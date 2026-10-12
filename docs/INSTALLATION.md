@@ -103,11 +103,44 @@ Astuce : si tu connectes une page **parente**, toutes ses sous-pages sont access
    sur la ligne de la branche concernée, clique sur **••• › Redeploy**.
 
 > **Adresses** :
-> - la version de test a une adresse fixe : `https://ject-git-preview-vthiriets-projects.vercel.app` ;
+> - la version de test a une adresse fixe : `https://ject-preview-vthiriets-projects.vercel.app` ;
 > - les adresses avec des lettres au hasard (`ject-bzy1x0why-…`) correspondent à une seule
 >   publication et ne bougent plus ;
-> - une erreur `404 DEPLOYMENT_NOT_FOUND` sur l'adresse `git-preview` veut dire que la
->   branche `preview` n'a encore jamais été publiée : il faut un nouvel envoi sur `preview`.
+> - une erreur `404 DEPLOYMENT_NOT_FOUND` veut dire que la branche n'a encore jamais
+>   été publiée (voir l'étape 3 bis).
+
+---
+
+## Étape 3 bis : Publication par GitHub (contournement)
+
+La liaison Git de Vercel échoue (« Git information retrieval failed »). C'est donc
+**GitHub** qui fabrique le site et l'envoie à Vercel, grâce au fichier
+`.github/workflows/vercel.yml`. Il lui faut trois **secrets**, c'est-à-dire des valeurs
+cachées que seul GitHub peut lire.
+
+1. **Créer une clé Vercel** : <https://vercel.com/account/tokens> › **Create Token**.
+   Nom : `github-ject`. Scope : ton espace (`vthiriet's projects`). Copie la clé :
+   elle ne sera plus jamais affichée.
+2. **Trouver l'identifiant du projet** : Vercel › projet **ject** › **Settings** ›
+   **General** › **Project ID** (commence par `prj_`).
+3. **Trouver l'identifiant de l'espace** : Vercel › en haut à gauche, ton espace
+   `vthiriet's projects` › **Settings** › **General** › **Team ID** (commence par `team_`).
+4. **Enregistrer les secrets sur GitHub** : <https://github.com/vthiriet/ject/settings/secrets/actions>
+   › **New repository secret**, trois fois :
+
+   | Name | Secret |
+   |---|---|
+   | `VERCEL_TOKEN` | la clé de l'étape 1 |
+   | `VERCEL_PROJECT_ID` | l'identifiant `prj_…` |
+   | `VERCEL_ORG_ID` | l'identifiant `team_…` |
+
+5. **Lancer une publication** : <https://github.com/vthiriet/ject/actions> ›
+   **Publication Vercel** › **Run workflow** › choisir la branche `preview` › **Run workflow**.
+6. ✅ Au bout de 2 à 3 minutes, la ligne devient verte, et la version de test
+   est en ligne à l'adresse fixe <https://ject-preview-vthiriets-projects.vercel.app>.
+
+Ensuite, chaque envoi sur `preview` ou `main` est publié tout seul.
+Le fichier `vercel.json` coupe les publications automatiques de Vercel, qui échouaient.
 
 ---
 

@@ -1,0 +1,68 @@
+# Publication sur Vercel depuis GitHub (contourne la liaison Git de Vercel, en panne).
+# - envoi sur `preview` -> version de test : https://ject-preview-vthiriets-projects.vercel.app
+# - envoi sur `main`    -> production
+# Secrets requis (GitHub > Settings > Secrets and variables > Actions) :
+#   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID  (voir docs/INSTALLATION.md)
+name: Publication Vercel
+
+on:
+  push:
+    branches: [main, preview]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Vérifier les secrets
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::error::Il manque les secrets VERCEL_TOKEN, VERCEL_ORG_ID ou VERCEL_PROJECT_ID (voir docs/INSTALLATION.md)."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer l'outil Vercel
+        run: npm install --global vercel@63
+
+      - name: Choisir l'environnement
+        run: |
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            echo "TARGET=production" >> "$GITHUB_ENV"
+            echo "PROD_FLAG=--prod" >> "$GITHUB_ENV"
+          else
+            echo "TARGET=preview" >> "$GITHUB_ENV"
+            echo "PROD_FLAG=" >> "$GITHUB_ENV"
+          fi
+
+      - name: Récupérer les réglages et variables du projet
+        run: vercel pull --yes --environment="$TARGET" --token="$VERCEL_TOKEN"
+
+      - name: Compiler
+        run: vercel build $PROD_FLAG --token="$VERCEL_TOKEN"
+
+      - name: Publier
+        id: deploy
+        run: echo "url=$(vercel deploy --prebuilt $PROD_FLAG --token="$VERCEL_TOKEN")" >> "$GITHUB_OUTPUT"
+
+      - name: Adresse fixe de la version de test
+        if: env.TARGET == 'preview'
+        run: vercel alias set "${{ steps.deploy.outputs.url }}" ject-preview-vthiriets-projects.vercel.app --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID"
+
+      - name: Résumé
+        run: |
+          echo "### Publié ($TARGET)" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

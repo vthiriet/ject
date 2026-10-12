@@ -200,3 +200,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Version initiale après le questionnaire de cadrage |
 | 12/10/2026 | Décisions : projets dans Notion, connexion par lien magique, export en cases à cocher vers une page choisie, illustrations importables. Prototype V1 complet. |
 | 12/10/2026 | Guide d'installation précisé (clé Notion, variables Vercel, adresses de test). Branche par défaut remise sur `main`. |
+| 12/10/2026 | Publication via GitHub Actions (la liaison Git de Vercel échoue). Version de test : ject-preview-vthiriets-projects.vercel.app. |

@@ -86,3 +86,8 @@ GitHub est la seule référence : chaque ordinateur a sa propre copie locale.
   sinon Vercel peut refuser de publier (« Git information retrieval failed »).
 - **Branches** : `main` = production (branche par défaut sur GitHub et branche de
   production sur Vercel), `preview` = version de test.
+- **Publication** : la liaison Git de Vercel est en panne pour ce projet. C'est
+  GitHub Actions (`.github/workflows/vercel.yml`) qui publie à chaque envoi sur
+  `preview` ou `main`. Adresse fixe de la version de test :
+  https://ject-preview-vthiriets-projects.vercel.app — vérifier le résultat dans
+  l'onglet Actions du dépôt GitHub.
