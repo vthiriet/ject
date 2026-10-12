@@ -33,6 +33,30 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 
 ## 3. Périmètre fonctionnel
 
+### 3.0 Deux onglets : Inbox et Listes
+
+**Inbox** (onglet principal, ouvert au lancement) : uniquement des éléments **bruts**, en
+attente d'être rangés.
+- Zone de saisie toujours visible (en bas sur téléphone, en haut sur ordinateur) :
+  on tape, « Entrée » dépose l'élément et la zone reste prête pour le suivant.
+  « Maj + Entrée » passe à la ligne.
+- Un élément = du texte sur une ou plusieurs lignes (liens cliquables avec aperçu).
+- Toucher un élément permet de le modifier ; corbeille avec « Annuler ».
+- Le partage Android (« Partager › Ject ») et le raccourci « Ajouter à l'inbox » arrivent ici.
+- Pastille sur l'onglet : nombre d'éléments à ranger.
+
+**Ranger** : bouton en haut de l'Inbox (tous les éléments) ou sur chaque élément.
+- Les éléments défilent **un par un** (« Ranger · 2 / 7 »). Pour chacun :
+  - toucher une **liste existante** (les plus récemment modifiées en premier, avec recherche) ;
+  - ou taper un nom et créer une **nouvelle liste** ;
+  - ou **garder comme note séparée** (la note passe dans l'onglet Listes) ;
+  - ou **Supprimer** / **Passer**.
+- Chaque ligne de l'élément devient une case à cocher de la liste choisie,
+  ajoutée à la suite des éléments non cochés. L'élément quitte alors l'Inbox.
+
+**Listes** : le fonctionnement inspiré de Google Keep décrit ci-dessous (notes, listes,
+couleurs, illustrations, libellés, épingles, archives, export Notion…).
+
 ### 3.1 V1 : prototype complet
 
 **Notes et listes**
@@ -201,3 +225,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Décisions : projets dans Notion, connexion par lien magique, export en cases à cocher vers une page choisie, illustrations importables. Prototype V1 complet. |
 | 12/10/2026 | Guide d'installation précisé (clé Notion, variables Vercel, adresses de test). Branche par défaut remise sur `main`. |
 | 12/10/2026 | Publication via GitHub Actions (la liaison Git de Vercel échoue). Version de test : ject-preview-vthiriets-projects.vercel.app. |
+| 12/10/2026 | Deux onglets : Inbox (éléments bruts + bouton Ranger) et Listes (façon Keep). |

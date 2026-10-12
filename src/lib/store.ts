@@ -122,6 +122,40 @@ export async function markExported(id: string, itemIds: string[] | 'all', mentio
   });
 }
 
+// ---------- Inbox ----------
+
+export const createInboxItem = (text: string) => createNote({ type: 'text', content: text.trim(), inbox: true });
+
+/** Chaque ligne non vide d'un élément de l'inbox devient un élément de liste. */
+function linesOf(note: Note) {
+  return [note.title, ...note.content.split(/\r?\n/)].map((l) => l.trim()).filter(Boolean);
+}
+
+export type FileTarget = { listId: string } | { newTitle: string } | { asNote: true };
+
+/** Range des éléments de l'inbox dans une liste (existante ou nouvelle), ou les garde comme notes. */
+export async function fileInboxItems(ids: string[], target: FileTarget) {
+  const items = (await db.notes.bulkGet(ids)).filter((n): n is Note => !!n && !n.deleted);
+  if (!items.length) return;
+  if ('asNote' in target) {
+    for (const n of items) await save('note', { ...n, inbox: false, position: Date.now() });
+    return;
+  }
+  const created = items.flatMap((n) => linesOf(n).map((l) => newItem(l)));
+  if ('newTitle' in target) {
+    await createNote({ type: 'list', title: target.newTitle.trim(), items: created });
+  } else {
+    const list = await db.notes.get(target.listId);
+    if (!list) return;
+    // Ajoute après le dernier élément non coché, en retirant les lignes vides.
+    const kept = list.items.filter((i) => i.text.trim());
+    const lastOpen = kept.map((i) => !i.checked && !i.exported).lastIndexOf(true);
+    kept.splice(lastOpen + 1, 0, ...created);
+    await save('note', { ...list, type: 'list', items: kept, archived: false, trashedAt: null });
+  }
+  for (const n of items) await deleteNoteForever(n.id);
+}
+
 // ---------- Libellés ----------
 
 export async function createLabel(name: string, emoji = '🏷️') {

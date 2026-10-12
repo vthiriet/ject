@@ -1,7 +1,7 @@
 import type { Label } from '../lib/types';
 import { Icon } from './Icon';
 
-export type Section = 'inbox' | 'archive' | 'trash';
+export type Section = 'inbox' | 'lists' | 'archive' | 'trash';
 
 interface Props {
   open: boolean;
@@ -15,7 +15,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** Menu latéral : inbox, libellés, archives, corbeille, paramètres. */
+/** Menu latéral : inbox, listes, libellés, archives, corbeille, paramètres. */
 export function Drawer({ open, section, labelId, labels, counts, onNavigate, onEditLabels, onSettings, onClose }: Props) {
   const item = (active: boolean, icon: React.ReactNode, text: string, onClick: () => void, count?: number, key?: string) => (
     <button key={key} type="button" className={`drawer-item ${active ? 'active' : ''}`} onClick={onClick}>
@@ -29,9 +29,10 @@ export function Drawer({ open, section, labelId, labels, counts, onNavigate, onE
       <div className={`drawer-backdrop ${open ? 'open' : ''}`} onClick={onClose} />
       <nav className={`drawer ${open ? 'open' : ''}`} aria-label="Menu">
         <div className="drawer-brand"><img src="/icons/icon.svg" alt="" width={32} height={32} /> Ject</div>
-        {item(section === 'inbox' && !labelId, <Icon name="inbox" />, 'Inbox', () => onNavigate('inbox', null), counts.inbox)}
+        {item(section === 'inbox', <Icon name="inbox" />, 'Inbox', () => onNavigate('inbox', null), counts.inbox)}
+        {item(section === 'lists' && !labelId, <Icon name="checked" />, 'Listes', () => onNavigate('lists', null), counts.lists)}
         <p className="drawer-heading">Libellés</p>
-        {labels.map((l) => item(section === 'inbox' && labelId === l.id, <span>{l.emoji}</span>, l.name, () => onNavigate('inbox', l.id), counts[l.id], l.id))}
+        {labels.map((l) => item(section === 'lists' && labelId === l.id, <span>{l.emoji}</span>, l.name, () => onNavigate('lists', l.id), counts[l.id], l.id))}
         {item(false, <Icon name="edit" />, 'Modifier les libellés', onEditLabels)}
         <hr />
         {item(section === 'archive', <Icon name="archive" />, 'Archives', () => onNavigate('archive', null))}

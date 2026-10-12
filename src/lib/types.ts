@@ -35,6 +35,8 @@ export interface Note {
   labelIds: string[];
   /** Renseigné quand la note entière a été envoyée vers Notion. */
   exported?: NotionMention;
+  /** Élément brut de l'onglet Inbox, en attente d'être rangé. */
+  inbox?: boolean;
   createdAt: number;
   updatedAt: number;
   deleted?: boolean;

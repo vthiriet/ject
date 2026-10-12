@@ -99,7 +99,7 @@ export function Settings({ onClose, theme, setTheme, launch, setLaunch }: Props)
         </div>
         <p className="setting-label">À l’ouverture de Ject</p>
         <div className="segmented" role="radiogroup" aria-label="À l'ouverture">
-          {([['none', 'Mes notes'], ['text', 'Nouvelle note'], ['list', 'Nouvelle liste']] as const).map(([v, l]) => (
+          {([['none', 'Inbox'], ['text', 'Nouvelle note'], ['list', 'Nouvelle liste']] as const).map(([v, l]) => (
             <button key={v} type="button" role="radio" aria-checked={launch === v} className={launch === v ? 'on' : ''} onClick={() => setLaunch(v)}>{l}</button>
           ))}
         </div>

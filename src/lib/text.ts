@@ -48,7 +48,7 @@ export function matchesQuery(note: Note, q: string): boolean {
   return normalize([note.title, note.content, ...note.items.map((i) => i.text)].join(' ')).includes(query);
 }
 
-function normalize(s: string) {
+export function normalize(s: string) {
   return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
