@@ -31,16 +31,24 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }, [text]);
 
-  const add = () => {
-    if (!text.trim()) return;
-    void createInboxItem(text);
+  // La zone se vide aussitôt (saisie en rafale) ; en cas d'échec, le texte est remis.
+  const add = async () => {
+    const value = text;
+    if (!value.trim()) return;
     setText('');
     inputRef.current?.focus();
+    try {
+      await createInboxItem(value);
+    } catch (e) {
+      setText((current) => (current ? `${value}\n${current}` : value));
+      toast(`Impossible d’enregistrer : ${e instanceof Error ? `${e.name} – ${e.message}` : String(e)}`);
+    }
   };
+
 
   return (
     <div className="inbox">
-      <form className="capture" onSubmit={(e) => { e.preventDefault(); add(); }}>
+      <form className="capture" onSubmit={(e) => { e.preventDefault(); void add(); }}>
         <textarea
           ref={inputRef}
           rows={1}
@@ -52,7 +60,7 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              add();
+              void add();
             }
           }}
         />

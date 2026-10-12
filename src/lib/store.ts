@@ -4,7 +4,13 @@ import type { BackgroundImage, ChecklistItem, Kind, Label, Note, NotionMention }
 
 const TRASH_DAYS = 7;
 
-export const uid = () => crypto.randomUUID();
+/** Identifiant unique (repli pour les navigateurs sans crypto.randomUUID). */
+export const uid = (): string =>
+  typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c) =>
+        (Number(c) ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (Number(c) / 4)))).toString(16),
+      );
 
 /** Enregistre localement et met l'élément en file d'attente pour Supabase. */
 async function save<T extends { id: string; updatedAt: number }>(kind: Kind, record: T) {

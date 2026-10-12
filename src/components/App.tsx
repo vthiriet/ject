@@ -54,6 +54,12 @@ export default function App() {
   useEffect(() => {
     if (started.current) return;
     started.current = true;
+    // Toute erreur inattendue s'affiche à l'écran au lieu de passer inaperçue.
+    window.addEventListener('unhandledrejection', (e) => {
+      const r = e.reason;
+      toast(`Erreur : ${r instanceof Error ? `${r.name} – ${r.message}` : String(r)}`);
+    });
+    window.addEventListener('error', (e) => toast(`Erreur : ${e.message}`));
     startAutoSync();
     void purgeOldTrash();
     const params = new URLSearchParams(location.search);

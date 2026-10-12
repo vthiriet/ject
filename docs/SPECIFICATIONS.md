@@ -226,3 +226,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Guide d'installation précisé (clé Notion, variables Vercel, adresses de test). Branche par défaut remise sur `main`. |
 | 12/10/2026 | Publication via GitHub Actions (la liaison Git de Vercel échoue). Version de test : ject-preview-vthiriets-projects.vercel.app. |
 | 12/10/2026 | Deux onglets : Inbox (éléments bruts + bouton Ranger) et Listes (façon Keep). |
+| 12/10/2026 | Inbox : le texte saisi est remis en place si l'enregistrement échoue ; les erreurs inattendues s'affichent à l'écran. |
