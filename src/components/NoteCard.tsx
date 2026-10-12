@@ -1,3 +1,4 @@
+import { categoryOf, frequencyLabel } from '../lib/gtd';
 import { updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
@@ -24,6 +25,19 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
   const link = extractLinks(note)[0];
   const empty = !note.title.trim() && !note.content.trim() && open.length === 0 && checkedCount === 0;
 
+  const category = categoryOf(note);
+  // Pastille d'état ou de régularité de la carte.
+  const meta =
+    category === 'action' && note.type === 'text' && note.status && note.status !== 'todo'
+      ? note.status === 'waiting' ? `⏳ En attente${note.waitingFor ? ` · ${note.waitingFor}` : ''}`
+        : note.status === 'someday' ? '💤 Un jour' : '✓ Fait'
+      : category === 'habit' && note.type === 'text' && note.frequency ? `🔁 ${frequencyLabel(note.frequency)}`
+      : category === 'project' && note.projectStatus === 'someday' ? '💤 Un jour'
+      : '';
+  const itemMeta = (i: Note['items'][number]) =>
+    category === 'habit' ? (i.frequency ? ` · 🔁 ${frequencyLabel(i.frequency)}` : '')
+    : i.status === 'waiting' ? ' · ⏳' : i.status === 'someday' ? ' · 💤' : '';
+
   const toggle = (id: string) =>
     updateNote(note.id, { items: note.items.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i)) });
 
@@ -40,7 +54,7 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
       <div className="card-body">
         {note.title.trim() && <h3 className="card-title">{note.title}</h3>}
         {note.type === 'text' && note.content.trim() && (
-          <p className="card-content"><LinkedText text={note.content} /></p>
+          <p className={`card-content ${note.status === 'done' && category === 'action' ? 'struck' : ''}`}><LinkedText text={note.content} /></p>
         )}
         {note.type === 'list' && open.length > 0 && (
           <ul className="card-items">
@@ -54,7 +68,7 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
                 >
                   <Icon name="unchecked" size={18} />
                 </button>
-                <span><LinkedText text={i.text} /></span>
+                <span><LinkedText text={i.text} />{itemMeta(i) && <small className="item-meta">{itemMeta(i)}</small>}</span>
               </li>
             ))}
           </ul>
@@ -68,6 +82,7 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
         ) : exportedCount > 0 ? (
           <p className="notion-mention"><Icon name="check" size={16} /> {exportedCount} élément{exportedCount > 1 ? 's' : ''} exporté{exportedCount > 1 ? 's' : ''} vers Notion</p>
         ) : null}
+        {meta && <p className="card-meta">{meta}</p>}
         {noteLabels.length > 0 && (
           <div className="chips">
             {noteLabels.map((l) => (

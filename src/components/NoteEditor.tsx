@@ -2,16 +2,19 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
 import {
-  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, trashNote, updateNote,
+  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, setProjectStatus, trashNote, updateNote,
 } from '../lib/store';
+import { ACTION_STATUS, CATEGORIES, categoryMeta, categoryOf, frequencyLabel, PROJECT_STATUS } from '../lib/gtd';
 import { extractLinks, formatDate, noteToText } from '../lib/text';
-import type { BackgroundImage, ChecklistItem, Label, Note } from '../lib/types';
+import type { ActionStatus, BackgroundImage, Category, ChecklistItem, Label, Note, ProjectStatus } from '../lib/types';
 import { Banner } from './Background';
 import { BackgroundPicker } from './BackgroundPicker';
+import { FrequencyPicker } from './FrequencyPicker';
 import { Icon, IconButton } from './Icon';
 import { LabelPicker } from './LabelPicker';
 import { LinkPreviewCard } from './LinkPreview';
 import { NotionExport } from './NotionExport';
+import { Segmented } from './Segmented';
 import { toast } from './Toast';
 
 interface Props {
@@ -25,7 +28,7 @@ interface Props {
 }
 
 type Draft = Pick<Note, 'title' | 'content' | 'items' | 'type'>;
-type Panel = null | 'colors' | 'labels' | 'more';
+type Panel = null | 'colors' | 'labels' | 'more' | 'move';
 
 export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: Props) {
   const stored = useLiveQuery(() => db.notes.get(noteId), [noteId]);
@@ -39,6 +42,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const [panel, setPanel] = useState<Panel>(null);
   const [showChecked, setShowChecked] = useState(false);
   const [exporting, setExporting] = useState(false);
+  /** Élément de liste dont on règle l'état ou la régularité. */
+  const [itemOptions, setItemOptions] = useState<string | null>(null);
   const dirty = useRef(false);
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -148,7 +153,12 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const flush = () => updateNote(noteId, draft);
   const archive = async () => {
     await flush();
-    await updateNote(noteId, { archived: !note.archived, pinned: false });
+    await updateNote(noteId, {
+      archived: !note.archived,
+      pinned: false,
+      // Un projet terminé qu'on désarchive redevient actif.
+      ...(note.archived && note.projectStatus === 'done' ? { projectStatus: 'active' as const } : {}),
+    });
     toast(note.archived ? 'Note désarchivée' : 'Note archivée', {
       label: 'Annuler',
       run: () => void updateNote(noteId, { archived: note.archived, pinned: note.pinned }),
@@ -175,6 +185,24 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     }
     setPanel(null);
   };
+  const moveTo = async (c: Category) => {
+    await flush();
+    await updateNote(noteId, {
+      category: c,
+      ...(c === 'action' && !note.status ? { status: 'todo' as const } : {}),
+      ...(c === 'project' && !note.projectStatus ? { projectStatus: 'active' as const } : {}),
+    });
+    toast(`Déplacée vers ${categoryMeta(c).plural}`);
+    onClose();
+  };
+  const changeProjectStatus = async (v: ProjectStatus) => {
+    await flush();
+    await setProjectStatus(noteId, v);
+    if (v === 'done') {
+      toast('Projet terminé : rangé dans les Archives', { label: 'Annuler', run: () => void setProjectStatus(noteId, 'active') });
+      onClose();
+    }
+  };
   const duplicate = async () => {
     await flush();
     await duplicateNote(noteId);
@@ -187,27 +215,79 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const exported = draft.items.filter((i) => i.exported);
   const links = extractLinks(draft);
 
-  const itemRow = (item: ChecklistItem, done: boolean) => (
-    <li key={item.id} className={`item-row ${done ? 'done' : ''}`}>
-      <button
-        type="button"
-        className="check"
-        aria-label={done ? 'Décocher' : 'Cocher'}
-        onClick={() => updateItem(item.id, { checked: !item.checked })}
-      >
-        <Icon name={done ? 'checked' : 'unchecked'} size={20} />
-      </button>
-      <AutoTextarea
-        ref={(el) => { if (el) itemRefs.current.set(item.id, el); else itemRefs.current.delete(item.id); }}
-        value={item.text}
-        placeholder="Élément de liste"
-        onChange={(v) => updateItem(item.id, { text: v.replace(/\n/g, ' ') })}
-        onKeyDown={(e) => onItemKey(e, item)}
-        onPaste={(e) => onItemPaste(e, item)}
-      />
-      <IconButton name="close" label="Supprimer l'élément" size={18} className="item-remove" onClick={() => removeItem(item.id)} />
-    </li>
-  );
+  const category = categoryOf(note);
+  const hasItemOptions = category === 'action' || category === 'project' || category === 'habit';
+
+  const itemBadge = (item: ChecklistItem) =>
+    category === 'habit'
+      ? item.frequency && `🔁 ${frequencyLabel(item.frequency)}`
+      : item.status === 'waiting'
+        ? `⏳ En attente${item.waitingFor ? ` · ${item.waitingFor}` : ''}`
+        : item.status === 'someday' && '💤 Un jour';
+
+  const itemRow = (item: ChecklistItem, done: boolean) => {
+    const badge = !done && hasItemOptions ? itemBadge(item) : '';
+    return (
+      <li key={item.id} className={`item-row ${done ? 'done' : ''} ${badge ? 'has-badge' : ''}`}>
+        <button
+          type="button"
+          className="check"
+          aria-label={done ? 'Décocher' : 'Cocher'}
+          onClick={() => updateItem(item.id, { checked: !item.checked })}
+        >
+          <Icon name={done ? 'checked' : 'unchecked'} size={20} />
+        </button>
+        <div className="item-main">
+          <AutoTextarea
+            ref={(el) => { if (el) itemRefs.current.set(item.id, el); else itemRefs.current.delete(item.id); }}
+            value={item.text}
+            placeholder="Élément de liste"
+            onChange={(v) => updateItem(item.id, { text: v.replace(/\n/g, ' ') })}
+            onKeyDown={(e) => onItemKey(e, item)}
+            onPaste={(e) => onItemPaste(e, item)}
+          />
+          {badge && (
+            <button type="button" className="item-badge" onClick={() => setItemOptions(itemOptions === item.id ? null : item.id)}>
+              {badge}
+            </button>
+          )}
+          {itemOptions === item.id && (
+            <div className="item-options">
+              {category === 'habit' ? (
+                <FrequencyPicker value={item.frequency ?? ''} onChange={(v) => updateItem(item.id, { frequency: v || undefined })} />
+              ) : (
+                <>
+                  <Segmented
+                    value={item.status ?? 'todo'}
+                    options={[['todo', 'À faire'], ['waiting', 'En attente'], ['someday', 'Un jour']]}
+                    onChange={(v) => updateItem(item.id, { status: v === 'todo' ? undefined : (v as 'waiting' | 'someday') })}
+                  />
+                  {item.status === 'waiting' && (
+                    <input
+                      className="text-input"
+                      value={item.waitingFor ?? ''}
+                      placeholder="En attente de qui ? (facultatif)"
+                      onChange={(e) => updateItem(item.id, { waitingFor: e.target.value || undefined })}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+        {hasItemOptions && !done && (
+          <IconButton
+            name={category === 'habit' ? 'repeat' : 'hourglass'}
+            label={category === 'habit' ? 'Régularité' : 'État'}
+            size={18}
+            className={`item-remove ${itemOptions === item.id ? 'shown' : ''}`}
+            onClick={() => setItemOptions(itemOptions === item.id ? null : item.id)}
+          />
+        )}
+        <IconButton name="close" label="Supprimer l'élément" size={18} className="item-remove" onClick={() => removeItem(item.id)} />
+      </li>
+    );
+  };
 
   return (
     <div className="overlay editor-overlay" onMouseDown={(e) => e.target === e.currentTarget && void close()}>
@@ -240,6 +320,35 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
               }
             }}
           />
+
+          <div className="editor-meta">
+            <span className="type-badge"><Icon name={categoryMeta(category).icon} size={14} /> {categoryMeta(category).label}</span>
+            {category === 'action' && draft.type === 'text' && (
+              <Segmented
+                value={note.status ?? 'todo'}
+                options={(Object.keys(ACTION_STATUS) as ActionStatus[]).map((k) => [k, ACTION_STATUS[k]])}
+                onChange={(v) => void updateNote(noteId, { status: v as ActionStatus })}
+              />
+            )}
+            {category === 'project' && (
+              <Segmented
+                value={note.projectStatus ?? 'active'}
+                options={(Object.keys(PROJECT_STATUS) as ProjectStatus[]).map((k) => [k, PROJECT_STATUS[k]])}
+                onChange={(v) => void changeProjectStatus(v as ProjectStatus)}
+              />
+            )}
+            {category === 'habit' && draft.type === 'text' && (
+              <FrequencyPicker value={note.frequency ?? ''} onChange={(v) => void updateNote(noteId, { frequency: v || undefined })} />
+            )}
+          </div>
+          {category === 'action' && draft.type === 'text' && note.status === 'waiting' && (
+            <input
+              className="text-input editor-waiting"
+              defaultValue={note.waitingFor ?? ''}
+              placeholder="En attente de qui ? (facultatif)"
+              onBlur={(e) => void updateNote(noteId, { waitingFor: e.target.value.trim() || undefined })}
+            />
+          )}
 
           {draft.type === 'text' ? (
             <AutoTextarea
@@ -311,6 +420,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
         {panel === 'more' && (
           <div className="panel menu">
             <button type="button" onClick={() => { setPanel(null); void flush().then(() => setExporting(true)); }}><Icon name="send" size={20} /> Exporter vers Notion</button>
+            <button type="button" onClick={() => setPanel('move')}><Icon name="file" size={20} /> Déplacer vers…</button>
             <button type="button" onClick={convert}><Icon name={draft.type === 'text' ? 'checked' : 'notes'} size={20} /> {draft.type === 'text' ? 'Transformer en liste' : 'Transformer en texte'}</button>
             <button type="button" onClick={() => void copy()}><Icon name="copy" size={20} /> Copier le texte</button>
             <button type="button" onClick={() => void share()}><Icon name="share" size={20} /> Partager</button>
@@ -319,9 +429,17 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           </div>
         )}
 
+        {panel === 'move' && (
+          <div className="panel menu">
+            {CATEGORIES.filter((c) => c.id !== category).map((c) => (
+              <button key={c.id} type="button" onClick={() => void moveTo(c.id)}><Icon name={c.icon} size={20} /> {c.plural}</button>
+            ))}
+          </div>
+        )}
+
         <div className="editor-bottom">
           <IconButton name="palette" label="Couleur et illustration" active={panel === 'colors'} onClick={() => setPanel(panel === 'colors' ? null : 'colors')} />
-          <IconButton name="label" label="Libellés" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
+          <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
           <IconButton name="send" label="Exporter vers Notion" onClick={() => void flush().then(() => setExporting(true))} />
           <span className="edited">Modifiée le {formatDate(note.updatedAt)}</span>
           <IconButton name="more" label="Plus d'actions" active={panel === 'more'} onClick={() => setPanel(panel === 'more' ? null : 'more')} />

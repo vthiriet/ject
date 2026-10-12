@@ -33,7 +33,7 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 
 ## 3. Périmètre fonctionnel
 
-### 3.0 Deux onglets : Inbox et Listes
+### 3.0 Onglet Inbox et rangement
 
 **Inbox** (onglet principal, ouvert au lancement) : uniquement des éléments **bruts**, en
 attente d'être rangés.
@@ -45,19 +45,11 @@ attente d'être rangés.
 - Le partage Android (« Partager › Ject ») et le raccourci « Ajouter à l'inbox » arrivent ici.
 - Pastille sur l'onglet : nombre d'éléments à ranger.
 
-**Ranger** : bouton en haut de l'Inbox (tous les éléments) ou sur chaque élément.
-- Les éléments défilent **un par un** (« Ranger · 2 / 7 »). Pour chacun :
-  - toucher une **liste existante** (les plus récemment modifiées en premier, avec recherche) ;
-  - ou taper un nom et créer une **nouvelle liste** ;
-  - ou **garder comme note séparée** (la note passe dans l'onglet Listes) ;
-  - ou **Supprimer** / **Passer**.
-- Chaque ligne de l'élément devient une case à cocher de la liste choisie,
-  ajoutée à la suite des éléments non cochés. L'élément quitte alors l'Inbox.
+**Ranger** : bouton en haut de l'Inbox (tous les éléments) ou sur chaque élément. Les
+éléments défilent un par un (« Ranger · 2 / 7 ») ; le détail est décrit en 3.0 bis.
+Chaque ligne d'un élément rangé dans une liste devient une case à cocher.
 
-**Listes** : le fonctionnement inspiré de Google Keep décrit ci-dessous (notes, listes,
-couleurs, illustrations, libellés, épingles, archives, export Notion…).
-
-### 3.0 bis Prochaine étape (à valider) : Actions, Habitudes, Projets, Ressources
+### 3.0 bis Onglets Actions, Habitudes, Projets, Ressources
 
 Inspiré de GTD (que faire de chaque élément) et de PARA (où il vit), en version simplifiée.
 
@@ -84,18 +76,33 @@ de filtrer par aire dans chaque onglet.
 
 Pour une liste, l'état ou la régularité se règle sur chaque élément. Une case cochée = fait.
 
-**Saisie dans l'Inbox :** sous la zone de texte, 4 pastilles facultatives :
-Action · Habitude · Projet · Ressource. Sans choix, l'élément reste « à trier ».
+**Saisie dans l'Inbox :** au-dessus de la zone de texte, 4 pastilles facultatives :
+Action · Habitude · Projet · Ressource (remises à zéro après chaque ajout). Sans choix,
+l'élément reste « à trier ». Le type choisi s'affiche sur l'élément.
 
 **Ranger :** pour chaque élément de l'Inbox :
 1. choisir ou confirmer le **type** (prérempli si choisi à la saisie) ;
 2. choisir la **destination** dans l'onglet correspondant : nouvelle carte, ajout à une
    liste existante, ou nouvelle liste ;
-3. facultatif : choisir l'**aire** (proposée d'après la liste de destination) et, selon
-   le type, l'**état** ou la **régularité**.
+3. facultatif, avant la destination : l'**état** (action, projet), la **régularité**
+   (habitude) et les **aires**. Ils s'appliquent à la nouvelle carte ou liste ; pour un
+   ajout à une liste existante, l'état ou la régularité s'applique à l'élément ajouté.
+   Destinations proposées : « Carte seule dans … », « Nouvelle liste « nom » », puis les
+   listes existantes de ce type (les plus récentes d'abord, avec recherche).
 
-**Données existantes :** les notes et listes actuelles sont classées dans **Ressources**.
-Une option « Déplacer vers… » permet de changer le type d'une carte.
+**Affichage par onglet :** Actions est découpé en sections À faire (listes et actions
+seules) / En attente / Un jour / Faites ; Projets en Actifs / Un jour ; un projet
+« Terminé » part dans les Archives (et redevient actif si on le désarchive). Les états et
+régularités s'affichent sur les cartes (⏳ En attente, 💤 Un jour, 🔁 Chaque jour…).
+
+**Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité). Dans
+une liste, chaque élément a un bouton ⏳ (ou 🔁 pour une habitude) pour régler son état
+ou sa régularité. Menu ⋮ › « Déplacer vers… » pour changer de type.
+
+**Données existantes :** les notes et listes créées avant cette version sont classées dans
+**Ressources**. Les libellés deviennent les **aires**. Le réglage « À l'ouverture de Ject »
+est retiré : Ject s'ouvre toujours sur l'Inbox. Raccourcis Android : « Ajouter à
+l'inbox » et « Actions ».
 
 ### 3.1 V1 : prototype complet
 
@@ -268,3 +275,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Deux onglets : Inbox (éléments bruts + bouton Ranger) et Listes (façon Keep). |
 | 12/10/2026 | Inbox : le texte saisi est remis en place si l'enregistrement échoue ; les erreurs inattendues s'affichent à l'écran. |
 | 12/10/2026 | Plan de l'organisation Actions / Habitudes / Projets / Ressources avec aires et états (à valider). |
+| 12/10/2026 | Onglets Actions, Habitudes, Projets, Ressources ; types à la saisie ; rangement en 3 temps ; états, régularités et aires. |

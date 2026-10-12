@@ -11,14 +11,10 @@ import { Dialog } from './Dialog';
 import { Icon } from './Icon';
 import { toast } from './Toast';
 
-export type LaunchPref = 'none' | 'text' | 'list';
-
 interface Props {
   onClose: () => void;
   theme: ThemePref;
   setTheme: (t: ThemePref) => void;
-  launch: LaunchPref;
-  setLaunch: (l: LaunchPref) => void;
 }
 
 const STATUS_TEXT = {
@@ -29,7 +25,7 @@ const STATUS_TEXT = {
   error: 'Erreur de synchronisation.',
 };
 
-export function Settings({ onClose, theme, setTheme, launch, setLaunch }: Props) {
+export function Settings({ onClose, theme, setTheme }: Props) {
   const status = useSyncStatus();
   const [email, setEmail] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -95,12 +91,6 @@ export function Settings({ onClose, theme, setTheme, launch, setLaunch }: Props)
         <div className="segmented" role="radiogroup" aria-label="Thème">
           {([['auto', 'Automatique'], ['light', 'Clair'], ['dark', 'Sombre']] as const).map(([v, l]) => (
             <button key={v} type="button" role="radio" aria-checked={theme === v} className={theme === v ? 'on' : ''} onClick={() => setTheme(v)}>{l}</button>
-          ))}
-        </div>
-        <p className="setting-label">À l’ouverture de Ject</p>
-        <div className="segmented" role="radiogroup" aria-label="À l'ouverture">
-          {([['none', 'Inbox'], ['text', 'Nouvelle note'], ['list', 'Nouvelle liste']] as const).map(([v, l]) => (
-            <button key={v} type="button" role="radio" aria-checked={launch === v} className={launch === v ? 'on' : ''} onClick={() => setLaunch(v)}>{l}</button>
           ))}
         </div>
       </section>

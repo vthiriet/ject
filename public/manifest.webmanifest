@@ -15,7 +15,7 @@
   ],
   "shortcuts": [
     { "name": "Ajouter à l'inbox", "short_name": "Inbox", "url": "/?new=inbox", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Nouvelle liste", "short_name": "Liste", "url": "/?new=list", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Actions", "short_name": "Actions", "url": "/?tab=action", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
   ],
   "share_target": {
     "action": "/",

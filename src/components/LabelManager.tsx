@@ -4,7 +4,7 @@ import type { Label } from '../lib/types';
 import { Dialog } from './Dialog';
 import { IconButton } from './Icon';
 
-const EMOJIS = ['🏷️', '💡', '🛒', '🚀', '📚', '🎬', '🎵', '✈️', '🍲', '🎁', '💼', '🏠', '❤️', '⭐', '📝', '🔧'];
+const EMOJIS = ['🏷️', '🩺', '💰', '👨‍👩‍👧', '💡', '🛒', '🚀', '📚', '🎬', '🎵', '✈️', '🍲', '🎁', '💼', '🏠', '❤️', '⭐', '📝', '🔧'];
 
 /** Créer, renommer, changer l'emoji ou supprimer les libellés. */
 export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: () => void }) {
@@ -18,9 +18,9 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
   };
 
   return (
-    <Dialog title="Modifier les libellés" onClose={onClose}>
+    <Dialog title="Modifier les aires" onClose={onClose}>
       <form className="row" onSubmit={(e) => { e.preventDefault(); void add(); }}>
-        <input className="text-input" value={name} placeholder="Nouveau libellé" onChange={(e) => setName(e.target.value)} />
+        <input className="text-input" value={name} placeholder="Nouvelle aire (ex. Santé, Maison)" onChange={(e) => setName(e.target.value)} />
         <button type="submit" className="btn primary">Créer</button>
       </form>
       <ul className="label-manage">
@@ -30,13 +30,13 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
             <input
               className="text-input flat"
               defaultValue={l.name}
-              aria-label="Nom du libellé"
+              aria-label="Nom de l'aire"
               onBlur={(e) => e.target.value.trim() && e.target.value !== l.name && void updateLabel(l.id, { name: e.target.value.trim() })}
             />
             <IconButton
               name="trash"
-              label="Supprimer le libellé"
-              onClick={() => confirm(`Supprimer le libellé « ${l.name} » ? Les notes ne seront pas supprimées.`) && void deleteLabel(l.id)}
+              label="Supprimer l'aire"
+              onClick={() => confirm(`Supprimer l’aire « ${l.name} » ? Les cartes ne seront pas supprimées.`) && void deleteLabel(l.id)}
             />
             {emojiFor === l.id && (
               <div className="emoji-grid">
@@ -47,7 +47,7 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
             )}
           </li>
         ))}
-        {!labels.length && <li className="hint">Aucun libellé pour l’instant.</li>}
+        {!labels.length && <li className="hint">Aucune aire pour l’instant : Santé, Maison, Finances, Travail…</li>}
       </ul>
     </Dialog>
   );

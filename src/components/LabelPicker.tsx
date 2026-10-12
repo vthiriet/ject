@@ -26,7 +26,7 @@ export function LabelPicker({ note, labels }: { note: Note; labels: Label[] }) {
       <input
         className="text-input"
         value={query}
-        placeholder="Chercher ou créer un libellé"
+        placeholder="Chercher ou créer une aire"
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && q && !exact && void create()}
       />
@@ -46,7 +46,7 @@ export function LabelPicker({ note, labels }: { note: Note; labels: Label[] }) {
             </button>
           </li>
         )}
-        {!labels.length && !q && <li className="hint">Aucun libellé pour l’instant : tape un nom pour en créer un.</li>}
+        {!labels.length && !q && <li className="hint">Aucune aire pour l’instant : tape un nom pour en créer une.</li>}
       </ul>
     </div>
   );

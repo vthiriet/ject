@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { CATEGORIES, categoryMeta } from '../lib/gtd';
 import { createInboxItem, restoreNote, trashNote, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
-import type { Note } from '../lib/types';
+import type { Category, Note } from '../lib/types';
 import { Icon, IconButton } from './Icon';
 import { LinkedText } from './LinkedText';
 import { LinkPreviewCard } from './LinkPreview';
@@ -18,6 +19,8 @@ interface Props {
 /** Onglet Inbox : déposer très vite des éléments bruts, puis les ranger. */
 export function InboxView({ items, total, focusSignal, onFile }: Props) {
   const [text, setText] = useState('');
+  /** Type pressenti (facultatif), remis à zéro après chaque ajout. */
+  const [category, setCategory] = useState<Category | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -34,13 +37,16 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
   // La zone se vide aussitôt (saisie en rafale) ; en cas d'échec, le texte est remis.
   const add = async () => {
     const value = text;
+    const type = category;
     if (!value.trim()) return;
     setText('');
+    setCategory(null);
     inputRef.current?.focus();
     try {
-      await createInboxItem(value);
+      await createInboxItem(value, type ?? undefined);
     } catch (e) {
       setText((current) => (current ? `${value}\n${current}` : value));
+      setCategory(type);
       toast(`Impossible d’enregistrer : ${e instanceof Error ? `${e.name} – ${e.message}` : String(e)}`);
     }
   };
@@ -49,6 +55,23 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
   return (
     <div className="inbox">
       <form className="capture" onSubmit={(e) => { e.preventDefault(); void add(); }}>
+        <div className="capture-types" role="radiogroup" aria-label="Type (facultatif)">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              role="radio"
+              aria-checked={category === c.id}
+              className={`type-chip ${category === c.id ? 'on' : ''}`}
+              // Garde le clavier ouvert : le bouton ne prend pas le focus.
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setCategory(category === c.id ? null : c.id)}
+            >
+              <Icon name={c.icon} size={16} /> {c.label}
+            </button>
+          ))}
+        </div>
+        <div className="capture-row">
         <textarea
           ref={inputRef}
           rows={1}
@@ -67,6 +90,7 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
         <button type="submit" className="capture-send" aria-label="Ajouter" disabled={!text.trim()}>
           <Icon name="send" size={22} />
         </button>
+        </div>
       </form>
 
       {total > 0 && (
@@ -156,7 +180,10 @@ function InboxRow({ item, onFile }: { item: Note; onFile: () => void }) {
           <p onClick={startEdit}><LinkedText text={text} /></p>
         )}
         {link && !editing && <LinkPreviewCard url={link} compact />}
-        <small>{formatDate(item.createdAt)}</small>
+        <small>
+          {item.category && <span className="type-badge"><Icon name={categoryMeta(item.category).icon} size={14} /> {categoryMeta(item.category).label}</span>}
+          {formatDate(item.createdAt)}
+        </small>
       </div>
       <IconButton name="file" label="Ranger cet élément" onClick={onFile} />
       <IconButton name="trash" label="Supprimer" onClick={remove} />

@@ -1,6 +1,6 @@
 import { db, tableFor } from './db';
 import { scheduleSync } from './sync';
-import type { BackgroundImage, ChecklistItem, Kind, Label, Note, NotionMention } from './types';
+import type { BackgroundImage, Category, ChecklistItem, Kind, Label, Note, NotionMention } from './types';
 
 const TRASH_DAYS = 7;
 
@@ -130,26 +130,55 @@ export async function markExported(id: string, itemIds: string[] | 'all', mentio
 
 // ---------- Inbox ----------
 
-export const createInboxItem = (text: string) => createNote({ type: 'text', content: text.trim(), inbox: true });
+export const createInboxItem = (text: string, category?: Category) =>
+  createNote({ type: 'text', content: text.trim(), inbox: true, ...(category ? { category } : {}) });
 
 /** Chaque ligne non vide d'un élément de l'inbox devient un élément de liste. */
 function linesOf(note: Note) {
   return [note.title, ...note.content.split(/\r?\n/)].map((l) => l.trim()).filter(Boolean);
 }
 
-export type FileTarget = { listId: string } | { newTitle: string } | { asNote: true };
+/** Où ranger : une carte seule, une nouvelle liste, ou une liste existante. */
+export type FileTarget = { newCard: true } | { newTitle: string } | { listId: string };
 
-/** Range des éléments de l'inbox dans une liste (existante ou nouvelle), ou les garde comme notes. */
-export async function fileInboxItems(ids: string[], target: FileTarget) {
+/** Précisions choisies pendant le rangement. */
+export interface FileDetails {
+  category: Category;
+  status?: 'todo' | 'waiting' | 'someday';
+  projectStatus?: 'active' | 'someday';
+  frequency?: string;
+  labelIds?: string[];
+}
+
+function itemFor(text: string, d: FileDetails): ChecklistItem {
+  const item = newItem(text);
+  if ((d.category === 'action' || d.category === 'project') && (d.status === 'waiting' || d.status === 'someday')) item.status = d.status;
+  if (d.category === 'habit' && d.frequency) item.frequency = d.frequency;
+  return item;
+}
+
+function cardFields(d: FileDetails): Partial<Note> {
+  return {
+    category: d.category,
+    labelIds: d.labelIds ?? [],
+    ...(d.category === 'action' ? { status: d.status ?? 'todo' } : {}),
+    ...(d.category === 'project' ? { projectStatus: d.projectStatus ?? 'active' } : {}),
+    ...(d.category === 'habit' && d.frequency ? { frequency: d.frequency } : {}),
+  };
+}
+
+/** Range des éléments de l'inbox selon le type et la destination choisis. */
+export async function fileInboxItems(ids: string[], target: FileTarget, d: FileDetails) {
   const items = (await db.notes.bulkGet(ids)).filter((n): n is Note => !!n && !n.deleted);
   if (!items.length) return;
-  if ('asNote' in target) {
-    for (const n of items) await save('note', { ...n, inbox: false, position: Date.now() });
+  if ('newCard' in target) {
+    // L'élément devient une carte seule dans l'onglet choisi.
+    for (const n of items) await save('note', { ...n, ...cardFields(d), inbox: false, position: Date.now() });
     return;
   }
-  const created = items.flatMap((n) => linesOf(n).map((l) => newItem(l)));
+  const created = items.flatMap((n) => linesOf(n).map((l) => itemFor(l, d)));
   if ('newTitle' in target) {
-    await createNote({ type: 'list', title: target.newTitle.trim(), items: created });
+    await createNote({ ...cardFields(d), type: 'list', title: target.newTitle.trim(), items: created, status: undefined });
   } else {
     const list = await db.notes.get(target.listId);
     if (!list) return;
@@ -161,6 +190,10 @@ export async function fileInboxItems(ids: string[], target: FileTarget) {
   }
   for (const n of items) await deleteNoteForever(n.id);
 }
+
+/** Change l'état d'un projet ; « terminé » l'envoie dans les Archives. */
+export const setProjectStatus = (id: string, projectStatus: 'active' | 'someday' | 'done') =>
+  updateNote(id, { projectStatus, archived: projectStatus === 'done', pinned: false });
 
 // ---------- Libellés ----------
 
