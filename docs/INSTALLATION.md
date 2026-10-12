@@ -52,7 +52,16 @@ cherche le plus proche.
 3. Nom : `Ject`. Espace de travail : le tien. Type : **Internal**.
 4. Valide, puis dans l'onglet **Capabilities** (Fonctionnalités), vérifie que
    **Read content** et **Insert content** sont cochés.
-5. Dans **Configuration**, copie l'**Internal Integration Secret**. Il commence par `ntn_` ou `secret_`.
+5. Clique sur le nom **Ject** dans la liste des intégrations, puis ouvre l'onglet
+   **Configuration** (selon les versions de Notion : **Secrets** ou **Keys**).
+6. Repère le champ caché par des points `••••`. Selon les versions, il s'appelle
+   **Internal Integration Secret**, **Installation access token** ou **Secret**.
+   Clique sur **Show** (ou l'icône d'œil), puis sur **Copy**.
+   La clé commence par `ntn_` ou `secret_`.
+
+> Pas de bouton pour créer une intégration ? Seul le **propriétaire** de l'espace de
+> travail Notion peut le faire. Pas de clé simple ? L'intégration a peut-être été créée
+> en type « Public » : recrée-la en **Internal**.
 
 > ⚠️ Cette clé est **secrète** : ne la colle nulle part ailleurs que dans Vercel (étape 3).
 
@@ -77,8 +86,11 @@ Astuce : si tu connectes une page **parente**, toutes ses sous-pages sont access
 1. Va sur <https://vercel.com/new>.
 2. Dans la liste de tes dépôts GitHub, trouve **ject** et clique sur **Import**.
 3. Vercel reconnaît **Astro** tout seul. Ne change rien aux réglages de build.
-4. Ouvre la section **Environment Variables** et ajoute ces quatre lignes
-   (le nom à gauche, la valeur à droite) :
+4. Clique sur **Deploy** **sans** remplir les variables (les ajouter dès l'import a
+   provoqué l'erreur « An unexpected internal error occurred »).
+5. Une fois le projet créé, va dans **Settings › Environment Variables** et ajoute
+   ces quatre lignes (le nom à gauche, la valeur à droite), en cochant à chaque fois
+   **Production** et **Preview** :
 
    | Nom | Valeur |
    |---|---|
@@ -87,12 +99,15 @@ Astuce : si tu connectes une page **parente**, toutes ses sous-pages sont access
    | `NOTION_TOKEN` | le secret Notion de l'étape 2.1 |
    | `ALLOWED_EMAIL` | ton adresse e-mail |
 
-5. Clique sur **Deploy**.
-6. ✅ Au bout d'une minute, Vercel affiche « Congratulations » et l'adresse du site,
-   par exemple `https://ject-xxxx.vercel.app`.
+6. Les variables ne s'appliquent qu'aux publications suivantes : dans **Deployments**,
+   sur la ligne de la branche concernée, clique sur **••• › Redeploy**.
 
-> Si le projet existait déjà sur Vercel : **Settings › Environment Variables**,
-> ajoute les quatre variables, puis **Deployments › ••• › Redeploy**.
+> **Adresses** :
+> - la version de test a une adresse fixe : `https://ject-git-preview-vthiriets-projects.vercel.app` ;
+> - les adresses avec des lettres au hasard (`ject-bzy1x0why-…`) correspondent à une seule
+>   publication et ne bougent plus ;
+> - une erreur `404 DEPLOYMENT_NOT_FOUND` sur l'adresse `git-preview` veut dire que la
+>   branche `preview` n'a encore jamais été publiée : il faut un nouvel envoi sur `preview`.
 
 ---
 
@@ -104,7 +119,8 @@ vers quelles adresses ce lien a le droit de te renvoyer.
 1. Dans Supabase : **Authentication › URL Configuration**.
 2. **Site URL** : l'adresse de production Vercel, par exemple `https://ject-xxxx.vercel.app`.
 3. **Redirect URLs** : clique sur **Add URL** et ajoute :
-   - `https://ject-git-preview-vthiriets-projects.vercel.app/**` (version de test) ;
+   - `https://ject-*-vthiriets-projects.vercel.app/**` (toutes les adresses Vercel de
+     test : l'étoile veut dire « n'importe quel texte ici ») ;
    - `http://localhost:4321/**` (travail en local).
 4. Clique sur **Save**.
 
