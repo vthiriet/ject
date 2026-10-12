@@ -13,6 +13,14 @@ export function logError(message: string) {
   errors.length = Math.min(errors.length, 10);
 }
 
+/** Échoue si l'opération ne répond pas à temps (base du navigateur bloquée). */
+export function withTimeout<T>(promise: Promise<T>, ms = 4000): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`pas de réponse après ${ms / 1000} s (base du navigateur bloquée)`)), ms)),
+  ]);
+}
+
 /** Rapport lisible sur l'état de l'app sur cet appareil. */
 export async function runDiagnostics(): Promise<string> {
   const lines: string[] = [];
@@ -22,25 +30,25 @@ export async function runDiagnostics(): Promise<string> {
   add('En ligne', navigator.onLine ? 'oui' : 'non');
   add('Service worker', navigator.serviceWorker?.controller ? 'actif' : 'aucun');
   try {
-    const all = await db.notes.toArray();
+    const all = await withTimeout(db.notes.toArray());
     add('Notes enregistrées', all.length);
     add('dont Inbox', all.filter((n) => n.inbox && !n.deleted && n.trashedAt === null).length);
     add('dont supprimées', all.filter((n) => n.deleted).length);
-    add('En attente d’envoi', await db.outbox.count());
+    add('En attente d’envoi', await withTimeout(db.outbox.count()));
   } catch (e) {
     add('Lecture de la base', `ÉCHEC ${describe(e)}`);
   }
   // Essai réel : ajouter un élément à l'inbox, le relire, puis l'effacer.
   try {
-    const note = await createInboxItem('Test diagnostic');
-    const back = await db.notes.get(note.id);
+    const note = await withTimeout(createInboxItem('Test diagnostic'));
+    const back = await withTimeout(db.notes.get(note.id));
     add('Essai d’ajout à l’inbox', back?.inbox ? 'OK' : 'ÉCHEC (élément introuvable après ajout)');
-    await deleteNoteForever(note.id);
+    await withTimeout(deleteNoteForever(note.id));
   } catch (e) {
     add('Essai d’ajout à l’inbox', `ÉCHEC ${describe(e)}`);
   }
   try {
-    const session = await getSession();
+    const session = await withTimeout(getSession());
     add('Compte', session?.user.email ?? 'non connecté');
   } catch (e) {
     add('Compte', `ÉCHEC ${describe(e)}`);

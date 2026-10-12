@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { describe, logError } from '../lib/diagnostics';
+import { db } from '../lib/db';
+import { describe, logError, withTimeout } from '../lib/diagnostics';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote } from '../lib/store';
@@ -95,6 +96,11 @@ export default function App() {
       toast(`Erreur : ${e.message}`);
     });
     startAutoSync();
+    // Vérifie que la base du navigateur répond ; sinon, explique quoi faire.
+    withTimeout(db.notes.count()).catch((e) => {
+      logError(`Base locale : ${describe(e)}`);
+      toast('La mémoire du navigateur est bloquée : ferme complètement le navigateur (Forcer l’arrêt), puis rouvre Ject.');
+    });
     void purgeOldTrash();
     const params = new URLSearchParams(location.search);
     const shared = ['share_title', 'share_text', 'share_url'].map((k) => params.get(k)?.trim() ?? '');

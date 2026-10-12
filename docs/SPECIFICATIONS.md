@@ -277,3 +277,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Plan de l'organisation Actions / Habitudes / Projets / Ressources avec aires et états (à valider). |
 | 12/10/2026 | Onglets Actions, Habitudes, Projets, Ressources ; types à la saisie ; rangement en 3 temps ; états, régularités et aires. |
 | 12/10/2026 | Paramètres › Diagnostic : version chargée, état de la base locale, essai d'ajout, dernières erreurs. |
+| 12/10/2026 | Base du navigateur bloquée : délai maximal de 4 s, message explicatif au démarrage et dans le diagnostic. |

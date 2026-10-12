@@ -20,7 +20,7 @@ export function Toaster() {
   }, []);
   useEffect(() => {
     if (!msg) return;
-    const t = setTimeout(() => setMsg(null), 4500);
+    const t = setTimeout(() => setMsg(null), msg.text.length > 80 ? 12000 : 4500);
     return () => clearTimeout(t);
   }, [msg]);
   if (!msg) return null;

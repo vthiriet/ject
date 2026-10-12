@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { describe, logError } from '../lib/diagnostics';
+import { describe, logError, withTimeout } from '../lib/diagnostics';
 import { CATEGORIES, categoryMeta } from '../lib/gtd';
 import { createInboxItem, restoreNote, trashNote, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
@@ -44,7 +44,7 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
     setCategory(null);
     inputRef.current?.focus();
     try {
-      await createInboxItem(value, type ?? undefined);
+      await withTimeout(createInboxItem(value, type ?? undefined));
     } catch (e) {
       setText((current) => (current ? `${value}\n${current}` : value));
       setCategory(type);
