@@ -1,0 +1,180 @@
+<title>Bilan SEO Valentine Panici</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,600;0,700;1,500&family=Cabin:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --fond: #fbf8fd;
+    --surface: #ffffff;
+    --texte: #2d2433;
+    --doux: #6e6377;
+    --ligne: #e6ddec;
+    --violet: #442854;
+    --violet-clair: #efe5f6;
+    --fait: #2f7a55;
+    --fait-fond: #e5f3ec;
+    --afaire: #a0561c;
+    --afaire-fond: #fbeee2;
+    --barre-avant: #cdbfd8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --fond: #17121b; --surface: #211a26; --texte: #ece6f0; --doux: #a99db3; --ligne: #382d40;
+      --violet: #cfb3e6; --violet-clair: #2e2338; --fait: #7fd1a6; --fait-fond: #1b3328;
+      --afaire: #f0b27c; --afaire-fond: #3a2818; --barre-avant: #4a3d55;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --fond: #17121b; --surface: #211a26; --texte: #ece6f0; --doux: #a99db3; --ligne: #382d40;
+    --violet: #cfb3e6; --violet-clair: #2e2338; --fait: #7fd1a6; --fait-fond: #1b3328;
+    --afaire: #f0b27c; --afaire-fond: #3a2818; --barre-avant: #4a3d55;
+  }
+  body { background: var(--fond); color: var(--texte); font: 16px/1.6 'Cabin', system-ui, sans-serif; }
+  .page { max-width: 820px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 48px; }
+  h1, h2 { font-family: 'Cormorant Infant', Georgia, serif; color: var(--violet); text-wrap: balance; line-height: 1.05; margin: 0; }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700; }
+  h2 { font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 700; margin-bottom: 16px; }
+  p { margin: 0; max-width: 65ch; }
+  .sur-titre { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--doux); font-weight: 600; }
+  header { display: grid; gap: 12px; }
+  .intro { color: var(--doux); }
+
+  /* Score */
+  .score { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; background: var(--surface); border: 1px solid var(--ligne); border-radius: 14px; padding: 24px; }
+  .chiffres { display: flex; align-items: baseline; gap: 14px; font-family: 'Cormorant Infant', Georgia, serif; font-variant-numeric: tabular-nums; }
+  .chiffres .avant { font-size: 3rem; color: var(--doux); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .chiffres .fleche { font-size: 2rem; color: var(--doux); }
+  .chiffres .apres { font-size: 5rem; font-weight: 700; color: var(--violet); line-height: 1; }
+  .chiffres .sur { font-size: 1.5rem; color: var(--doux); }
+  .score .gain { display: inline-block; background: var(--fait-fond); color: var(--fait); font-weight: 600; border-radius: 999px; padding: 2px 12px; font-size: 14px; margin-bottom: 6px; }
+  .score p { color: var(--doux); font-size: 15px; }
+
+  /* Catégories */
+  .categories { display: grid; gap: 14px; }
+  .cat { display: grid; grid-template-columns: 11rem 1fr 5.5rem; gap: 14px; align-items: center; }
+  .cat .nom { font-weight: 500; }
+  .cat .nom small { display: block; color: var(--doux); font-size: 12px; font-weight: 400; }
+  .jauges { display: grid; gap: 4px; }
+  .jauge { height: 8px; border-radius: 4px; background: var(--ligne); overflow: hidden; }
+  .jauge span { display: block; height: 100%; border-radius: 4px; }
+  .jauge.avant span { background: var(--barre-avant); }
+  .jauge.apres span { background: var(--violet); }
+  .cat .valeurs { font-variant-numeric: tabular-nums; text-align: right; font-size: 14px; color: var(--doux); }
+  .cat .valeurs b { color: var(--texte); font-size: 16px; }
+  .legende { display: flex; gap: 18px; font-size: 13px; color: var(--doux); flex-wrap: wrap; }
+  .legende i { display: inline-block; width: 18px; height: 8px; border-radius: 4px; margin-right: 6px; vertical-align: middle; }
+
+  /* Checklist */
+  .liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .item { display: grid; grid-template-columns: 28px 1fr; gap: 14px; background: var(--surface); border: 1px solid var(--ligne); border-radius: 12px; padding: 16px 18px; }
+  .case { width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .fait .case { background: var(--fait); color: var(--surface); }
+  .afaire .case { border: 2px solid var(--afaire); background: var(--afaire-fond); }
+  .item .titre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; font-weight: 600; }
+  .num { font-variant-numeric: tabular-nums; color: var(--doux); font-weight: 500; }
+  .prio { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; background: var(--violet-clair); color: var(--violet); }
+  .item p { color: var(--doux); font-size: 15px; margin-top: 4px; }
+  .afaire { background: var(--afaire-fond); border-color: transparent; }
+  .afaire p { color: var(--texte); }
+
+  .bonus { display: grid; gap: 8px; margin: 0; padding-left: 20px; }
+  .bonus li::marker { color: var(--violet); }
+  .encart { background: var(--violet-clair); border-radius: 12px; padding: 20px 22px; display: grid; gap: 10px; }
+  .encart h3 { margin: 0; font-family: 'Cormorant Infant', Georgia, serif; font-size: 1.5rem; color: var(--violet); }
+  .encart ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--ligne); padding-top: 20px; display: grid; gap: 8px; }
+
+  @media (max-width: 560px) {
+    .score { grid-template-columns: 1fr; gap: 12px; }
+    .chiffres .apres { font-size: 4rem; }
+    .cat { grid-template-columns: 1fr 4.5rem; }
+    .cat .jauges { grid-column: 1 / -1; grid-row: 2; }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <span class="sur-titre">valentine-panici.fr · 28 septembre 2026</span>
+    <h1>Bilan SEO du site</h1>
+    <p class="intro">Le SEO, c'est tout ce qui aide un site à bien apparaître dans Google. Ce bilan reprend le plan d'action issu de l'audit du site : ce qui a été fait, ce qui reste à faire, et l'évolution du score.</p>
+  </header>
+
+  <section>
+    <h2>Le score</h2>
+    <div class="score">
+      <div class="chiffres" aria-label="Score passé de 53 à environ 79 sur 100">
+        <span class="avant">53</span><span class="fleche">→</span><span class="apres">79</span><span class="sur">/100</span>
+      </div>
+      <div>
+        <span class="gain">+26 points</span>
+        <p>Score de santé SEO calculé sur 7 catégories pondérées. Le score après travaux est une estimation sur la même grille que l'audit de départ. Ce n'est pas une note attribuée par Google.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Détail par catégorie</h2>
+    <div class="legende"><span><i style="background:var(--barre-avant)"></i>Avant</span><span><i style="background:var(--violet)"></i>Après</span></div>
+    <div class="categories" style="margin-top:14px">
+      <div class="cat"><div class="nom">SEO technique<small>poids 22 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:68%"></span></div><div class="jauge apres"><span style="width:92%"></span></div></div><div class="valeurs">68 → <b>92</b></div></div>
+      <div class="cat"><div class="nom">Qualité du contenu<small>poids 23 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:55%"></span></div><div class="jauge apres"><span style="width:58%"></span></div></div><div class="valeurs">55 → <b>58</b></div></div>
+      <div class="cat"><div class="nom">SEO des pages<small>poids 20 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:40%"></span></div><div class="jauge apres"><span style="width:88%"></span></div></div><div class="valeurs">40 → <b>88</b></div></div>
+      <div class="cat"><div class="nom">Données structurées<small>poids 10 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:5%"></span></div><div class="jauge apres"><span style="width:75%"></span></div></div><div class="valeurs">5 → <b>75</b></div></div>
+      <div class="cat"><div class="nom">Performance<small>poids 10 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:88%"></span></div><div class="jauge apres"><span style="width:92%"></span></div></div><div class="valeurs">88 → <b>92</b></div></div>
+      <div class="cat"><div class="nom">Recherche par IA<small>poids 10 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:50%"></span></div><div class="jauge apres"><span style="width:70%"></span></div></div><div class="valeurs">50 → <b>70</b></div></div>
+      <div class="cat"><div class="nom">Images<small>poids 5 %</small></div><div class="jauges"><div class="jauge avant"><span style="width:70%"></span></div><div class="jauge apres"><span style="width:88%"></span></div></div><div class="valeurs">70 → <b>88</b></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ce qui a été fait</h2>
+    <ul class="liste">
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">1</span>Menu sur téléphone<span class="prio">Critique</span></div><p>Sur mobile, le menu était invisible. Un bouton ☰ permet maintenant d'accéder à toutes les pages. Les titres trop larges pour un écran de téléphone ont aussi été corrigés.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">2</span>Titre et description Google propres à chaque page<span class="prio">Haute</span></div><p>Les 13 pages avaient la même description. Chacune a désormais son titre et sa description, modifiables dans Sanity (bloc SEO).</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">3</span>Sitemap complet<span class="prio">Haute</span></div><p>La liste des pages fournie à Google passe de 6 à 13 pages et se met à jour toute seule quand un projet graphique avec page dédiée est publié.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">4</span>Données structurées<span class="prio">Haute</span></div><p>Google sait maintenant que Valentine Panici est artiste peintre et graphiste à Lyon, que chaque projet est une de ses œuvres, et peut afficher un fil d'Ariane dans ses résultats.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">5</span>Aperçu sur les réseaux sociaux<span class="prio">Moyenne</span></div><p>Un lien partagé sur Facebook, WhatsApp ou LinkedIn affiche désormais une image, un titre et une description. Chaque page a aussi une adresse officielle pour Google.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">6</span>Titre principal de l'accueil<span class="prio">Moyenne</span></div><p>« Bienvenue ! » est remplacé par « Valentine Panici », avec « Peintre et graphiste à Lyon » dessous.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">9</span>Textes alternatifs des images<span class="prio">Moyenne</span></div><p>64 images décrites une par une pour Google Images et les personnes malvoyantes. Un champ « Texte alternatif » est disponible sous chaque image dans Sanity.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">10</span>Titre principal de la page Contact<span class="prio">Basse</span></div><p>La page affiche maintenant « Contacter Valentine Panici » comme titre principal.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">11</span>Vitesse d'affichage<span class="prio">Basse</span></div><p>Les images d'en-tête se chargent en priorité, et la connexion aux polices est préparée à l'avance.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">12</span>Nettoyage du fichier robots.txt<span class="prio">Basse</span></div><p>Google peut désormais suivre les redirections des adresses de l'ancien site et les retirer de ses résultats.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">13</span>Sécurité du site<span class="prio">Basse</span></div><p>Cinq protections supplémentaires, par exemple contre l'affichage du site à l'intérieur d'un autre site.</p></div></li>
+      <li class="item fait"><span class="case" aria-hidden="true">✓</span><div><div class="titre"><span class="num">14</span>Sitemap déclaré à Google<span class="prio">Basse</span></div><p>Le nouveau sitemap a été soumis dans Google Search Console, et l'ancien sitemap inutile a été supprimé.</p></div></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Ce qui reste à faire</h2>
+    <ul class="liste">
+      <li class="item afaire"><span class="case" aria-hidden="true"></span><div><div class="titre"><span class="num">7</span>Une page pour chaque peinture<span class="prio">Moyenne</span></div><p>Les quelque 80 peintures sont réunies sur une seule page. Avec une page chacune (titre, image, technique, format, prix), elles pourraient apparaître une par une dans Google et Google Images. C'est le chantier qui a le plus de potentiel.</p></div></li>
+      <li class="item afaire"><span class="case" aria-hidden="true"></span><div><div class="titre"><span class="num">8</span>Enrichir les pages de projets courtes<span class="prio">Moyenne</span></div><p>Carbur'en Scène, La Maison d'Izieu, Plume de Lynx et Quand la pause s'impose comptent moins de 110 mots. Quelques paragraphes sur le contexte, la commande et les choix graphiques leur donneraient plus de poids.</p></div></li>
+    </ul>
+    <p class="intro" style="margin-top:14px">Avec ces deux points, le score devrait dépasser 90/100.</p>
+  </section>
+
+  <section>
+    <h2>Également réalisé</h2>
+    <ul class="bonus">
+      <li>Les 9 pages de projets sans « page dédiée », qui existaient sans être reliées au site, ont été supprimées.</li>
+      <li>Dans Sanity, les fiches de pages s'appellent désormais « Pages : en-tête et SEO ».</li>
+      <li>Trois légendes corrigées : « Papeterie », « Sweat », et « test légende » supprimée sur Confin'it.</li>
+      <li>Les champs du formulaire de contact ne dépassent plus de leur colonne.</li>
+    </ul>
+  </section>
+
+  <section class="encart">
+    <h3>Ce que Valentine peut faire elle-même dans Sanity</h3>
+    <ul>
+      <li><b>Bloc SEO</b>, en bas des fiches de pages et des projets à page dédiée : modifier le titre et la description qui apparaissent dans Google. Laissé vide, un texte par défaut s'applique.</li>
+      <li><b>Texte alternatif</b>, sous chaque image : décrire l'image en une phrase. À remplir pour chaque nouvelle image.</li>
+      <li>Toute publication dans Sanity met le site en ligne à jour en une à deux minutes.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Les effets dans Google apparaissent progressivement, le temps que Google repasse sur les pages : de quelques jours à quelques semaines. On peut les suivre dans Google Search Console, rubrique « Performances ».</p>
+  </footer>
+</div>
