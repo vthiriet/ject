@@ -57,6 +57,46 @@ attente d'être rangés.
 **Listes** : le fonctionnement inspiré de Google Keep décrit ci-dessous (notes, listes,
 couleurs, illustrations, libellés, épingles, archives, export Notion…).
 
+### 3.0 bis Prochaine étape (à valider) : Actions, Habitudes, Projets, Ressources
+
+Inspiré de GTD (que faire de chaque élément) et de PARA (où il vit), en version simplifiée.
+
+**Onglets, dans l'ordre :** Inbox · Actions · Habitudes · Projets · Ressources.
+Ils remplacent l'onglet « Listes ». Le menu ☰ garde les Aires, les Archives, la Corbeille
+et les Paramètres.
+
+**Cartes :** dans chaque onglet, une carte est soit un **élément seul** (note texte), soit
+une **liste** (plusieurs éléments à cocher), comme dans Keep. Couleurs, illustrations et
+export Notion restent disponibles partout. L'onglet où se trouve la carte donne son type.
+
+**Aires** (Santé, Maison, Finances…) : ce sont les libellés actuels, renommés. Une carte de
+n'importe quel type peut appartenir à une ou plusieurs aires. Une rangée de pastilles permet
+de filtrer par aire dans chaque onglet.
+
+**Par type :**
+
+| Type | Exemples | Information propre |
+|---|---|---|
+| Action | « Prendre RDV dentiste » ; liste « Courses » | **État** : à faire / en attente (de qui, facultatif) / un jour / fait |
+| Habitude | « Courir » ; liste « Routine du matin » | **Régularité** : chaque jour, X fois par semaine, chaque semaine, chaque mois, ou texte libre |
+| Projet | liste « Voyage Japon » (ses étapes) | **État** : actif / un jour / terminé (part dans les Archives). Les étapes ont les états des actions |
+| Ressource | « Film : Dune 2 » ; liste « Films à voir » | Aucune |
+
+Pour une liste, l'état ou la régularité se règle sur chaque élément. Une case cochée = fait.
+
+**Saisie dans l'Inbox :** sous la zone de texte, 4 pastilles facultatives :
+Action · Habitude · Projet · Ressource. Sans choix, l'élément reste « à trier ».
+
+**Ranger :** pour chaque élément de l'Inbox :
+1. choisir ou confirmer le **type** (prérempli si choisi à la saisie) ;
+2. choisir la **destination** dans l'onglet correspondant : nouvelle carte, ajout à une
+   liste existante, ou nouvelle liste ;
+3. facultatif : choisir l'**aire** (proposée d'après la liste de destination) et, selon
+   le type, l'**état** ou la **régularité**.
+
+**Données existantes :** les notes et listes actuelles sont classées dans **Ressources**.
+Une option « Déplacer vers… » permet de changer le type d'une carte.
+
 ### 3.1 V1 : prototype complet
 
 **Notes et listes**
@@ -227,3 +267,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Publication via GitHub Actions (la liaison Git de Vercel échoue). Version de test : ject-preview-vthiriets-projects.vercel.app. |
 | 12/10/2026 | Deux onglets : Inbox (éléments bruts + bouton Ranger) et Listes (façon Keep). |
 | 12/10/2026 | Inbox : le texte saisi est remis en place si l'enregistrement échoue ; les erreurs inattendues s'affichent à l'écran. |
+| 12/10/2026 | Plan de l'organisation Actions / Habitudes / Projets / Ressources avec aires et états (à valider). |
