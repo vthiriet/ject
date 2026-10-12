@@ -80,3 +80,9 @@ GitHub est la seule référence : chaque ordinateur a sa propre copie locale.
   `npm run check` (vérification des types), `npm run build` (compilation comme sur Vercel).
 - Avant d'envoyer, lancer `npm run check` et `npm run build`, et tester en 360 px
   de large et sur ordinateur.
+- **Signature des envois** : les commits doivent avoir pour auteur le compte GitHub
+  `vthiriet` (`git config user.name "vthiriet"` et
+  `git config user.email "290705520+vthiriet@users.noreply.github.com"`),
+  sinon Vercel peut refuser de publier (« Git information retrieval failed »).
+- **Branches** : `main` = production (branche par défaut sur GitHub et branche de
+  production sur Vercel), `preview` = version de test.
