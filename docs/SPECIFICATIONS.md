@@ -37,9 +37,11 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 
 **Inbox** (onglet principal, ouvert au lancement) : uniquement des éléments **bruts**, en
 attente d'être rangés.
-- Bouton rond **+** en bas à droite (comme Google Keep, sur tous les onglets) : on choisit
-  **Texte** ou **Liste**, et la carte s'ouvre prête à écrire. Une carte laissée vide est
-  supprimée à la fermeture.
+- Bouton rond **+** en bas à droite (sur tous les onglets). Il propose :
+  **Inbox · Action · Habitude · Projet · Ressource**.
+  - **Inbox** ouvre aussitôt une carte texte à trier plus tard (capture rapide). Une
+    carte laissée vide est supprimée à la fermeture.
+  - Les 4 types ouvrent la **page de création** (voir 3.0 bis).
 - Un élément = un texte ou une liste (liens cliquables avec aperçu).
 - Toucher un élément l'ouvre pour le modifier (sans épingle ni archivage) ; corbeille
   avec « Annuler ».
@@ -82,8 +84,14 @@ facultatives : Action · Habitude · Projet · Ressource. Sans choix, l'élémen
 « à trier ». Le type choisi s'affiche sur l'élément et est présélectionné au rangement.
 Menu ⋮ › « Ranger dans… » range directement la carte telle quelle dans un onglet.
 
-**Bouton + dans les autres onglets :** la carte créée prend le type de l'onglet (et
-l'aire filtrée, le cas échéant).
+**Page de création (bouton + › un type) :** plein écran sur téléphone.
+- Type modifiable en haut (Action · Habitude · Projet · Ressource).
+- **Unique / Liste** : un texte seul, ou un titre et plusieurs éléments (« Entrée » passe
+  à l'élément suivant). Le texte saisi est conservé si on change de format.
+- **Nouvelle … / … existante** : créer une carte, ou ajouter le(s) élément(s) à une liste
+  existante de ce type (choisie dans la liste, avec recherche au-delà de 5).
+- Précisions facultatives : état ou régularité, et aires (l'aire filtrée est proposée).
+- « Créer » / « Ajouter », puis l'onglet du type s'affiche.
 
 **Ranger :** pour chaque élément de l'Inbox :
 1. choisir ou confirmer le **type** (prérempli si choisi à la saisie) ;
@@ -284,3 +292,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Paramètres › Diagnostic : version chargée, état de la base locale, essai d'ajout, dernières erreurs. |
 | 12/10/2026 | Base du navigateur bloquée : délai maximal de 4 s, message explicatif au démarrage et dans le diagnostic. |
 | 12/10/2026 | Bouton + (Texte / Liste) à la place de la zone de saisie permanente de l'Inbox et des barres « Nouvelle … » des onglets. |
+| 12/10/2026 | Bouton + : Inbox ou un type ; page de création (Unique / Liste, nouvelle / existante, précisions). |

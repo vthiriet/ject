@@ -185,15 +185,32 @@ export async function fileInboxItems(ids: string[], target: FileTarget, d: FileD
   if ('newTitle' in target) {
     await createNote({ ...cardFields(d), type: 'list', title: target.newTitle.trim(), items: created, status: undefined });
   } else {
-    const list = await db.notes.get(target.listId);
-    if (!list) return;
-    // Ajoute après le dernier élément non coché, en retirant les lignes vides.
-    const kept = list.items.filter((i) => i.text.trim());
-    const lastOpen = kept.map((i) => !i.checked && !i.exported).lastIndexOf(true);
-    kept.splice(lastOpen + 1, 0, ...created);
-    await save('note', { ...list, type: 'list', items: kept, archived: false, trashedAt: null });
+    await appendToList(target.listId, created);
   }
   for (const n of items) await deleteNoteForever(n.id);
+}
+
+/** Ajoute des éléments à une liste, après le dernier élément non coché. */
+async function appendToList(listId: string, created: ChecklistItem[]) {
+  const list = await db.notes.get(listId);
+  if (!list) return;
+  const kept = list.items.filter((i) => i.text.trim());
+  const lastOpen = kept.map((i) => !i.checked && !i.exported).lastIndexOf(true);
+  kept.splice(lastOpen + 1, 0, ...created);
+  await save('note', { ...list, type: 'list', items: kept, archived: false, trashedAt: null });
+}
+
+/** Création depuis le bouton + : carte seule, nouvelle liste, ou ajout à une liste existante. */
+export async function createFromForm(
+  form:
+    | { format: 'single'; text: string; listId?: string }
+    | { format: 'list'; title: string; items: string[]; listId?: string },
+  d: FileDetails,
+) {
+  const texts = (form.format === 'single' ? [form.text] : form.items).map((t) => t.trim()).filter(Boolean);
+  if (form.listId) return appendToList(form.listId, texts.map((t) => itemFor(t, d)));
+  if (form.format === 'single') return createNote({ ...cardFields(d), type: 'text', content: form.text.trim() });
+  return createNote({ ...cardFields(d), type: 'list', title: form.title.trim(), items: texts.map((t) => itemFor(t, d)), status: undefined });
 }
 
 /** Change l'état d'un projet ; « terminé » l'envoie dans les Archives. */

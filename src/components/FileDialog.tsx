@@ -4,9 +4,8 @@ import { fileInboxItems, trashNote, type FileDetails, type FileTarget } from '..
 import { normalize } from '../lib/text';
 import type { Category, Label, Note } from '../lib/types';
 import { Dialog } from './Dialog';
-import { FrequencyPicker } from './FrequencyPicker';
+import { DetailsFields } from './DetailsFields';
 import { Icon } from './Icon';
-import { Segmented } from './Segmented';
 import { LinkedText } from './LinkedText';
 import { toast } from './Toast';
 
@@ -88,7 +87,6 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
     item.type === 'list'
       ? [item.title, ...item.items.filter((i) => i.text.trim()).map((i) => `☐ ${i.text}`)].filter((t) => t.trim()).join('\n')
       : [item.title, item.content].filter((t) => t.trim()).join('\n');
-  const toggleLabel = (id: string) => setLabelIds(labelIds.includes(id) ? labelIds.filter((l) => l !== id) : [...labelIds, id]);
 
   return (
     <Dialog
@@ -132,37 +130,20 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
         <p className="hint">Choisis un type pour voir où le ranger.</p>
       ) : (
         <>
-          {category !== 'resource' && <p className="section-label">2. Précisions (facultatif)</p>}
-          {category === 'action' && (
-            <Segmented
-              value={status ?? 'todo'}
-              options={[['todo', 'À faire'], ['waiting', 'En attente'], ['someday', 'Un jour']]}
-              onChange={(v) => setStatus(v as FileDetails['status'])}
-            />
-          )}
-          {category === 'project' && (
-            <Segmented
-              value={projectStatus ?? 'active'}
-              options={[['active', 'Actif'], ['someday', 'Un jour']]}
-              onChange={(v) => setProjectStatus(v as FileDetails['projectStatus'])}
-            />
-          )}
-          {category === 'habit' && <FrequencyPicker value={frequency} onChange={setFrequency} />}
+          <DetailsFields
+            category={category}
+            value={{ status, projectStatus, frequency, labelIds }}
+            onChange={(d) => {
+              setStatus(d.status);
+              setProjectStatus(d.projectStatus);
+              setFrequency(d.frequency ?? '');
+              setLabelIds(d.labelIds ?? []);
+            }}
+            labels={labels}
+            title="2. Précisions et aires (facultatif)"
+          />
 
-          {labels.length > 0 && (
-            <p className="section-label">Aire (facultatif)</p>
-          )}
-          {labels.length > 0 && (
-            <div className="chips file-aires" aria-label="Aires">
-              {labels.map((l) => (
-                <button key={l.id} type="button" className={`chip ${labelIds.includes(l.id) ? 'on' : ''}`} onClick={() => toggleLabel(l.id)}>
-                  {l.emoji} {l.name}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <p className="section-label">{category === 'resource' ? '2' : '3'}. Ranger dans…</p>
+          <p className="section-label">3. Ranger dans…</p>
           <input
             className="text-input"
             value={query}

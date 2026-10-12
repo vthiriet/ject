@@ -8,6 +8,7 @@ import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
 import { Drawer, type Section } from './Drawer';
+import { CreatePage } from './CreatePage';
 import { Fab } from './Fab';
 import { FileDialog } from './FileDialog';
 import { Icon, IconButton } from './Icon';
@@ -66,6 +67,7 @@ export default function App() {
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [filing, setFiling] = useState<string[] | null>(null);
+  const [creating, setCreating] = useState<Category | null>(null);
   const started = useRef(false);
 
   // L'éditeur s'ouvre immédiatement ; l'enregistrement se fait en parallèle.
@@ -267,7 +269,20 @@ export default function App() {
         )}
       </main>
 
-      {isTab && <Fab onPick={(type) => newNote(type, isCategory(section) ? section : null)} />}
+      {isTab && <Fab onPick={(c) => (c === 'inbox' ? newNote('text', null) : setCreating(c))} />}
+      {creating && (
+        <CreatePage
+          category={creating}
+          notes={notes}
+          labels={labels}
+          labelId={labelId}
+          onClose={() => setCreating(null)}
+          onCreated={(c) => {
+            setCreating(null);
+            navigate(c);
+          }}
+        />
+      )}
 
       <Drawer
         open={drawer}
