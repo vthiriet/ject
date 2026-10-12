@@ -1548,3 +1548,14 @@ textarea.auto {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.diagnostic {
+  margin: 12px 0 0;
+  padding: 12px;
+  overflow-x: auto;
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

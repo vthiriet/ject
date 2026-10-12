@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { describe, logError } from '../lib/diagnostics';
 import { CATEGORIES, categoryMeta } from '../lib/gtd';
 import { createInboxItem, restoreNote, trashNote, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
@@ -47,7 +48,8 @@ export function InboxView({ items, total, focusSignal, onFile }: Props) {
     } catch (e) {
       setText((current) => (current ? `${value}\n${current}` : value));
       setCategory(type);
-      toast(`Impossible d’enregistrer : ${e instanceof Error ? `${e.name} – ${e.message}` : String(e)}`);
+      logError(`Ajout inbox : ${describe(e)}`);
+      toast(`Impossible d’enregistrer : ${describe(e)}`);
     }
   };
 

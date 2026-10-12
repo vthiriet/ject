@@ -1,4 +1,5 @@
 import { db, getMeta, setMeta, tableFor } from './db';
+import { logError } from './diagnostics';
 import { getSession, supabase } from './supabase';
 import type { Kind } from './types';
 
@@ -57,6 +58,7 @@ export async function syncNow() {
     setStatus('synced');
   } catch (e) {
     console.error('Synchronisation', e);
+    logError(`Synchronisation : ${e instanceof Error ? e.message : String(e)}`);
     setStatus(navigator.onLine ? 'error' : 'offline', e instanceof Error ? e.message : String(e));
   } finally {
     running = false;

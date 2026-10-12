@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { db } from '../lib/db';
+import { runDiagnostics } from '../lib/diagnostics';
 import { downloadFile } from '../lib/download';
 import { useSyncStatus, type ThemePref } from '../lib/hooks';
 import { importBackup } from '../lib/store';
@@ -31,6 +32,13 @@ export function Settings({ onClose, theme, setTheme }: Props) {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [diag, setDiag] = useState('');
+  const [diagRunning, setDiagRunning] = useState(false);
+  const runDiag = async () => {
+    setDiagRunning(true);
+    setDiag(await runDiagnostics());
+    setDiagRunning(false);
+  };
 
   useEffect(() => {
     void supabase?.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
@@ -128,6 +136,21 @@ export function Settings({ onClose, theme, setTheme }: Props) {
             <input type="file" accept="application/json,.json" hidden onChange={(e) => void importJson(e.target.files?.[0])} />
           </label>
         </div>
+      </section>
+      <section className="settings-section">
+        <h3>Diagnostic</h3>
+        <p className="hint">En cas de problème : lance le diagnostic, puis fais une capture d’écran ou copie le résultat.</p>
+        <div className="row wrap">
+          <button type="button" className="btn" disabled={diagRunning} onClick={() => void runDiag()}>
+            <Icon name="sync" size={18} /> {diagRunning ? 'Diagnostic…' : 'Lancer le diagnostic'}
+          </button>
+          {diag && (
+            <button type="button" className="btn" onClick={() => void navigator.clipboard.writeText(diag).then(() => toast('Diagnostic copié'))}>
+              <Icon name="copy" size={18} /> Copier
+            </button>
+          )}
+        </div>
+        {diag && <pre className="diagnostic">{diag}</pre>}
       </section>
       <p className="hint about">Ject · version 0.1</p>
     </Dialog>

@@ -9,4 +9,6 @@ export default defineConfig({
   integrations: [react()],
   adapter: vercel(),
   devToolbar: { enabled: false },
+  // Date de fabrication, affichée dans le diagnostic pour savoir quelle version est chargée.
+  vite: { define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) } },
 });

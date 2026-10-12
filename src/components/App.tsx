@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { describe, logError } from '../lib/diagnostics';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote } from '../lib/store';
@@ -86,10 +87,13 @@ export default function App() {
     started.current = true;
     // Toute erreur inattendue s'affiche à l'écran au lieu de passer inaperçue.
     window.addEventListener('unhandledrejection', (e) => {
-      const r = e.reason;
-      toast(`Erreur : ${r instanceof Error ? `${r.name} – ${r.message}` : String(r)}`);
+      logError(describe(e.reason));
+      toast(`Erreur : ${describe(e.reason)}`);
     });
-    window.addEventListener('error', (e) => toast(`Erreur : ${e.message}`));
+    window.addEventListener('error', (e) => {
+      logError(e.message);
+      toast(`Erreur : ${e.message}`);
+    });
     startAutoSync();
     void purgeOldTrash();
     const params = new URLSearchParams(location.search);
