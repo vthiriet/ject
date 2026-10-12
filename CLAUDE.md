@@ -66,3 +66,17 @@ GitHub est la seule référence : chaque ordinateur a sa propre copie locale.
 - Les réglages propres à un ordinateur (mémoire de Claude, connexion
   GitHub, outils installés) ne se synchronisent pas : les règles
   importantes doivent être écrites ici, dans CLAUDE.md.
+
+## Le projet Ject
+
+- **Ce que c'est** : une inbox personnelle (PWA) inspirée de Google Keep, avec export vers Notion.
+- **Spécifications** : `docs/SPECIFICATIONS.md`. **Mets-les à jour à chaque nouvelle
+  fonctionnalité ou optimisation**, y compris le tableau « Historique ».
+- **Installation** (Supabase, Notion, Vercel) : `docs/INSTALLATION.md`.
+- **Technique** : Astro + React, Dexie (IndexedDB) pour le stockage local d'abord,
+  Supabase pour la synchronisation, routes serveur `src/pages/api/*` pour Notion et
+  les aperçus de liens.
+- **Commandes** : `npm run dev` (site local sur http://localhost:4321),
+  `npm run check` (vérification des types), `npm run build` (compilation comme sur Vercel).
+- Avant d'envoyer, lancer `npm run check` et `npm run build`, et tester en 360 px
+  de large et sur ordinateur.

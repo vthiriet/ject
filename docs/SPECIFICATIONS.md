@@ -1,7 +1,7 @@
 # Ject — Spécifications
 
 > Document vivant : il est mis à jour à chaque nouvelle fonctionnalité ou optimisation.
-> Dernière mise à jour : 12/10/2026 (version initiale, après le questionnaire de cadrage).
+> Dernière mise à jour : 12/10/2026 (prototype V1).
 
 ## 1. Vision
 
@@ -36,20 +36,29 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 ### 3.1 V1 : prototype complet
 
 **Notes et listes**
-- Notes texte (titre + contenu).
+- Notes texte (titre + contenu), transformables en liste et inversement.
 - Listes à cocher : les éléments cochés descendent en bas, dans une zone repliable.
 - Liens cliquables avec aperçu (titre, image et site de la page liée).
-- Couleurs de fond des notes (palette inspirée de Keep).
+- Couleurs de fond des notes (palette inspirée de Keep, 11 couleurs).
+- **Illustration de fond** (bandeau en haut de la note) : une galerie intégrée de
+  10 illustrations (courses, recettes, idées, projets, musique, films, lecture,
+  voyage, fête, nature), plus **ses propres images importées**. Les images importées
+  sont réduites automatiquement et rangées dans « ma galerie » pour être réutilisées.
 
 **Organisation**
 - Épingler une note en haut.
-- Libellés (étiquettes), **bien mis en avant** : filtre rapide en haut de l'écran
-  et affichage des libellés sur chaque carte.
+- Libellés (étiquettes), **bien mis en avant** :
+  - chaque libellé a un **emoji** ;
+  - une **rangée de pastilles** en haut de l'écran filtre d'un seul geste ;
+  - les libellés s'affichent sur chaque carte ;
+  - le menu latéral les liste avec le nombre de notes ;
+  - une note créée pendant qu'un filtre est actif reçoit automatiquement ce libellé.
 - Archiver une note.
-- Corbeille : suppression définitive automatique après 7 jours, comme Keep.
+- Corbeille : restauration possible, suppression définitive automatique après 7 jours.
+- Bouton « Annuler » après un archivage ou une suppression.
 - Recherche dans le titre, le contenu et les éléments de liste.
 - Affichage en grille (mosaïque) ou en liste.
-- Glisser-déposer pour réordonner les notes.
+- Glisser-déposer pour réordonner les notes (appui long sur téléphone).
 
 **Sortie des données**
 - Copier une note dans le presse-papiers et utiliser le partage Android
@@ -58,7 +67,12 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 - Export de toutes les données (sauvegarde) au format JSON et Markdown.
 
 **Saisie rapide** (besoin n°1)
-- À l'ouverture, l'app est immédiatement prête à écrire.
+- Barre « Créer une note… » toujours visible en bas de l'écran du téléphone :
+  un toucher, et le clavier s'ouvre aussitôt.
+- Réglage « À l'ouverture de Ject » : afficher mes notes, ou ouvrir directement
+  une nouvelle note ou une nouvelle liste.
+- Dans une liste, « Entrée » crée l'élément suivant ; coller plusieurs lignes crée
+  plusieurs éléments.
 - Raccourcis sur l'icône Android (appui long) : « Nouvelle note » et « Nouvelle liste ».
 - Ject apparaît dans le menu « Partager » d'Android : un lien ou un texte partagé
   depuis une autre app crée une note dans l'inbox.
@@ -68,7 +82,10 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 - Synchronisation entre le téléphone et l'ordinateur.
 - Mode sombre : automatique (selon le système) ou choisi manuellement.
 
-### 3.2 Gestion de projet (voir les questions ouvertes)
+### 3.2 Gestion de projet : dans Notion pour le moment
+
+Ject reste une inbox. Les projets se gèrent dans Notion, grâce à l'export (§5).
+Ce qui suit décrit ce que serait la gestion de projet si elle arrivait un jour dans Ject :
 
 - Un **projet** est un chantier à moyen ou long terme.
 - Il contient des **tâches** avec échéance, priorité et statut.
@@ -93,7 +110,7 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 - Dessins à main levée.
 - Import des notes Google Keep.
 
-## 4. Choix techniques (proposition)
+## 4. Choix techniques
 
 | Brique | Choix | Pourquoi |
 |---|---|---|
@@ -112,42 +129,73 @@ récente l'emporte.
 **Limite connue** : une PWA ne peut pas afficher de **widget** sur l'écran
 d'accueil Android. Les raccourcis sur l'icône et le menu « Partager » le remplacent.
 
+**Accès et sécurité** :
+- Sans compte, Ject fonctionne entièrement sur l'appareil.
+- La synchronisation demande une connexion par **lien magique envoyé par e-mail**,
+  une seule fois par appareil (Supabase Auth).
+- Chaque ligne de la base appartient à son utilisateur. Les règles RLS de Supabase
+  empêchent toute autre personne de la lire.
+- Les routes serveur (Notion, aperçu de liens) vérifient la connexion et l'adresse
+  autorisée (`ALLOWED_EMAIL`).
+- Après la première connexion, il est recommandé de désactiver les inscriptions
+  dans Supabase.
+
+**Aperçu des liens** : une route serveur lit le titre, l'image et le site de la page
+liée. Le résultat est gardé en cache sur l'appareil.
+
+**Synchronisation** : elle se lance au démarrage, au retour du réseau, au retour
+sur l'app, toutes les 30 secondes, et peu après chaque modification.
+
 ## 5. Export vers Notion
 
-- Connexion par une **intégration interne Notion** : une clé secrète, créée une
-  fois dans les réglages Notion et stockée dans Vercel. Elle n'est jamais visible
-  dans le navigateur.
-- Les appels à Notion passent par une route serveur Astro, car Notion refuse les
-  appels directs depuis un navigateur.
-- Depuis une liste, on peut :
-  - exporter **la liste entière** ;
-  - **sélectionner des éléments** puis les exporter.
-- La destination exacte (page ou base de données Notion) et la correspondance des
-  champs restent à préciser (voir les questions ouvertes).
+- **Rôle** : Ject sert d'inbox, et les projets vivent dans Notion (pour le moment).
+- **Connexion** : une **intégration interne Notion**. Sa clé secrète est stockée dans Vercel
+  et n'est jamais visible dans le navigateur. Les appels passent par une route serveur
+  Astro, car Notion refuse les appels directs depuis un navigateur.
+- **Destination** : une **page** Notion, choisie à chaque export dans la liste des pages
+  partagées avec l'intégration. La dernière page utilisée est proposée par défaut.
+- **Format** :
+  - les éléments d'une liste deviennent des **cases à cocher** ajoutées à la fin
+    de la page, en gardant leur état coché ou non ;
+  - le titre de la note peut être ajouté comme intertitre (option) ;
+  - une note texte est envoyée sous forme de paragraphes.
+- **Choix** : la liste entière, ou seulement les éléments sélectionnés.
+- **Après l'export** :
+  - liste entière ou note texte : la note est **archivée** avec la mention
+    « Exportée vers Notion le … dans « page » » ;
+  - éléments choisis : ils passent dans une section **« Exportés vers Notion »** de la
+    liste, avec la page et la date. Quand il ne reste plus rien, la liste est archivée.
+- Réservé à l'utilisateur connecté (adresse autorisée par `ALLOWED_EMAIL`).
 
-## 6. Modèle de données (première version)
+## 6. Modèle de données
 
-- **note** : id, type (`note` ou `liste`), titre, contenu, couleur, épinglée,
-  archivée, supprimée le, position, projet, créée le, modifiée le.
-- **element_liste** : id, note, texte, coché, position.
-- **libelle** : id, nom, couleur ou emoji.
-- **note_libelle** : lien entre une note et ses libellés (une note peut en avoir plusieurs).
-- **projet** : id, projet parent, nom, description, statut.
-- **tache** : id, projet, tâche parente, titre, statut, priorité, échéance, position.
-- **export_notion** : id, note ou élément exporté, identifiant Notion, date
-  (pour savoir ce qui a déjà été envoyé).
+**Sur l'appareil (IndexedDB)** :
+- **notes** : id, type (`text` ou `list`), titre, contenu, éléments de liste
+  (id, texte, coché, mention d'export), couleur, illustration (`preset:<id>` ou
+  `img:<id>`), épinglée, archivée, mise à la corbeille le, position, libellés,
+  mention d'export Notion, créée le, modifiée le.
+- **labels** : id, nom, emoji.
+- **backgrounds** : images importées (réduites, format JPEG).
+- **outbox** : éléments modifiés en attente d'envoi à Supabase.
+- **previews** : aperçus de liens (cache local, non synchronisé).
 
-## 7. Questions ouvertes
+**Sur Supabase** : une seule table `ject_records` (id, utilisateur, type, données
+JSON, date de modification, supprimé, date d'arrivée sur le serveur).
+Le schéma est dans `supabase/schema.sql`. Une suppression définitive laisse une
+« pierre tombale », pour que les autres appareils suppriment aussi la note.
+En cas de conflit, la modification la plus récente l'emporte.
 
-1. Les projets et le Kanban sont-ils gérés **dans Ject**, ou **dans Notion** (Ject
-   se limitant alors à l'inbox et à l'export) ?
-2. Le projet fait-il partie du prototype V1 ?
-3. Comment protéger l'accès aux données sans compte (voir §4) ?
-4. Destination et format de l'export Notion.
-5. Que recouvre « illustrations » ?
+## 7. Pistes pour la suite
+
+- Réordonner les éléments d'une liste par glisser-déposer.
+- Export vers une **base de données** Notion (une ligne par élément), en plus des pages.
+- Gestion de projet dans Ject (Kanban, échéances, priorités, sous-tâches), si Notion
+  ne suffit plus.
+- Repasse de design avec Claude Design.
 
 ## 8. Historique
 
 | Date | Changement |
 |---|---|
 | 12/10/2026 | Version initiale après le questionnaire de cadrage |
+| 12/10/2026 | Décisions : projets dans Notion, connexion par lien magique, export en cases à cocher vers une page choisie, illustrations importables. Prototype V1 complet. |
