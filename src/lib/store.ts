@@ -133,8 +133,13 @@ export async function markExported(id: string, itemIds: string[] | 'all', mentio
 export const createInboxItem = (text: string, category?: Category) =>
   createNote({ type: 'text', content: text.trim(), inbox: true, ...(category ? { category } : {}) });
 
-/** Chaque ligne non vide d'un élément de l'inbox devient un élément de liste. */
+/** Chaque ligne (ou élément) non vide d'un élément de l'inbox devient un élément de liste. */
 function linesOf(note: Note) {
+  // Une liste apporte ses éléments (son titre seulement si elle n'en a pas).
+  if (note.type === 'list') {
+    const texts = note.items.map((i) => i.text.trim()).filter(Boolean);
+    return texts.length ? texts : [note.title.trim()].filter(Boolean);
+  }
   return [note.title, ...note.content.split(/\r?\n/)].map((l) => l.trim()).filter(Boolean);
 }
 

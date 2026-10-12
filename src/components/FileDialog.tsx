@@ -84,7 +84,10 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
     );
   }
 
-  const text = [item.title, item.content].filter((t) => t.trim()).join('\n');
+  const text =
+    item.type === 'list'
+      ? [item.title, ...item.items.filter((i) => i.text.trim()).map((i) => `☐ ${i.text}`)].filter((t) => t.trim()).join('\n')
+      : [item.title, item.content].filter((t) => t.trim()).join('\n');
   const toggleLabel = (id: string) => setLabelIds(labelIds.includes(id) ? labelIds.filter((l) => l !== id) : [...labelIds, id]);
 
   return (

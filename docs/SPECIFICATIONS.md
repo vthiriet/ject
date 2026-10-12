@@ -37,11 +37,12 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 
 **Inbox** (onglet principal, ouvert au lancement) : uniquement des éléments **bruts**, en
 attente d'être rangés.
-- Zone de saisie toujours visible (en bas sur téléphone, en haut sur ordinateur) :
-  on tape, « Entrée » dépose l'élément et la zone reste prête pour le suivant.
-  « Maj + Entrée » passe à la ligne.
-- Un élément = du texte sur une ou plusieurs lignes (liens cliquables avec aperçu).
-- Toucher un élément permet de le modifier ; corbeille avec « Annuler ».
+- Bouton rond **+** en bas à droite (comme Google Keep, sur tous les onglets) : on choisit
+  **Texte** ou **Liste**, et la carte s'ouvre prête à écrire. Une carte laissée vide est
+  supprimée à la fermeture.
+- Un élément = un texte ou une liste (liens cliquables avec aperçu).
+- Toucher un élément l'ouvre pour le modifier (sans épingle ni archivage) ; corbeille
+  avec « Annuler ».
 - Le partage Android (« Partager › Ject ») et le raccourci « Ajouter à l'inbox » arrivent ici.
 - Pastille sur l'onglet : nombre d'éléments à ranger.
 
@@ -76,9 +77,13 @@ de filtrer par aire dans chaque onglet.
 
 Pour une liste, l'état ou la régularité se règle sur chaque élément. Une case cochée = fait.
 
-**Saisie dans l'Inbox :** au-dessus de la zone de texte, 4 pastilles facultatives :
-Action · Habitude · Projet · Ressource (remises à zéro après chaque ajout). Sans choix,
-l'élément reste « à trier ». Le type choisi s'affiche sur l'élément.
+**Type pressenti dans l'Inbox :** dans la carte d'un élément de l'Inbox, 4 pastilles
+facultatives : Action · Habitude · Projet · Ressource. Sans choix, l'élément reste
+« à trier ». Le type choisi s'affiche sur l'élément et est présélectionné au rangement.
+Menu ⋮ › « Ranger dans… » range directement la carte telle quelle dans un onglet.
+
+**Bouton + dans les autres onglets :** la carte créée prend le type de l'onglet (et
+l'aire filtrée, le cas échéant).
 
 **Ranger :** pour chaque élément de l'Inbox :
 1. choisir ou confirmer le **type** (prérempli si choisi à la saisie) ;
@@ -278,3 +283,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Onglets Actions, Habitudes, Projets, Ressources ; types à la saisie ; rangement en 3 temps ; états, régularités et aires. |
 | 12/10/2026 | Paramètres › Diagnostic : version chargée, état de la base locale, essai d'ajout, dernières erreurs. |
 | 12/10/2026 | Base du navigateur bloquée : délai maximal de 4 s, message explicatif au démarrage et dans le diagnostic. |
+| 12/10/2026 | Bouton + (Texte / Liste) à la place de la zone de saisie permanente de l'Inbox et des barres « Nouvelle … » des onglets. |

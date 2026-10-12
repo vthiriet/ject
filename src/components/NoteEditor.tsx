@@ -189,6 +189,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     await flush();
     await updateNote(noteId, {
       category: c,
+      // Depuis l'Inbox, déplacer revient à ranger la carte telle quelle.
+      inbox: false,
+      position: Date.now(),
       ...(c === 'action' && !note.status ? { status: 'todo' as const } : {}),
       ...(c === 'project' && !note.projectStatus ? { projectStatus: 'active' as const } : {}),
     });
@@ -215,8 +218,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const exported = draft.items.filter((i) => i.exported);
   const links = extractLinks(draft);
 
+  const inInbox = !!note.inbox;
   const category = categoryOf(note);
-  const hasItemOptions = category === 'action' || category === 'project' || category === 'habit';
+  const hasItemOptions = !inInbox && (category === 'action' || category === 'project' || category === 'habit');
 
   const itemBadge = (item: ChecklistItem) =>
     category === 'habit'
@@ -295,7 +299,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
         <div className="editor-top">
           <IconButton name="back" label="Fermer" onClick={() => void close()} />
           <div className="spacer" />
-          {!note.trashedAt && (
+          {!note.trashedAt && !inInbox && (
             <>
               <IconButton name="pin" label={note.pinned ? 'Désépingler' : 'Épingler'} active={note.pinned} onClick={() => void updateNote(noteId, { pinned: !note.pinned, archived: false })} />
               <IconButton name={note.archived ? 'unarchive' : 'archive'} label={note.archived ? 'Désarchiver' : 'Archiver'} onClick={() => void archive()} />
@@ -321,6 +325,22 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
             }}
           />
 
+          {inInbox ? (
+            <div className="editor-meta">
+              <span className="type-badge"><Icon name="inbox" size={14} /> Inbox</span>
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`type-chip ${note.category === c.id ? 'on' : ''}`}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => void updateNote(noteId, { category: note.category === c.id ? undefined : c.id })}
+                >
+                  <Icon name={c.icon} size={16} /> {c.label}
+                </button>
+              ))}
+            </div>
+          ) : (
           <div className="editor-meta">
             <span className="type-badge"><Icon name={categoryMeta(category).icon} size={14} /> {categoryMeta(category).label}</span>
             {category === 'action' && draft.type === 'text' && (
@@ -341,7 +361,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
               <FrequencyPicker value={note.frequency ?? ''} onChange={(v) => void updateNote(noteId, { frequency: v || undefined })} />
             )}
           </div>
-          {category === 'action' && draft.type === 'text' && note.status === 'waiting' && (
+          )}
+          {!inInbox && category === 'action' && draft.type === 'text' && note.status === 'waiting' && (
             <input
               className="text-input editor-waiting"
               defaultValue={note.waitingFor ?? ''}
@@ -420,7 +441,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
         {panel === 'more' && (
           <div className="panel menu">
             <button type="button" onClick={() => { setPanel(null); void flush().then(() => setExporting(true)); }}><Icon name="send" size={20} /> Exporter vers Notion</button>
-            <button type="button" onClick={() => setPanel('move')}><Icon name="file" size={20} /> Déplacer vers…</button>
+            <button type="button" onClick={() => setPanel('move')}><Icon name="file" size={20} /> {inInbox ? 'Ranger dans…' : 'Déplacer vers…'}</button>
             <button type="button" onClick={convert}><Icon name={draft.type === 'text' ? 'checked' : 'notes'} size={20} /> {draft.type === 'text' ? 'Transformer en liste' : 'Transformer en texte'}</button>
             <button type="button" onClick={() => void copy()}><Icon name="copy" size={20} /> Copier le texte</button>
             <button type="button" onClick={() => void share()}><Icon name="share" size={20} /> Partager</button>
@@ -431,7 +452,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
         {panel === 'move' && (
           <div className="panel menu">
-            {CATEGORIES.filter((c) => c.id !== category).map((c) => (
+            {CATEGORIES.filter((c) => inInbox || c.id !== category).map((c) => (
               <button key={c.id} type="button" onClick={() => void moveTo(c.id)}><Icon name={c.icon} size={20} /> {c.plural}</button>
             ))}
           </div>

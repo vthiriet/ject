@@ -8,6 +8,7 @@ import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
 import { Drawer, type Section } from './Drawer';
+import { Fab } from './Fab';
 import { FileDialog } from './FileDialog';
 import { Icon, IconButton } from './Icon';
 import { InboxView } from './InboxView';
@@ -65,19 +66,20 @@ export default function App() {
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [filing, setFiling] = useState<string[] | null>(null);
-  const [focusInbox, setFocusInbox] = useState(0);
   const started = useRef(false);
 
   // L'éditeur s'ouvre immédiatement ; l'enregistrement se fait en parallèle.
-  const newNote = (type: 'text' | 'list', category: Category) => {
-    setSection(category);
-    const note = buildNote({
-      type,
-      category,
-      labelIds: labelId ? [labelId] : [],
-      ...(category === 'action' && type === 'text' ? { status: 'todo' as const } : {}),
-      ...(category === 'project' ? { projectStatus: 'active' as const } : {}),
-    });
+  // Depuis l'Inbox, la carte est un élément brut ; ailleurs, elle prend le type de l'onglet.
+  const newNote = (type: 'text' | 'list', category: Category | null) => {
+    const note = category
+      ? buildNote({
+          type,
+          category,
+          labelIds: labelId ? [labelId] : [],
+          ...(category === 'action' && type === 'text' ? { status: 'todo' as const } : {}),
+          ...(category === 'project' ? { projectStatus: 'active' as const } : {}),
+        })
+      : buildNote({ type, inbox: true });
     setEditing({ id: note.id, isNew: true, initial: note });
     void saveNote(note);
   };
@@ -112,8 +114,8 @@ export default function App() {
       void createInboxItem(content).then(() => toast('Ajouté à ton inbox'));
     } else if (tab && CATEGORIES.some((c) => c.id === tab)) {
       setSection(tab as Category);
-    } else {
-      setFocusInbox(Date.now());
+    } else if (params.get('new') === 'inbox') {
+      newNote('text', null);
     }
     if (location.search) history.replaceState(null, '', '/');
   }, []);
@@ -155,7 +157,6 @@ export default function App() {
     setLabelId(s === 'inbox' || s === 'trash' ? null : l);
     setDrawer(false);
     window.scrollTo(0, 0);
-    if (s === 'inbox') setFocusInbox(Date.now());
   };
 
   const sortable = !query && section !== 'trash';
@@ -230,17 +231,9 @@ export default function App() {
 
       <main className={`content ${isTab ? 'with-tabs' : ''}`}>
         {section === 'inbox' && (
-          <InboxView items={inboxItems} total={inboxAll.length} focusSignal={focusInbox} onFile={setFiling} />
+          <InboxView items={inboxItems} total={inboxAll.length} onOpen={(id) => setEditing({ id, isNew: false })} onFile={setFiling} />
         )}
 
-        {isCategory(section) && (
-          <div className="composer">
-            <button type="button" className="composer-main" onClick={() => newNote('text', section)}>
-              {section === 'action' ? 'Nouvelle action…' : section === 'habit' ? 'Nouvelle habitude…' : section === 'project' ? 'Nouveau projet…' : 'Nouvelle ressource…'}
-            </button>
-            <IconButton name="checked" label="Nouvelle liste" onClick={() => newNote('list', section)} />
-          </div>
-        )}
 
         {section === 'trash' && visible.length > 0 && (
           <div className="trash-head">
@@ -273,6 +266,8 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {isTab && <Fab onPick={(type) => newNote(type, isCategory(section) ? section : null)} />}
 
       <Drawer
         open={drawer}
