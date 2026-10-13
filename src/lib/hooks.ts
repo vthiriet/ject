@@ -54,6 +54,18 @@ export function useTheme(): [ThemePref, (t: ThemePref) => void] {
     const root = document.documentElement;
     if (theme === 'auto') delete root.dataset.theme;
     else root.dataset.theme = theme;
+    // Les barres du téléphone (état, navigation) prennent la couleur du thème affiché.
+    const sync = () => {
+      const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+      document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+        m.removeAttribute('media');
+        m.setAttribute('content', bg);
+      });
+    };
+    sync();
+    const mq = matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
   }, [theme]);
   return [theme, setTheme];
 }

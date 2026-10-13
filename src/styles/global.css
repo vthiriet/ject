@@ -8,9 +8,11 @@
 }
 html {
   -webkit-text-size-adjust: 100%;
+  background: var(--bg);
 }
 body {
   margin: 0;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font-family: Roboto, 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -1713,4 +1715,12 @@ textarea.auto {
 }
 .create-page .file-aires {
   margin-top: 8px;
+}
+
+.copy-list {
+  margin: 12px 20px 4px;
+}
+.card-actions .icon-btn {
+  width: 36px;
+  height: 36px;
 }

@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CATEGORIES, categoryOf } from '../lib/gtd';
-import { fileInboxItems, trashNote, type FileDetails, type FileTarget } from '../lib/store';
+import { fileInboxItems, trashNote, type FileTarget } from '../lib/store';
 import { normalize } from '../lib/text';
-import type { Category, Label, Note } from '../lib/types';
+import type { Category, Note } from '../lib/types';
 import { Dialog } from './Dialog';
-import { DetailsFields } from './DetailsFields';
 import { Icon } from './Icon';
 import { LinkedText } from './LinkedText';
 import { toast } from './Toast';
@@ -13,33 +12,24 @@ interface Props {
   /** Éléments à ranger, dans l'ordre. */
   ids: string[];
   notes: Note[];
-  labels: Label[];
   onClose: () => void;
 }
 
 const listName = (n: Note) => n.title.trim() || n.items.find((i) => i.text.trim())?.text || 'Liste sans titre';
 
 /** Mode « Ranger » : pour chaque élément de l'inbox, choisir son type, puis sa destination. */
-export function FileDialog({ ids, notes, labels, onClose }: Props) {
+export function FileDialog({ ids, notes, onClose }: Props) {
   const [queue] = useState(ids);
   const [index, setIndex] = useState(0);
   const [query, setQuery] = useState('');
   const [filed, setFiled] = useState(0);
   const item = notes.find((n) => n.id === queue[index]);
 
-  // Précisions, remises à zéro pour chaque élément.
+  // Type, remis à jour pour chaque élément.
   const [category, setCategory] = useState<Category | null>(item?.category ?? null);
-  const [status, setStatus] = useState<FileDetails['status']>('todo');
-  const [projectStatus, setProjectStatus] = useState<FileDetails['projectStatus']>('active');
-  const [frequency, setFrequency] = useState('');
-  const [labelIds, setLabelIds] = useState<string[]>([]);
 
   useEffect(() => {
     setCategory(item?.category ?? null);
-    setStatus('todo');
-    setProjectStatus('active');
-    setFrequency('');
-    setLabelIds(item?.labelIds ?? []);
     setQuery('');
   }, [item?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -71,7 +61,7 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
 
   const file = async (target: FileTarget) => {
     if (!item || !category) return;
-    await fileInboxItems([item.id], target, { category, status, projectStatus, frequency: frequency || undefined, labelIds });
+    await fileInboxItems([item.id], target, { category, labelIds: item.labelIds });
     next(true);
   };
 
@@ -130,20 +120,7 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
         <p className="hint">Choisis un type pour voir où le ranger.</p>
       ) : (
         <>
-          <DetailsFields
-            category={category}
-            value={{ status, projectStatus, frequency, labelIds }}
-            onChange={(d) => {
-              setStatus(d.status);
-              setProjectStatus(d.projectStatus);
-              setFrequency(d.frequency ?? '');
-              setLabelIds(d.labelIds ?? []);
-            }}
-            labels={labels}
-            title="2. Précisions et aires (facultatif)"
-          />
-
-          <p className="section-label">3. Ranger dans…</p>
+          <p className="section-label">2. Ranger dans…</p>
           <input
             className="text-input"
             value={query}
@@ -171,7 +148,6 @@ export function FileDialog({ ids, notes, labels, onClose }: Props) {
             {shown.map((l) => (
               <li key={l.id}>
                 <button type="button" className="file-target" data-color={l.color} onClick={() => void file({ listId: l.id })}>
-                  <Icon name="checked" size={20} />
                   <span>{listName(l)}</span>
                   <small>{l.items.filter((i) => !i.checked && !i.exported && i.text.trim()).length}</small>
                 </button>

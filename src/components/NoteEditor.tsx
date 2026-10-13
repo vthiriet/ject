@@ -171,6 +171,14 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     toast('Note placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(noteId) });
     onClose();
   };
+  const copyList = async () => {
+    try {
+      await navigator.clipboard.writeText(noteToText({ ...note, ...draft }));
+      toast('Liste copiée');
+    } catch {
+      toast('Copie impossible sur cet appareil');
+    }
+  };
   const copy = async () => {
     await navigator.clipboard.writeText(noteToText({ ...note, ...draft }));
     toast('Note copiée');
@@ -410,6 +418,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
                   </ul>
                 </div>
               )}
+              <button type="button" className="btn copy-list" onClick={() => void copyList()}>
+                <Icon name="copy" size={18} /> Copier la liste
+              </button>
             </div>
           )}
 

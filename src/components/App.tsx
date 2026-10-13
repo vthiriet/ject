@@ -3,12 +3,11 @@ import { db } from '../lib/db';
 import { describe, logError, withTimeout } from '../lib/diagnostics';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
-import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote } from '../lib/store';
+import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote, trashNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
 import { Drawer, type Section } from './Drawer';
-import { CreatePage } from './CreatePage';
 import { Fab } from './Fab';
 import { FileDialog } from './FileDialog';
 import { Icon, IconButton } from './Icon';
@@ -67,7 +66,6 @@ export default function App() {
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [filing, setFiling] = useState<string[] | null>(null);
-  const [creating, setCreating] = useState<Category | null>(null);
   const started = useRef(false);
 
   // L'éditeur s'ouvre immédiatement ; l'enregistrement se fait en parallèle.
@@ -179,7 +177,24 @@ export default function App() {
         }
       />
     ) : (
-      <NoteCard note={n} labels={labels} images={images} onOpen={() => setEditing({ id: n.id, isNew: false })} />
+      <NoteCard
+        note={n}
+        labels={labels}
+        images={images}
+        onOpen={() => setEditing({ id: n.id, isNew: false })}
+        actions={
+          section === 'action' || section === 'habit' || section === 'resource' ? (
+            <IconButton
+              name="trash"
+              label="Supprimer"
+              onClick={() => {
+                void trashNote(n.id);
+                toast('Carte placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(n.id) });
+              }}
+            />
+          ) : undefined
+        }
+      />
     );
 
   const currentLabel = labels.find((l) => l.id === labelId);
@@ -269,20 +284,7 @@ export default function App() {
         )}
       </main>
 
-      {isTab && <Fab onPick={(c) => (c === 'inbox' ? newNote('text', null) : setCreating(c))} />}
-      {creating && (
-        <CreatePage
-          category={creating}
-          notes={notes}
-          labels={labels}
-          labelId={labelId}
-          onClose={() => setCreating(null)}
-          onCreated={(c) => {
-            setCreating(null);
-            navigate(c);
-          }}
-        />
-      )}
+      {isTab && <Fab onPick={(type) => newNote(type, isCategory(section) ? section : null)} />}
 
       <Drawer
         open={drawer}
@@ -300,7 +302,7 @@ export default function App() {
         <NoteEditor key={editing.id} noteId={editing.id} isNew={editing.isNew} initial={editing.initial} labels={labels} images={images} onClose={() => setEditing(null)} />
       )}
       {dialog === 'settings' && <Settings onClose={() => setDialog(null)} theme={theme} setTheme={setTheme} />}
-      {filing && <FileDialog ids={filing} notes={notes} labels={labels} onClose={() => setFiling(null)} />}
+      {filing && <FileDialog ids={filing} notes={notes} onClose={() => setFiling(null)} />}
       {dialog === 'labels' && <LabelManager labels={labels} onClose={() => setDialog(null)} />}
       <Toaster />
     </div>

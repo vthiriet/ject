@@ -37,11 +37,10 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 
 **Inbox** (onglet principal, ouvert au lancement) : uniquement des éléments **bruts**, en
 attente d'être rangés.
-- Bouton rond **+** en bas à droite (sur tous les onglets). Il propose :
-  **Inbox · Action · Habitude · Projet · Ressource**.
-  - **Inbox** ouvre aussitôt une carte texte à trier plus tard (capture rapide). Une
-    carte laissée vide est supprimée à la fermeture.
-  - Les 4 types ouvrent la **page de création** (voir 3.0 bis).
+- Bouton rond **+** en bas à droite (sur tous les onglets), comme Google Keep : on choisit
+  **Texte** ou **Liste**, et la carte s'ouvre prête à écrire. Dans l'Inbox, c'est un
+  élément à trier ; dans un autre onglet, la carte prend le type de l'onglet (et l'aire
+  filtrée). Une carte laissée vide est supprimée à la fermeture.
 - Un élément = un texte ou une liste (liens cliquables avec aperçu).
 - Toucher un élément l'ouvre pour le modifier (sans épingle ni archivage) ; corbeille
   avec « Annuler ».
@@ -84,31 +83,25 @@ facultatives : Action · Habitude · Projet · Ressource. Sans choix, l'élémen
 « à trier ». Le type choisi s'affiche sur l'élément et est présélectionné au rangement.
 Menu ⋮ › « Ranger dans… » range directement la carte telle quelle dans un onglet.
 
-**Page de création (bouton + › un type) :** plein écran sur téléphone.
-- Type modifiable en haut (Action · Habitude · Projet · Ressource).
-- **Unique / Liste** : un texte seul, ou un titre et plusieurs éléments (« Entrée » passe
-  à l'élément suivant). Le texte saisi est conservé si on change de format.
-- **Nouvelle … / … existante** : créer une carte, ou ajouter le(s) élément(s) à une liste
-  existante de ce type (choisie dans la liste, avec recherche au-delà de 5).
-- Précisions facultatives : état ou régularité, et aires (l'aire filtrée est proposée).
-- « Créer » / « Ajouter », puis l'onglet du type s'affiche.
-
 **Ranger :** pour chaque élément de l'Inbox :
 1. choisir ou confirmer le **type** (prérempli si choisi à la saisie) ;
 2. choisir la **destination** dans l'onglet correspondant : nouvelle carte, ajout à une
-   liste existante, ou nouvelle liste ;
-3. facultatif, avant la destination : l'**état** (action, projet), la **régularité**
-   (habitude) et les **aires**. Ils s'appliquent à la nouvelle carte ou liste ; pour un
-   ajout à une liste existante, l'état ou la régularité s'applique à l'élément ajouté.
-   Destinations proposées : « Carte seule dans … », « Nouvelle liste « nom » », puis les
-   listes existantes de ce type (les plus récentes d'abord, avec recherche).
+   liste existante, ou nouvelle liste.
+
+Destinations proposées : « Carte seule dans … », « Nouvelle liste « nom » », puis les
+listes existantes de ce type (les plus récentes d'abord, avec recherche). Pas de réglage
+d'état, de régularité ni d'aire au rangement : ils se règlent ensuite dans la carte.
 
 **Affichage par onglet :** Actions est découpé en sections À faire (listes et actions
 seules) / En attente / Un jour / Faites ; Projets en Actifs / Un jour ; un projet
 « Terminé » part dans les Archives (et redevient actif si on le désarchive). Les états et
 régularités s'affichent sur les cartes (⏳ En attente, 💤 Un jour, 🔁 Chaque jour…).
 
-**Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité). Dans
+**Cartes :** dans Actions, Habitudes et Ressources, chaque carte a une icône poubelle
+(corbeille, avec « Annuler »).
+
+**Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité).
+Une liste ouverte affiche un bouton **« Copier la liste »** (titre et éléments ☐ / ☑). Dans
 une liste, chaque élément a un bouton ⏳ (ou 🔁 pour une habitude) pour régler son état
 ou sa régularité. Menu ⋮ › « Déplacer vers… » pour changer de type.
 
@@ -293,3 +286,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Base du navigateur bloquée : délai maximal de 4 s, message explicatif au démarrage et dans le diagnostic. |
 | 12/10/2026 | Bouton + (Texte / Liste) à la place de la zone de saisie permanente de l'Inbox et des barres « Nouvelle … » des onglets. |
 | 12/10/2026 | Bouton + : Inbox ou un type ; page de création (Unique / Liste, nouvelle / existante, précisions). |
+| 13/10/2026 | Retours bêta : + revient à Texte / Liste ; Ranger sans précisions ni aires ni icône ; poubelle sur les cartes Actions, Habitudes, Ressources ; « Copier la liste » ; barres du téléphone aux couleurs du thème affiché. |

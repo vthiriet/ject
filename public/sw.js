@@ -1,5 +1,5 @@
 // Service worker de Ject : garde l'app en cache pour qu'elle s'ouvre même hors ligne.
-const CACHE = 'ject-v3';
+const CACHE = 'ject-v4';
 const SHELL = ['/', '/manifest.webmanifest', '/icons/icon.svg', '/icons/icon-192.png'];
 
 self.addEventListener('install', (event) => {

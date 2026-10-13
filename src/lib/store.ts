@@ -200,18 +200,6 @@ async function appendToList(listId: string, created: ChecklistItem[]) {
   await save('note', { ...list, type: 'list', items: kept, archived: false, trashedAt: null });
 }
 
-/** Création depuis le bouton + : carte seule, nouvelle liste, ou ajout à une liste existante. */
-export async function createFromForm(
-  form:
-    | { format: 'single'; text: string; listId?: string }
-    | { format: 'list'; title: string; items: string[]; listId?: string },
-  d: FileDetails,
-) {
-  const texts = (form.format === 'single' ? [form.text] : form.items).map((t) => t.trim()).filter(Boolean);
-  if (form.listId) return appendToList(form.listId, texts.map((t) => itemFor(t, d)));
-  if (form.format === 'single') return createNote({ ...cardFields(d), type: 'text', content: form.text.trim() });
-  return createNote({ ...cardFields(d), type: 'list', title: form.title.trim(), items: texts.map((t) => itemFor(t, d)), status: undefined });
-}
 
 /** Change l'état d'un projet ; « terminé » l'envoie dans les Archives. */
 export const setProjectStatus = (id: string, projectStatus: 'active' | 'someday' | 'done') =>
