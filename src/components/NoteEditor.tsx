@@ -252,7 +252,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           aria-label={done ? 'Décocher' : 'Cocher'}
           onClick={() => updateItem(item.id, { checked: !item.checked })}
         >
-          <Icon name={done ? 'checked' : 'unchecked'} size={20} />
+          <Icon name={done ? 'checked' : 'unchecked'} size={26} />
         </button>
         <div className="item-main">
           <AutoTextarea
@@ -396,7 +396,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
             <div className="editor-list">
               <ul>{unchecked.map((i) => itemRow(i, false))}</ul>
               <button type="button" className="add-item" onClick={() => insertAfter(unchecked[unchecked.length - 1]?.id ?? null)}>
-                <Icon name="add" size={20} /> Élément de liste
+                <Icon name="add" size={24} /> Élément de liste
               </button>
               {checked.length > 0 && (
                 <>

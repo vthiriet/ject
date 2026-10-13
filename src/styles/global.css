@@ -634,13 +634,15 @@ textarea.auto {
 }
 .editor-title {
   padding: 12px 20px 4px !important;
-  font-size: 22px;
+  font-size: 27px;
+  line-height: 1.3;
   font-weight: 500;
 }
 .editor-content {
   min-height: 160px;
   padding: 8px 20px !important;
-  font-size: 16px;
+  font-size: 21px;
+  line-height: 1.45;
 }
 .editor-list ul {
   list-style: none;
@@ -656,14 +658,15 @@ textarea.auto {
 .item-row .check {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   flex: none;
   color: var(--muted);
 }
 .item-row textarea {
-  padding: 7px 0 !important;
-  font-size: 16px;
+  padding: 8px 0 !important;
+  font-size: 21px;
+  line-height: 1.35;
 }
 .item-row.done textarea {
   color: var(--muted);
@@ -1723,4 +1726,14 @@ textarea.auto {
 .card-actions .icon-btn {
   width: 36px;
   height: 36px;
+}
+
+/* Texte plus grand dans une carte ouverte : saisies courtes, lisibles d'un coup d'œil. */
+.editor .add-item,
+.editor .checked-toggle {
+  min-height: 48px;
+  font-size: 18px;
+}
+.editor .item-row.exported {
+  font-size: 18px;
 }

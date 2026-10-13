@@ -293,3 +293,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | Retours bêta : + revient à Texte / Liste ; Ranger sans précisions ni aires ni icône ; poubelle sur les cartes Actions, Habitudes, Ressources ; « Copier la liste » ; barres du téléphone aux couleurs du thème affiché. |
 | 13/10/2026 | App installée : barre de navigation Android en noir (couleurs du manifeste). |
 | 13/10/2026 | Bouton « précédent » du téléphone : retour à l'onglet d'avant, fermeture des cartes et fenêtres ouvertes. |
+| 13/10/2026 | Texte agrandi dans une carte ouverte (titre 27 px, texte et éléments de liste 21 px, cases plus grandes). |
