@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
+import { useBackClose } from '../lib/history';
 import {
   deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, setProjectStatus, trashNote, updateNote,
 } from '../lib/store';
@@ -48,6 +49,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const itemRefs = useRef(new Map<string, HTMLTextAreaElement>());
+  // Bouton « précédent » du téléphone : ferme la carte comme la flèche ←.
+  const closeRef = useRef<() => void>(onClose);
+  useBackClose(true, () => closeRef.current());
 
   // Copie de travail : chargée une fois, puis enregistrée automatiquement.
   useEffect(() => {
@@ -94,6 +98,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     }
     onClose();
   };
+  closeRef.current = () => void close();
 
   // ----- Listes -----
   const setItems = (items: ChecklistItem[]) => edit({ items });

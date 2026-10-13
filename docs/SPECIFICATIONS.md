@@ -100,6 +100,10 @@ régularités s'affichent sur les cartes (⏳ En attente, 💤 Un jour, 🔁 Cha
 **Cartes :** dans Actions, Habitudes et Ressources, chaque carte a une icône poubelle
 (corbeille, avec « Annuler »).
 
+**Bouton « précédent » du téléphone :** il revient à l'onglet affiché avant, et referme
+d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
+menu du +). Sur le premier écran, il quitte l'app.
+
 **Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité).
 Une liste ouverte affiche un bouton **« Copier la liste »** (titre et éléments ☐ / ☑). Dans
 une liste, chaque élément a un bouton ⏳ (ou 🔁 pour une habitude) pour régler son état
@@ -288,3 +292,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Bouton + : Inbox ou un type ; page de création (Unique / Liste, nouvelle / existante, précisions). |
 | 13/10/2026 | Retours bêta : + revient à Texte / Liste ; Ranger sans précisions ni aires ni icône ; poubelle sur les cartes Actions, Habitudes, Ressources ; « Copier la liste » ; barres du téléphone aux couleurs du thème affiché. |
 | 13/10/2026 | App installée : barre de navigation Android en noir (couleurs du manifeste). |
+| 13/10/2026 | Bouton « précédent » du téléphone : retour à l'onglet d'avant, fermeture des cartes et fenêtres ouvertes. |

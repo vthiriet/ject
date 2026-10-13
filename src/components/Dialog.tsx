@@ -1,10 +1,12 @@
 import { useEffect, type ReactNode } from 'react';
+import { useBackClose } from '../lib/history';
 import { IconButton } from './Icon';
 
 /** Fenêtre par-dessus l'app : plein écran sur téléphone, centrée sur ordinateur. */
 export function Dialog({
   title, onClose, children, footer, className = '',
 }: { title?: string; onClose: () => void; children: ReactNode; footer?: ReactNode; className?: string }) {
+  useBackClose(true, onClose);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);

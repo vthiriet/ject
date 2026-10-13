@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useBackClose } from '../lib/history';
 import { Icon } from './Icon';
 
 /** Bouton rond « + » (comme Google Keep) : on choisit Texte ou Liste. */
 export function Fab({ onPick }: { onPick: (type: 'text' | 'list') => void }) {
   const [open, setOpen] = useState(false);
+  useBackClose(open, () => setOpen(false));
 
   useEffect(() => {
     if (!open) return;

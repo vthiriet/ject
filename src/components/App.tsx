@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { db } from '../lib/db';
 import { describe, logError, withTimeout } from '../lib/diagnostics';
+import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote, trashNote } from '../lib/store';
@@ -67,6 +68,7 @@ export default function App() {
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [filing, setFiling] = useState<string[] | null>(null);
   const started = useRef(false);
+  useBackClose(drawer, () => setDrawer(false));
 
   // L'éditeur s'ouvre immédiatement ; l'enregistrement se fait en parallèle.
   // Depuis l'Inbox, la carte est un élément brut ; ailleurs, elle prend le type de l'onglet.
@@ -117,7 +119,13 @@ export default function App() {
     } else if (params.get('new') === 'inbox') {
       newNote('text', null);
     }
-    if (location.search) history.replaceState(null, '', '/');
+    // Bouton « précédent » du téléphone : retour à l'onglet d'avant (après lecture de l'adresse).
+    const startTab = tab && CATEGORIES.some((c) => c.id === tab) ? tab : 'inbox';
+    initHistory({ section: startTab, labelId: null }, (v) => {
+      setSection(v.section as Section);
+      setLabelId(v.labelId);
+      window.scrollTo(0, 0);
+    });
   }, []);
 
   const inboxAll = useMemo(
@@ -153,8 +161,10 @@ export default function App() {
   }, [notes, inboxAll]);
 
   const navigate = (s: Section, l: string | null = labelId) => {
+    const label = s === 'inbox' || s === 'trash' ? null : l;
     setSection(s);
-    setLabelId(s === 'inbox' || s === 'trash' ? null : l);
+    setLabelId(label);
+    pushView({ section: s, labelId: label });
     setDrawer(false);
     window.scrollTo(0, 0);
   };
