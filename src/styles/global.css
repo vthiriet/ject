@@ -1741,3 +1741,19 @@ textarea.auto {
 .file-target.card-first {
   margin-bottom: 10px;
 }
+
+/* Poubelle à droite de la carte, centrée verticalement (sans ligne en plus). */
+.note-card.has-side .card-body {
+  padding-right: 32px;
+}
+.card-side {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+}
+.card-side .icon-btn {
+  width: 32px;
+  height: 40px;
+  border-radius: 8px;
+}

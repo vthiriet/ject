@@ -97,8 +97,8 @@ seules) / En attente / Un jour / Faites ; Projets en Actifs / Un jour ; un proje
 « Terminé » part dans les Archives (et redevient actif si on le désarchive). Les états et
 régularités s'affichent sur les cartes (⏳ En attente, 💤 Un jour, 🔁 Chaque jour…).
 
-**Cartes :** dans Actions, Habitudes et Ressources, chaque carte a une icône poubelle
-(corbeille, avec « Annuler »).
+**Cartes :** dans Actions, Habitudes et Ressources, chaque carte a une icône poubelle à
+droite, centrée verticalement (corbeille, avec « Annuler »), sans augmenter sa hauteur.
 
 **Bouton « précédent » du téléphone :** il revient à l'onglet affiché avant, et referme
 d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
@@ -296,3 +296,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | Bouton « précédent » du téléphone : retour à l'onglet d'avant, fermeture des cartes et fenêtres ouvertes. |
 | 13/10/2026 | Texte agrandi dans une carte ouverte (titre 27 px, texte et éléments de liste 21 px, cases plus grandes). |
 | 13/10/2026 | Ranger : « Carte seule » en premier, puis la recherche et les listes existantes. |
+| 13/10/2026 | Poubelle des cartes à droite et centrée : même hauteur que les cartes Projets. |

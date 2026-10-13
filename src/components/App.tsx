@@ -192,11 +192,12 @@ export default function App() {
         labels={labels}
         images={images}
         onOpen={() => setEditing({ id: n.id, isNew: false })}
-        actions={
+        sideAction={
           section === 'action' || section === 'habit' || section === 'resource' ? (
             <IconButton
               name="trash"
               label="Supprimer"
+              size={20}
               onClick={() => {
                 void trashNote(n.id);
                 toast('Carte placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(n.id) });

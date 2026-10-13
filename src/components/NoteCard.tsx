@@ -13,11 +13,13 @@ interface Props {
   images: BackgroundImage[];
   onOpen: () => void;
   actions?: React.ReactNode;
+  /** Bouton unique placé à droite, centré verticalement (ex. poubelle). */
+  sideAction?: React.ReactNode;
 }
 
 const MAX_ITEMS = 8;
 
-export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
+export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: Props) {
   const open = note.items.filter((i) => !i.checked && !i.exported && i.text.trim());
   const checkedCount = note.items.filter((i) => i.checked && !i.exported && i.text.trim()).length;
   const exportedCount = note.items.filter((i) => i.exported).length;
@@ -43,7 +45,7 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
 
   return (
     <article
-      className="note-card"
+      className={`note-card ${sideAction ? 'has-side' : ''}`}
       data-color={note.color}
       tabIndex={0}
       onClick={onOpen}
@@ -92,6 +94,7 @@ export function NoteCard({ note, labels, images, onOpen, actions }: Props) {
         )}
       </div>
       {actions && <div className="card-actions" onClick={(e) => e.stopPropagation()}>{actions}</div>}
+      {sideAction && <div className="card-side" onClick={(e) => e.stopPropagation()}>{sideAction}</div>}
     </article>
   );
 }
