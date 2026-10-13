@@ -193,7 +193,7 @@ export default function App() {
         images={images}
         onOpen={() => setEditing({ id: n.id, isNew: false })}
         sideAction={
-          section === 'action' || section === 'habit' || section === 'resource' ? (
+          isCategory(section) ? (
             <IconButton
               name="trash"
               label="Supprimer"
