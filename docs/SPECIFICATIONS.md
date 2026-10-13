@@ -287,3 +287,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Bouton + (Texte / Liste) à la place de la zone de saisie permanente de l'Inbox et des barres « Nouvelle … » des onglets. |
 | 12/10/2026 | Bouton + : Inbox ou un type ; page de création (Unique / Liste, nouvelle / existante, précisions). |
 | 13/10/2026 | Retours bêta : + revient à Texte / Liste ; Ranger sans précisions ni aires ni icône ; poubelle sur les cartes Actions, Habitudes, Ressources ; « Copier la liste » ; barres du téléphone aux couleurs du thème affiché. |
+| 13/10/2026 | App installée : barre de navigation Android en noir (couleurs du manifeste). |
