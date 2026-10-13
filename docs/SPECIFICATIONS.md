@@ -268,6 +268,7 @@ En cas de conflit, la modification la plus récente l'emporte.
 
 ## 7. Pistes pour la suite
 
+- Inbox : « Coller une liste » (chaque ligne collée devient un élément distinct).
 - Réordonner les éléments d'une liste par glisser-déposer.
 - Export vers une **base de données** Notion (une ligne par élément), en plus des pages.
 - Gestion de projet dans Ject (Kanban, échéances, priorités, sous-tâches), si Notion
