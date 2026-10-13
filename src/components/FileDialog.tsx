@@ -121,6 +121,9 @@ export function FileDialog({ ids, notes, onClose }: Props) {
       ) : (
         <>
           <p className="section-label">2. Ranger dans…</p>
+          <button type="button" className="file-target new card-first" onClick={() => void file({ newCard: true })}>
+            <Icon name="add" size={20} /> Carte seule dans {CATEGORIES.find((c) => c.id === category)!.plural}
+          </button>
           <input
             className="text-input"
             value={query}
@@ -133,11 +136,6 @@ export function FileDialog({ ids, notes, onClose }: Props) {
             }}
           />
           <ul className="file-targets">
-            <li>
-              <button type="button" className="file-target new" onClick={() => void file({ newCard: true })}>
-                <Icon name="add" size={20} /> Carte seule dans {CATEGORIES.find((c) => c.id === category)!.plural}
-              </button>
-            </li>
             {query.trim() && !exact && (
               <li>
                 <button type="button" className="file-target new" onClick={() => void file({ newTitle: query })}>

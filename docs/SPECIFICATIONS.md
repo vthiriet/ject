@@ -88,8 +88,8 @@ Menu ⋮ › « Ranger dans… » range directement la carte telle quelle dans u
 2. choisir la **destination** dans l'onglet correspondant : nouvelle carte, ajout à une
    liste existante, ou nouvelle liste.
 
-Destinations proposées : « Carte seule dans … », « Nouvelle liste « nom » », puis les
-listes existantes de ce type (les plus récentes d'abord, avec recherche). Pas de réglage
+Destinations proposées, dans l'ordre : « Carte seule dans … », puis la barre de recherche
+(qui propose « Nouvelle liste « nom » ») et les listes existantes de ce type (les plus récentes d'abord, avec recherche). Pas de réglage
 d'état, de régularité ni d'aire au rangement : ils se règlent ensuite dans la carte.
 
 **Affichage par onglet :** Actions est découpé en sections À faire (listes et actions
@@ -295,3 +295,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | App installée : barre de navigation Android en noir (couleurs du manifeste). |
 | 13/10/2026 | Bouton « précédent » du téléphone : retour à l'onglet d'avant, fermeture des cartes et fenêtres ouvertes. |
 | 13/10/2026 | Texte agrandi dans une carte ouverte (titre 27 px, texte et éléments de liste 21 px, cases plus grandes). |
+| 13/10/2026 | Ranger : « Carte seule » en premier, puis la recherche et les listes existantes. |

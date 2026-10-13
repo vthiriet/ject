@@ -1737,3 +1737,7 @@ textarea.auto {
 .editor .item-row.exported {
   font-size: 18px;
 }
+
+.file-target.card-first {
+  margin-bottom: 10px;
+}
