@@ -52,7 +52,9 @@ attente d'être rangés.
 Chaque ligne d'un élément rangé dans une liste devient une case à cocher.
 
 **Sélection multiple** : appui long sur un élément (téléphone) ou lien « Sélectionner »
-(ordinateur). Une case apparaît devant chaque élément ; toucher un élément le coche ou le
+(ordinateur). L'élément est coché dès que l'appui long est reconnu, doigt encore posé ;
+si le doigt se met ensuite à glisser, la sélection est annulée et c'est un glisser-déposer
+(fusion). Une case apparaît devant chaque élément ; toucher un élément le coche ou le
 décoche ; « Tout » / « Aucun » ; ✕ ou le bouton retour du téléphone quittent la sélection.
 « Ranger » ouvre alors une seule fenêtre « Ranger N éléments » : un type et une destination
 pour tous (N cartes seules, une nouvelle liste ou une liste existante). « Supprimer » les
@@ -375,3 +377,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Flammes de priorité numérotées (1, 2, 3) ; tri rouge → orange → jaune → gris. |
 | 17/10/2026 | Coche « Archiver » à la place de la poubelle sur les cartes ; suppression depuis les Archives. |
 | 17/10/2026 | Glisser-déposer des éléments au sein d'une liste (poignée ⋮⋮) ; Inbox : sélection multiple (appui long ou « Sélectionner ») pour ranger plusieurs éléments au même endroit. |
+| 17/10/2026 | Inbox : l'appui long coche l'élément sans attendre que le doigt se lève. |

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { categoryMeta } from '../lib/gtd';
 import { useBackClose } from '../lib/history';
 import { updateNote } from '../lib/store';
@@ -27,6 +27,8 @@ export function InboxView({ items, total, onOpen, onFile, onMerge }: Props) {
   const [selected, setSelected] = useState<string[] | null>(null);
   const selecting = selected !== null;
   useBackClose(selecting, () => setSelected(null));
+  // Sélection d'avant l'appui long, pour l'annuler si le doigt se met à glisser.
+  const beforeHold = useRef<string[] | null>(null);
 
   const toggle = (id: string) =>
     setSelected((s) => {
@@ -74,13 +76,14 @@ export function InboxView({ items, total, onOpen, onFile, onMerge }: Props) {
       <NoteGrid
         notes={items}
         layout="list"
-        sortable={!!onMerge && !selecting}
+        sortable={!!onMerge}
         reorder={false}
         onMerge={onMerge}
         onHold={(id) => {
-          navigator.vibrate?.(30);
-          setSelected([id]);
+          beforeHold.current = selected;
+          toggle(id);
         }}
+        onHoldCancel={() => setSelected(beforeHold.current)}
         render={(item) => (
           <InboxRow
             item={item}
