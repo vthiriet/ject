@@ -9,6 +9,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   background: var(--bg);
+  /* Pas de zoom au double toucher ni au pincement : l'app garde sa taille. */
+  touch-action: pan-x pan-y;
 }
 body {
   margin: 0;
@@ -2040,4 +2042,82 @@ textarea.auto {
 }
 .habit-form .switch-row {
   margin: 0;
+}
+
+/* Bouton de validation d'une carte ouverte */
+.editor-ok {
+  order: 10;
+  min-height: 38px;
+  margin: 0 6px 0 8px;
+  padding: 0 16px;
+}
+
+/* Priorité des actions : flamme grisée, puis jaune (3), orange (2), rouge (1). */
+.card-side {
+  display: flex;
+  align-items: center;
+}
+.note-card.has-side:has(.priority-btn) .card-body {
+  padding-right: 62px;
+}
+.priority-btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 40px;
+  border-radius: 8px;
+  color: var(--muted);
+  opacity: 0.45;
+}
+.priority-btn:hover {
+  background: var(--hover);
+}
+.priority-btn.p3 { color: #f9ab00; opacity: 1; }
+.priority-btn.p2 { color: #f57c00; opacity: 1; }
+.priority-btn.p1 { color: #d93025; opacity: 1; }
+.card-side .icon-btn {
+  width: 30px;
+}
+
+/* Glisser-déposer : fusion (centre) ou placement (bord) */
+.drag-item {
+  position: relative;
+  border-radius: var(--radius);
+}
+.drag-item.drop-merge > * {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+.drag-item.drop-before::before,
+.drag-item.drop-after::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  border-radius: 2px;
+  background: var(--accent);
+}
+.note-grid.list .drag-item.drop-before::before { left: 0; right: 0; top: -7px; height: 4px; }
+.note-grid.list .drag-item.drop-after::after { left: 0; right: 0; bottom: -7px; height: 4px; }
+.note-grid.grid .drag-item.drop-before::before { top: 0; bottom: 0; left: -7px; width: 4px; }
+.note-grid.grid .drag-item.drop-after::after { top: 0; bottom: 0; right: -7px; width: 4px; }
+.dragging {
+  position: relative;
+}
+.merge-label {
+  position: absolute;
+  left: 50%;
+  top: -14px;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.inbox .note-grid.list {
+  gap: 0;
 }

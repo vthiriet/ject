@@ -73,6 +73,8 @@ export interface Note {
   /** Carte « action » seule. */
   status?: ActionStatus;
   waitingFor?: string;
+  /** Action : priorité 1 (rouge, la plus haute), 2 (orange), 3 (jaune). */
+  priority?: 1 | 2 | 3;
   /** Carte « projet ». */
   projectStatus?: ProjectStatus;
   /** Ancienne régularité d'habitude (texte), remplacée par `habit`. */

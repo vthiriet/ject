@@ -305,3 +305,35 @@ export async function resumeHabit(id: string, today: string, yesterday: string) 
     .filter((p) => p.from <= p.to);
   await save('note', { ...note, habitPauses: pauses });
 }
+
+// ---------- Fusion par glisser-déposer ----------
+
+/**
+ * Lâche une carte sur une autre : la cible devient (ou reste) une liste et reçoit le contenu
+ * de la carte déplacée, qui disparaît. Renvoie l'état d'avant, pour « Annuler ».
+ */
+export async function mergeNotes(sourceId: string, targetId: string) {
+  const source = await db.notes.get(sourceId);
+  const target = await db.notes.get(targetId);
+  if (!source || !target || source.id === target.id) return null;
+  const before = [structuredClone(source), structuredClone(target)];
+  const moved =
+    source.type === 'list'
+      ? [
+          ...(source.title.trim() && !source.items.some((i) => i.text.trim()) ? [newItem(source.title.trim())] : []),
+          ...source.items.filter((i) => i.text.trim()).map((i) => ({ ...i, id: uid(), exported: undefined })),
+        ]
+      : linesOf(source).map((t) => newItem(t));
+  const base =
+    target.type === 'list'
+      ? target.items.filter((i) => i.text.trim())
+      : target.content.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).map((t) => newItem(t));
+  await save('note', { ...target, type: 'list', content: '', items: [...base, ...moved] });
+  await save('note', { ...source, title: '', content: '', items: [], deleted: true });
+  return before;
+}
+
+/** Remet des cartes dans l'état enregistré (annulation d'une fusion). */
+export async function restoreNotes(snapshot: Note[]) {
+  for (const n of snapshot) await save('note', { ...n, deleted: undefined });
+}

@@ -29,16 +29,8 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
   const empty = !note.title.trim() && !note.content.trim() && open.length === 0 && checkedCount === 0;
 
   const category = categoryOf(note);
-  // Pastille d'état ou de régularité de la carte.
-  const meta =
-    category === 'action' && note.type === 'text' && note.status && note.status !== 'todo'
-      ? note.status === 'waiting' ? `⏳ En attente${note.waitingFor ? ` · ${note.waitingFor}` : ''}`
-        : note.status === 'someday' ? '💤 Un jour' : '✓ Fait'
-      : category === 'habit' ? `🔁 ${rhythmLabel(habitConfig(note))}`
-      : category === 'project' && note.projectStatus === 'someday' ? '💤 Un jour'
-      : '';
-  const itemMeta = (i: Note['items'][number]) =>
-    i.status === 'waiting' ? ' · ⏳' : i.status === 'someday' ? ' · 💤' : '';
+  // Pastille de régularité (habitudes) ; plus d'états pour les actions et projets.
+  const meta = category === 'habit' ? `🔁 ${rhythmLabel(habitConfig(note))}` : '';
 
   const toggle = (id: string) =>
     updateNote(note.id, { items: note.items.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i)) });
@@ -56,7 +48,7 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
       <div className="card-body">
         {note.title.trim() && <h3 className="card-title">{note.title}</h3>}
         {note.type === 'text' && note.content.trim() && (
-          <p className={`card-content ${note.status === 'done' && category === 'action' ? 'struck' : ''}`}><LinkedText text={note.content} /></p>
+          <p className="card-content"><LinkedText text={note.content} /></p>
         )}
         {note.type === 'list' && open.length > 0 && (
           <ul className="card-items">
@@ -70,7 +62,7 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
                 >
                   <Icon name="unchecked" size={18} />
                 </button>
-                <span><LinkedText text={i.text} />{itemMeta(i) && <small className="item-meta">{itemMeta(i)}</small>}</span>
+                <span><LinkedText text={i.text} /></span>
               </li>
             ))}
           </ul>

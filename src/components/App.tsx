@@ -5,7 +5,7 @@ import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { appliesOn, habitConfig, isPaused, level, pointsOf, progress, scaleOf } from '../lib/habits';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
-import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote, trashNote } from '../lib/store';
+import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
@@ -43,14 +43,8 @@ function groupsFor(section: Section, notes: Note[]): { label: string; notes: Not
   const groups: { label: string; notes: Note[] }[] = [];
   if (pinned.length) groups.push({ label: 'Épinglées', notes: pinned });
   if (section === 'action') {
-    const by = (s: string) => rest.filter((n) => n.type === 'text' && n.status === s);
-    groups.push({ label: 'À faire', notes: rest.filter((n) => n.type === 'list' || !n.status || n.status === 'todo') });
-    groups.push({ label: 'En attente', notes: by('waiting') });
-    groups.push({ label: 'Un jour', notes: by('someday') });
-    groups.push({ label: 'Faites', notes: by('done') });
-  } else if (section === 'project') {
-    groups.push({ label: 'Actifs', notes: rest.filter((n) => n.projectStatus !== 'someday') });
-    groups.push({ label: 'Un jour', notes: rest.filter((n) => n.projectStatus === 'someday') });
+    // Les plus prioritaires d'abord (1 = rouge), puis l'ordre choisi.
+    groups.push({ label: pinned.length ? 'Autres' : '', notes: [...rest].sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4)) });
   } else {
     groups.push({ label: pinned.length ? 'Autres' : '', notes: rest });
   }
@@ -192,6 +186,12 @@ export default function App() {
   };
 
   const sortable = !query && section !== 'trash';
+
+  // Lâcher une carte au centre d'une autre : elles fusionnent en une liste (annulable).
+  const merge = async (sourceId: string, targetId: string) => {
+    const before = await mergeNotes(sourceId, targetId);
+    if (before) toast('Cartes fusionnées en liste', { label: 'Annuler', run: () => void restoreNotes(before) });
+  };
   const groups = groupsFor(section, visible);
 
   const habits = useMemo(() => notes.filter((n) => categoryOf(n) === 'habit' && !n.inbox && !n.archived && n.trashedAt === null), [notes]);
@@ -228,15 +228,28 @@ export default function App() {
         onOpen={() => setEditing({ id: n.id, isNew: false })}
         sideAction={
           isCategory(section) ? (
-            <IconButton
-              name="trash"
-              label="Supprimer"
-              size={20}
-              onClick={() => {
-                void trashNote(n.id);
-                toast('Carte placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(n.id) });
-              }}
-            />
+            <>
+              {section === 'action' && (
+                <button
+                  type="button"
+                  className={`priority-btn p${n.priority ?? 0}`}
+                  aria-label={n.priority ? `Priorité ${n.priority}` : 'Ajouter une priorité'}
+                  title={n.priority ? `Priorité ${n.priority}` : 'Priorité'}
+                  onClick={() => void updateNote(n.id, { priority: n.priority === 3 ? 2 : n.priority === 2 ? 1 : n.priority === 1 ? undefined : 3 })}
+                >
+                  <Icon name="flame" size={20} />
+                </button>
+              )}
+              <IconButton
+                name="trash"
+                label="Supprimer"
+                size={20}
+                onClick={() => {
+                  void trashNote(n.id);
+                  toast('Carte placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(n.id) });
+                }}
+              />
+            </>
           ) : undefined
         }
       />
@@ -293,7 +306,13 @@ export default function App() {
 
       <main className={`content ${isTab ? 'with-tabs' : ''}`}>
         {section === 'inbox' && (
-          <InboxView items={inboxItems} total={inboxAll.length} onOpen={(id) => setEditing({ id, isNew: false })} onFile={setFiling} />
+          <InboxView
+            items={inboxItems}
+            total={inboxAll.length}
+            onOpen={(id) => setEditing({ id, isNew: false })}
+            onFile={setFiling}
+            onMerge={query ? undefined : (a, b) => void merge(a, b)}
+          />
         )}
 
 
@@ -315,6 +334,7 @@ export default function App() {
               notes={g.notes}
               layout={section === 'habit' ? 'list' : layout}
               sortable={sortable && section !== 'habit'}
+              onMerge={isCategory(section) && section !== 'habit' ? (a, b) => void merge(a, b) : undefined}
               render={card}
             />
           </section>

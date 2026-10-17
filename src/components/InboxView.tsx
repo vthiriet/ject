@@ -5,6 +5,7 @@ import type { Note } from '../lib/types';
 import { Icon, IconButton } from './Icon';
 import { LinkedText } from './LinkedText';
 import { LinkPreviewCard } from './LinkPreview';
+import { NoteGrid } from './NoteGrid';
 import { toast } from './Toast';
 
 interface Props {
@@ -13,10 +14,12 @@ interface Props {
   total: number;
   onOpen: (id: string) => void;
   onFile: (ids: string[]) => void;
+  /** Lâcher un élément sur un autre : ils fusionnent en une liste. */
+  onMerge?: (sourceId: string, targetId: string) => void;
 }
 
 /** Onglet Inbox : les éléments bruts déposés avec le bouton +, en attente d'être rangés. */
-export function InboxView({ items, total, onOpen, onFile }: Props) {
+export function InboxView({ items, total, onOpen, onFile, onMerge }: Props) {
   return (
     <div className="inbox">
       {total > 0 && (
@@ -28,11 +31,14 @@ export function InboxView({ items, total, onOpen, onFile }: Props) {
         </div>
       )}
 
-      <ul className="inbox-list">
-        {items.map((item) => (
-          <InboxRow key={item.id} item={item} onOpen={() => onOpen(item.id)} onFile={() => onFile([item.id])} />
-        ))}
-      </ul>
+      <NoteGrid
+        notes={items}
+        layout="list"
+        sortable={!!onMerge}
+        reorder={false}
+        onMerge={onMerge}
+        render={(item) => <InboxRow item={item} onOpen={() => onOpen(item.id)} onFile={() => onFile([item.id])} />}
+      />
 
       {items.length === 0 && (
         <div className="empty">
@@ -55,7 +61,7 @@ function InboxRow({ item, onOpen, onFile }: { item: Note; onOpen: () => void; on
   };
 
   return (
-    <li className="inbox-row">
+    <div className="inbox-row">
       <div className="inbox-text" role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}>
         {text.trim() && <p className={item.type === 'list' ? 'inbox-title' : ''}><LinkedText text={text} /></p>}
         {listItems.length > 0 && (
@@ -76,6 +82,6 @@ function InboxRow({ item, onOpen, onFile }: { item: Note; onOpen: () => void; on
       </div>
       <IconButton name="file" label="Ranger cet élément" onClick={onFile} />
       <IconButton name="trash" label="Supprimer" onClick={remove} />
-    </li>
+    </div>
   );
 }

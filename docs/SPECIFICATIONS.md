@@ -71,12 +71,13 @@ de filtrer par aire dans chaque onglet.
 
 | Type | Exemples | Information propre |
 |---|---|---|
-| Action | « Prendre RDV dentiste » ; liste « Courses » | **État** : à faire / en attente (de qui, facultatif) / un jour / fait |
+| Action | « Prendre RDV dentiste » ; liste « Courses » | **Priorité** (flamme) : aucune / 3 jaune / 2 orange / 1 rouge |
 | Habitude | « Courir » ; liste « Routine du matin » | **Rythme**, objectif, à éviter, moment (voir 3.0 ter) |
-| Projet | liste « Voyage Japon » (ses étapes) | **État** : actif / un jour / terminé (part dans les Archives). Les étapes ont les états des actions |
+| Projet | liste « Voyage Japon » (ses étapes) | Aucune (pas de statut) |
 | Ressource | « Film : Dune 2 » ; liste « Films à voir » | Aucune |
 
-Pour une liste, l'état ou la régularité se règle sur chaque élément. Une case cochée = fait.
+Plus de statuts (à faire, en attente, un jour, fait, actif, terminé) dans Actions et Projets :
+une case cochée = fait ; un projet fini s'archive.
 
 **Type pressenti dans l'Inbox :** dans la carte d'un élément de l'Inbox, 4 pastilles
 facultatives : Action · Habitude · Projet · Ressource. Sans choix, l'élément reste
@@ -103,6 +104,20 @@ droite, centrée verticalement (corbeille, avec « Annuler »), sans augmenter s
 **Bouton « précédent » du téléphone :** il revient à l'onglet affiché avant, et referme
 d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
 menu du +). Sur le premier écran, il quitte l'app.
+
+**Glisser-déposer** (Inbox, Actions, Projets, Ressources ; appui long sur téléphone) :
+lâcher une carte **au centre** d'une autre les fusionne en une liste (cadre jaune « Fusionner
+en liste », « Annuler » possible) ; lâcher sur un **bord** la déplace avant ou après (pas dans
+l'Inbox, triée par date).
+
+**Priorité des actions** : flamme à côté de la poubelle ; chaque appui : grise → jaune (3) →
+orange (2) → rouge (1, priorité maximale) → grise. Les actions les plus prioritaires
+s'affichent en premier.
+
+**Saisie** : pas de champ titre pour un texte (sauf s'il en avait déjà un) ; bouton
+**« Ajouter »** (nouvelle carte) ou **« OK »** en haut à droite pour valider, avec le message
+« Ajouté à l'inbox » / « Ajouté ». Dans l'Inbox, pas d'aires ni d'export Notion. Le zoom de
+l'app est désactivé.
 
 **Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité).
 Une liste ouverte affiche un bouton **« Copier la liste »** (titre et éléments ☐ / ☑). Dans
@@ -344,3 +359,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | Poubelle des cartes à droite et centrée : même hauteur que les cartes Projets. |
 | 13/10/2026 | Poubelle ajoutée aussi sur les cartes Projets. |
 | 17/10/2026 | Habitudes incitatives : rythmes détaillés, +1 en un geste, progression, encouragements, points et niveaux, routines à étapes, fiche détaillée, rattrapage, pauses. |
+| 17/10/2026 | Retours : glisser une carte au centre d'une autre pour fusionner en liste (bord = déplacer) ; priorité des actions (flamme 3/2/1) ; statuts retirés d'Actions et Projets ; Inbox sans aires ni export ; pas de zoom ; pas de titre pour un texte ; bouton « Ajouter » / « OK » dans une carte. |

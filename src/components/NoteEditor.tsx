@@ -4,11 +4,11 @@ import { db } from '../lib/db';
 import { habitConfig } from '../lib/habits';
 import { useBackClose } from '../lib/history';
 import {
-  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, setProjectStatus, trashNote, updateNote,
+  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, trashNote, updateNote,
 } from '../lib/store';
-import { ACTION_STATUS, CATEGORIES, categoryMeta, categoryOf, PROJECT_STATUS } from '../lib/gtd';
+import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { extractLinks, formatDate, noteToText } from '../lib/text';
-import type { ActionStatus, BackgroundImage, Category, ChecklistItem, Label, Note, ProjectStatus } from '../lib/types';
+import type { BackgroundImage, Category, ChecklistItem, Label, Note } from '../lib/types';
 import { Banner } from './Background';
 import { BackgroundPicker } from './BackgroundPicker';
 import { HabitConfigForm } from './HabitConfigForm';
@@ -50,6 +50,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const itemRefs = useRef(new Map<string, HTMLTextAreaElement>());
+  // Pas de titre pour un texte, sauf s'il en avait déjà un (pour ne rien perdre).
+  const textHadTitle = useRef<boolean | null>(null);
   // Bouton « précédent » du téléphone : ferme la carte comme la flèche ←.
   const closeRef = useRef<() => void>(onClose);
   useBackClose(true, () => closeRef.current());
@@ -81,6 +83,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     }
   }, [focusId, draft]);
 
+  if (note && textHadTitle.current === null) textHadTitle.current = !!note.title.trim();
   if (!note || !draft) return null;
 
   const edit = (patch: Partial<Draft>) => {
@@ -96,6 +99,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
       // Retire les lignes vides des listes.
       const items = draft.items.filter((i) => i.text.trim());
       await updateNote(noteId, { ...draft, items });
+      if (isNew) toast(note.inbox ? 'Ajouté à l’inbox' : 'Ajouté');
     }
     onClose();
   };
@@ -212,14 +216,6 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     toast(`Déplacée vers ${categoryMeta(c).plural}`);
     onClose();
   };
-  const changeProjectStatus = async (v: ProjectStatus) => {
-    await flush();
-    await setProjectStatus(noteId, v);
-    if (v === 'done') {
-      toast('Projet terminé : rangé dans les Archives', { label: 'Annuler', run: () => void setProjectStatus(noteId, 'active') });
-      onClose();
-    }
-  };
   const duplicate = async () => {
     await flush();
     await duplicateNote(noteId);
@@ -234,7 +230,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   const inInbox = !!note.inbox;
   const category = categoryOf(note);
-  const hasItemOptions = !inInbox && (category === 'action' || category === 'project');
+  // Plus d'états (en attente, un jour…) sur les éléments de liste.
+  const hasItemOptions = false;
 
   const itemBadge = (item: ChecklistItem) =>
     item.status === 'waiting'
@@ -306,6 +303,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
       <div className="editor" data-color={note.color} role="dialog" aria-modal="true" aria-label="Note">
         <div className="editor-top">
           <IconButton name="back" label="Fermer" onClick={() => void close()} />
+          <button type="button" className="btn primary editor-ok" onClick={() => void close()}>
+            <Icon name="check" size={18} /> {isNew ? 'Ajouter' : 'OK'}
+          </button>
           <div className="spacer" />
           {!note.trashedAt && !inInbox && (
             <>
@@ -317,6 +317,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
         <div className="editor-scroll">
           <Banner value={note.background} images={images} tall />
+          {(draft.type === 'list' || textHadTitle.current) && (
           <AutoTextarea
             ref={titleRef}
             className="editor-title"
@@ -332,6 +333,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
               }
             }}
           />
+          )}
 
           {inInbox ? (
             <div className="editor-meta">
@@ -351,33 +353,11 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           ) : (
           <div className="editor-meta">
             <span className="type-badge"><Icon name={categoryMeta(category).icon} size={14} /> {categoryMeta(category).label}</span>
-            {category === 'action' && draft.type === 'text' && (
-              <Segmented
-                value={note.status ?? 'todo'}
-                options={(Object.keys(ACTION_STATUS) as ActionStatus[]).map((k) => [k, ACTION_STATUS[k]])}
-                onChange={(v) => void updateNote(noteId, { status: v as ActionStatus })}
-              />
-            )}
-            {category === 'project' && (
-              <Segmented
-                value={note.projectStatus ?? 'active'}
-                options={(Object.keys(PROJECT_STATUS) as ProjectStatus[]).map((k) => [k, PROJECT_STATUS[k]])}
-                onChange={(v) => void changeProjectStatus(v as ProjectStatus)}
-              />
-            )}
 
           </div>
           )}
           {!inInbox && category === 'habit' && (
             <HabitConfigForm value={habitConfig(note)} onChange={(c) => void updateNote(noteId, { habit: c, frequency: undefined })} />
-          )}
-          {!inInbox && category === 'action' && draft.type === 'text' && note.status === 'waiting' && (
-            <input
-              className="text-input editor-waiting"
-              defaultValue={note.waitingFor ?? ''}
-              placeholder="En attente de qui ? (facultatif)"
-              onBlur={(e) => void updateNote(noteId, { waitingFor: e.target.value.trim() || undefined })}
-            />
           )}
 
           {draft.type === 'text' ? (
@@ -452,7 +432,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
         {panel === 'labels' && <LabelPicker note={note} labels={labels} />}
         {panel === 'more' && (
           <div className="panel menu">
-            <button type="button" onClick={() => { setPanel(null); void flush().then(() => setExporting(true)); }}><Icon name="send" size={20} /> Exporter vers Notion</button>
+            {!inInbox && <button type="button" onClick={() => { setPanel(null); void flush().then(() => setExporting(true)); }}><Icon name="send" size={20} /> Exporter vers Notion</button>}
             <button type="button" onClick={() => setPanel('move')}><Icon name="file" size={20} /> {inInbox ? 'Ranger dans…' : 'Déplacer vers…'}</button>
             <button type="button" onClick={convert}><Icon name={draft.type === 'text' ? 'checked' : 'notes'} size={20} /> {draft.type === 'text' ? 'Transformer en liste' : 'Transformer en texte'}</button>
             <button type="button" onClick={() => void copy()}><Icon name="copy" size={20} /> Copier le texte</button>
@@ -472,8 +452,12 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
         <div className="editor-bottom">
           <IconButton name="palette" label="Couleur et illustration" active={panel === 'colors'} onClick={() => setPanel(panel === 'colors' ? null : 'colors')} />
-          <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
-          <IconButton name="send" label="Exporter vers Notion" onClick={() => void flush().then(() => setExporting(true))} />
+          {!inInbox && (
+            <>
+              <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
+              <IconButton name="send" label="Exporter vers Notion" onClick={() => void flush().then(() => setExporting(true))} />
+            </>
+          )}
           <span className="edited">Modifiée le {formatDate(note.updatedAt)}</span>
           <IconButton name="more" label="Plus d'actions" active={panel === 'more'} onClick={() => setPanel(panel === 'more' ? null : 'more')} />
         </div>
