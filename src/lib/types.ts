@@ -6,6 +6,26 @@ export type Category = 'action' | 'habit' | 'project' | 'resource';
 export type ActionStatus = 'todo' | 'waiting' | 'someday' | 'done';
 export type ProjectStatus = 'active' | 'someday' | 'done';
 
+/** Rythme d'une habitude. */
+export type HabitRhythm = 'daily' | 'days' | 'perWeek' | 'weekly' | 'perMonth' | 'monthly';
+
+export interface HabitConfig {
+  rhythm: HabitRhythm;
+  /** « Certains jours » : 0 = lundi … 6 = dimanche. */
+  days?: number[];
+  /** « X fois par semaine / par mois ». */
+  times?: number;
+  /** « Chaque mois » : jour du mois conseillé (facultatif). */
+  monthDay?: number;
+  /** Objectif affiché (ex. « 160 g », « 7 000 pas »). */
+  target?: string;
+  /** Habitude à éviter : cocher = période tenue. */
+  avoid?: boolean;
+  moment?: 'morning' | 'day' | 'evening';
+  /** Quotidienne : pas le samedi ni le dimanche. */
+  noWeekend?: boolean;
+}
+
 export type NoteColor =
   | 'default' | 'coral' | 'peach' | 'sand' | 'mint' | 'sage'
   | 'fog' | 'storm' | 'dusk' | 'blossom' | 'clay' | 'chalk';
@@ -55,8 +75,16 @@ export interface Note {
   waitingFor?: string;
   /** Carte « projet ». */
   projectStatus?: ProjectStatus;
-  /** Carte « habitude » seule. */
+  /** Ancienne régularité d'habitude (texte), remplacée par `habit`. */
   frequency?: string;
+  /** Réglages d'une habitude. */
+  habit?: HabitConfig;
+  /** Fois où l'habitude a été faite, par jour (« 2026-10-17 » → 1). */
+  habitLog?: Record<string, number>;
+  /** Pauses (vacances, maladie) : ces jours ne comptent pas. */
+  habitPauses?: { from: string; to: string }[];
+  /** Étapes cochées d'une routine pour la période en cours. */
+  habitSteps?: { period: string; done: string[] };
   createdAt: number;
   updatedAt: number;
   deleted?: boolean;

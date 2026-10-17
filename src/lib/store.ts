@@ -251,3 +251,57 @@ export async function importBackup(data: { notes?: Note[]; labels?: Label[]; bac
   for (const b of data.backgrounds ?? []) if (b.id && !b.deleted) await save('background', { ...b });
   return count;
 }
+
+// ---------- Habitudes ----------
+
+/** Ajoute (ou retire, avec delta = -1) une fois faite à une date donnée. */
+export async function logHabit(id: string, day: string, delta: 1 | -1) {
+  const note = await db.notes.get(id);
+  if (!note) return;
+  const log = { ...(note.habitLog ?? {}) };
+  const next = Math.max(0, (log[day] ?? 0) + delta);
+  if (next) log[day] = next;
+  else delete log[day];
+  await save('note', { ...note, habitLog: log });
+}
+
+/**
+ * Coche ou décoche une étape de routine. Quand toutes les étapes sont cochées, la routine
+ * compte comme faite une fois et ses étapes se décochent pour la fois suivante.
+ * Renvoie true si la routine vient d'être complétée.
+ */
+export async function toggleHabitStep(id: string, itemId: string, period: string, today: string) {
+  const note = await db.notes.get(id);
+  if (!note) return false;
+  const steps = note.items.filter((i) => i.text.trim()).map((i) => i.id);
+  const current = note.habitSteps?.period === period ? note.habitSteps.done : [];
+  let done = current.includes(itemId) ? current.filter((d) => d !== itemId) : [...current, itemId];
+  const complete = steps.length > 0 && steps.every((s) => done.includes(s));
+  const log = { ...(note.habitLog ?? {}) };
+  if (complete) {
+    log[today] = (log[today] ?? 0) + 1;
+    done = [];
+  }
+  await save('note', { ...note, habitSteps: { period, done }, habitLog: log });
+  return complete;
+}
+
+/** Met des habitudes en pause jusqu'à une date (vacances, maladie). */
+export async function pauseHabits(ids: string[], from: string, to: string) {
+  for (const id of ids) {
+    const note = await db.notes.get(id);
+    if (!note) continue;
+    const pauses = (note.habitPauses ?? []).filter((p) => p.to < from);
+    await save('note', { ...note, habitPauses: [...pauses, { from, to }] });
+  }
+}
+
+/** Arrête une pause en cours : elle se termine la veille. */
+export async function resumeHabit(id: string, today: string, yesterday: string) {
+  const note = await db.notes.get(id);
+  if (!note) return;
+  const pauses = (note.habitPauses ?? [])
+    .map((p) => (p.from <= today && today <= p.to ? { ...p, to: yesterday } : p))
+    .filter((p) => p.from <= p.to);
+  await save('note', { ...note, habitPauses: pauses });
+}

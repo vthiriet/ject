@@ -72,7 +72,7 @@ de filtrer par aire dans chaque onglet.
 | Type | Exemples | Information propre |
 |---|---|---|
 | Action | « Prendre RDV dentiste » ; liste « Courses » | **État** : à faire / en attente (de qui, facultatif) / un jour / fait |
-| Habitude | « Courir » ; liste « Routine du matin » | **Régularité** : chaque jour, X fois par semaine, chaque semaine, chaque mois, ou texte libre |
+| Habitude | « Courir » ; liste « Routine du matin » | **Rythme**, objectif, à éviter, moment (voir 3.0 ter) |
 | Projet | liste « Voyage Japon » (ses étapes) | **État** : actif / un jour / terminé (part dans les Archives). Les étapes ont les états des actions |
 | Ressource | « Film : Dune 2 » ; liste « Films à voir » | Aucune |
 
@@ -113,6 +113,49 @@ ou sa régularité. Menu ⋮ › « Déplacer vers… » pour changer de type.
 **Ressources**. Les libellés deviennent les **aires**. Le réglage « À l'ouverture de Ject »
 est retiré : Ject s'ouvre toujours sur l'Inbox. Raccourcis Android : « Ajouter à
 l'inbox » et « Actions ».
+
+### 3.0 ter Onglet Habitudes (incitatif)
+
+**Réglages d'une habitude** (dans la carte ouverte) :
+- rythme : chaque jour · certains jours (lun…dim) · X fois par semaine · chaque semaine ·
+  X fois par mois · chaque mois (jour conseillé facultatif) ;
+- objectif affiché facultatif (« 160 g », « 7 000 pas ») ;
+- « à éviter » : cocher = période tenue ;
+- moment facultatif (matin, journée, soir) ;
+- « pas le week-end » pour une habitude quotidienne.
+- Une carte **liste** est une **routine** : on coche ses étapes ; toutes cochées = une fois
+  faite, et les étapes se décochent pour la fois suivante.
+- Les semaines commencent le lundi.
+
+**Affichage, par rythme** :
+- **Aujourd'hui** : habitudes quotidiennes du jour, en simple rappel. Case facultative qui
+  barre l'habitude pour la journée, sans statistiques ni points.
+- **Cette semaine** / **Ce mois-ci** : bouton « +1 » en un geste, barre de progression
+  « 2 / 3 », message d'encouragement (« Plus qu'une fois cette semaine ! », « Il reste
+  2 jours pour 3 fois : on s'accroche ! »). Une fois l'objectif atteint, la carte descend en
+  bas, barrée.
+- **Pas aujourd'hui** (jour non concerné) et **En pause**, en bas.
+- Petite animation au moment de cocher (+ points, ✨🎉), avec « Annuler ».
+
+**Motivation** :
+- En-tête : « X / Y tenues cette semaine », « X / Y tenues ce mois-ci », niveau et points.
+- Points : +10 par fois faite pour une habitude hebdomadaire, +30 pour une mensuelle,
+  0 pour une quotidienne ; un niveau tous les 100 points (message au passage de niveau).
+- Pas de série 🔥, de calendrier en pastilles ni de records (choix explicite).
+
+**Fiche détaillée** (toucher une habitude) : avancement, % de réussite (4 dernières semaines
+ou 3 derniers mois ; la période en cours ne compte que si elle est réussie ; les périodes en
+pause sont ignorées), points gagnés, historique en barres, **rattrapage** d'un oubli (choisir
+un jour de la période en cours), liste des jours cochés (avec « Retirer »), **pause** jusqu'à
+une date / « Reprendre », « Modifier », « Supprimer ».
+
+**Pause générale** (vacances, maladie) : depuis l'en-tête, met toutes les habitudes en pause
+jusqu'à une date ; les jours de pause ne comptent pas.
+
+**Prochaine étape : notifications** (nécessite un serveur d'envoi et 2 clés à créer) : un
+rappel en **début** de période (lundi, 1er du mois) et à la **mi-période** (mi-semaine,
+mi-mois) pour les habitudes hebdomadaires et mensuelles non encore tenues. Horaires à
+confirmer (proposition : 9 h en début de période, 18 h à la mi-période).
 
 ### 3.1 V1 : prototype complet
 
@@ -254,7 +297,9 @@ sur l'app, toutes les 30 secondes, et peu après chaque modification.
 - **notes** : id, type (`text` ou `list`), titre, contenu, éléments de liste
   (id, texte, coché, mention d'export), couleur, illustration (`preset:<id>` ou
   `img:<id>`), épinglée, archivée, mise à la corbeille le, position, libellés,
-  mention d'export Notion, créée le, modifiée le.
+  mention d'export Notion, type (`category`), état, réglages d'habitude (`habit`), journal
+  des fois faites par jour (`habitLog`), pauses (`habitPauses`), étapes cochées
+  (`habitSteps`), créée le, modifiée le.
 - **labels** : id, nom, emoji.
 - **backgrounds** : images importées (réduites, format JPEG).
 - **outbox** : éléments modifiés en attente d'envoi à Supabase.
@@ -298,3 +343,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | Ranger : « Carte seule » en premier, puis la recherche et les listes existantes. |
 | 13/10/2026 | Poubelle des cartes à droite et centrée : même hauteur que les cartes Projets. |
 | 13/10/2026 | Poubelle ajoutée aussi sur les cartes Projets. |
+| 17/10/2026 | Habitudes incitatives : rythmes détaillés, +1 en un geste, progression, encouragements, points et niveaux, routines à étapes, fiche détaillée, rattrapage, pauses. |

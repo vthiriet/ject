@@ -3,6 +3,7 @@ import { db } from '../lib/db';
 import { describe, logError, withTimeout } from '../lib/diagnostics';
 import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
+import { appliesOn, habitConfig, isPaused, level, pointsOf, progress, scaleOf } from '../lib/habits';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, restoreNote, saveNote, trashNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
@@ -10,6 +11,9 @@ import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
 import { Drawer, type Section } from './Drawer';
 import { Fab } from './Fab';
+import { HabitCard } from './HabitCard';
+import { HabitSheet } from './HabitSheet';
+import { HabitSummary } from './HabitSummary';
 import { FileDialog } from './FileDialog';
 import { Icon, IconButton } from './Icon';
 import { InboxView } from './InboxView';
@@ -33,6 +37,7 @@ const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id ==
 /** Regroupe les cartes d'un onglet en sections (épinglées, puis par état). */
 function groupsFor(section: Section, notes: Note[]): { label: string; notes: Note[] }[] {
   if (!isCategory(section)) return [{ label: '', notes }];
+  if (section === 'habit') return habitGroups(notes);
   const pinned = notes.filter((n) => n.pinned);
   const rest = notes.filter((n) => !n.pinned);
   const groups: { label: string; notes: Note[] }[] = [];
@@ -52,6 +57,22 @@ function groupsFor(section: Section, notes: Note[]): { label: string; notes: Not
   return groups.filter((g) => g.notes.length);
 }
 
+/** Habitudes : par rythme, celles déjà tenues en bas ; puis « pas aujourd'hui » et « en pause ». */
+function habitGroups(notes: Note[]) {
+  const today = new Date();
+  const doneLast = (list: Note[]) => [...list.filter((n) => !progress(n, today).done), ...list.filter((n) => progress(n, today).done)];
+  const active = notes.filter((n) => !isPaused(n, today));
+  const of = (scale: string) => active.filter((n) => scaleOf(habitConfig(n)) === scale);
+  const daily = of('day');
+  return [
+    { label: "Aujourd'hui", notes: doneLast(daily.filter((n) => appliesOn(habitConfig(n), today))) },
+    { label: 'Cette semaine', notes: doneLast(of('week')) },
+    { label: 'Ce mois-ci', notes: doneLast(of('month')) },
+    { label: "Pas aujourd'hui", notes: daily.filter((n) => !appliesOn(habitConfig(n), today)) },
+    { label: 'En pause', notes: notes.filter((n) => isPaused(n, today)) },
+  ].filter((g) => g.notes.length);
+}
+
 export default function App() {
   const notes = useNotes();
   const labels = useLabels();
@@ -67,6 +88,7 @@ export default function App() {
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [filing, setFiling] = useState<string[] | null>(null);
+  const [sheet, setSheet] = useState<string | null>(null);
   const started = useRef(false);
   useBackClose(drawer, () => setDrawer(false));
 
@@ -172,8 +194,20 @@ export default function App() {
   const sortable = !query && section !== 'trash';
   const groups = groupsFor(section, visible);
 
+  const habits = useMemo(() => notes.filter((n) => categoryOf(n) === 'habit' && !n.inbox && !n.archived && n.trashedAt === null), [notes]);
+  const totalPoints = habits.reduce((sum, h) => sum + pointsOf(h), 0);
+
   const card = (n: Note) =>
-    section === 'trash' ? (
+    section === 'habit' ? (
+      <HabitCard
+        note={n}
+        onOpen={() => setSheet(n.id)}
+        onDone={(pts) => {
+          const next = level(totalPoints + pts).level;
+          if (next > level(totalPoints).level) setTimeout(() => toast(`🏆 Niveau ${next} atteint, bravo !`), 900);
+        }}
+      />
+    ) : section === 'trash' ? (
       <NoteCard
         note={n}
         labels={labels}
@@ -226,7 +260,7 @@ export default function App() {
           <input type="search" value={query} placeholder="Rechercher" onChange={(e) => setQuery(e.target.value)} aria-label="Rechercher" />
           {query && <IconButton name="close" label="Effacer la recherche" size={18} onClick={() => setQuery('')} />}
         </label>
-        {section !== 'inbox' && <IconButton name={layout === 'grid' ? 'list' : 'grid'} label={layout === 'grid' ? 'Affichage en liste' : 'Affichage en grille'} onClick={() => setLayout(layout === 'grid' ? 'list' : 'grid')} />}
+        {section !== 'inbox' && section !== 'habit' && <IconButton name={layout === 'grid' ? 'list' : 'grid'} label={layout === 'grid' ? 'Affichage en liste' : 'Affichage en grille'} onClick={() => setLayout(layout === 'grid' ? 'list' : 'grid')} />}
         <button type="button" className={`sync-indicator ${status}`} title={SYNC_LABEL[status]} aria-label={SYNC_LABEL[status]} onClick={() => setDialog('settings')}>
           <Icon name="cloud" size={22} />
         </button>
@@ -272,10 +306,17 @@ export default function App() {
           </div>
         )}
 
+        {section === 'habit' && !query && <HabitSummary habits={habits} />}
+
         {groups.map((g) => (
           <section key={g.label || 'all'}>
             {g.label && <p className="section-label grid-label">{g.label}</p>}
-            <NoteGrid notes={g.notes} layout={layout} sortable={sortable} render={card} />
+            <NoteGrid
+              notes={g.notes}
+              layout={section === 'habit' ? 'list' : layout}
+              sortable={sortable && section !== 'habit'}
+              render={card}
+            />
           </section>
         ))}
 
@@ -313,6 +354,16 @@ export default function App() {
         <NoteEditor key={editing.id} noteId={editing.id} isNew={editing.isNew} initial={editing.initial} labels={labels} images={images} onClose={() => setEditing(null)} />
       )}
       {dialog === 'settings' && <Settings onClose={() => setDialog(null)} theme={theme} setTheme={setTheme} />}
+      {sheet && notes.find((n) => n.id === sheet) && (
+        <HabitSheet
+          note={notes.find((n) => n.id === sheet)!}
+          onClose={() => setSheet(null)}
+          onEdit={() => {
+            setSheet(null);
+            setEditing({ id: sheet, isNew: false });
+          }}
+        />
+      )}
       {filing && <FileDialog ids={filing} notes={notes} onClose={() => setFiling(null)} />}
       {dialog === 'labels' && <LabelManager labels={labels} onClose={() => setDialog(null)} />}
       <Toaster />

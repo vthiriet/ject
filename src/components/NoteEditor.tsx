@@ -1,16 +1,17 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
+import { habitConfig } from '../lib/habits';
 import { useBackClose } from '../lib/history';
 import {
   deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, setProjectStatus, trashNote, updateNote,
 } from '../lib/store';
-import { ACTION_STATUS, CATEGORIES, categoryMeta, categoryOf, frequencyLabel, PROJECT_STATUS } from '../lib/gtd';
+import { ACTION_STATUS, CATEGORIES, categoryMeta, categoryOf, PROJECT_STATUS } from '../lib/gtd';
 import { extractLinks, formatDate, noteToText } from '../lib/text';
 import type { ActionStatus, BackgroundImage, Category, ChecklistItem, Label, Note, ProjectStatus } from '../lib/types';
 import { Banner } from './Background';
 import { BackgroundPicker } from './BackgroundPicker';
-import { FrequencyPicker } from './FrequencyPicker';
+import { HabitConfigForm } from './HabitConfigForm';
 import { Icon, IconButton } from './Icon';
 import { LabelPicker } from './LabelPicker';
 import { LinkPreviewCard } from './LinkPreview';
@@ -233,12 +234,10 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   const inInbox = !!note.inbox;
   const category = categoryOf(note);
-  const hasItemOptions = !inInbox && (category === 'action' || category === 'project' || category === 'habit');
+  const hasItemOptions = !inInbox && (category === 'action' || category === 'project');
 
   const itemBadge = (item: ChecklistItem) =>
-    category === 'habit'
-      ? item.frequency && `🔁 ${frequencyLabel(item.frequency)}`
-      : item.status === 'waiting'
+    item.status === 'waiting'
         ? `⏳ En attente${item.waitingFor ? ` · ${item.waitingFor}` : ''}`
         : item.status === 'someday' && '💤 Un jour';
 
@@ -270,9 +269,6 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           )}
           {itemOptions === item.id && (
             <div className="item-options">
-              {category === 'habit' ? (
-                <FrequencyPicker value={item.frequency ?? ''} onChange={(v) => updateItem(item.id, { frequency: v || undefined })} />
-              ) : (
                 <>
                   <Segmented
                     value={item.status ?? 'todo'}
@@ -288,14 +284,13 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
                     />
                   )}
                 </>
-              )}
             </div>
           )}
         </div>
         {hasItemOptions && !done && (
           <IconButton
-            name={category === 'habit' ? 'repeat' : 'hourglass'}
-            label={category === 'habit' ? 'Régularité' : 'État'}
+            name="hourglass"
+            label="État"
             size={18}
             className={`item-remove ${itemOptions === item.id ? 'shown' : ''}`}
             onClick={() => setItemOptions(itemOptions === item.id ? null : item.id)}
@@ -370,10 +365,11 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
                 onChange={(v) => void changeProjectStatus(v as ProjectStatus)}
               />
             )}
-            {category === 'habit' && draft.type === 'text' && (
-              <FrequencyPicker value={note.frequency ?? ''} onChange={(v) => void updateNote(noteId, { frequency: v || undefined })} />
-            )}
+
           </div>
+          )}
+          {!inInbox && category === 'habit' && (
+            <HabitConfigForm value={habitConfig(note)} onChange={(c) => void updateNote(noteId, { habit: c, frequency: undefined })} />
           )}
           {!inInbox && category === 'action' && draft.type === 'text' && note.status === 'waiting' && (
             <input

@@ -1,4 +1,5 @@
-import { categoryOf, frequencyLabel } from '../lib/gtd';
+import { categoryOf } from '../lib/gtd';
+import { habitConfig, rhythmLabel } from '../lib/habits';
 import { updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
@@ -33,12 +34,11 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
     category === 'action' && note.type === 'text' && note.status && note.status !== 'todo'
       ? note.status === 'waiting' ? `⏳ En attente${note.waitingFor ? ` · ${note.waitingFor}` : ''}`
         : note.status === 'someday' ? '💤 Un jour' : '✓ Fait'
-      : category === 'habit' && note.type === 'text' && note.frequency ? `🔁 ${frequencyLabel(note.frequency)}`
+      : category === 'habit' ? `🔁 ${rhythmLabel(habitConfig(note))}`
       : category === 'project' && note.projectStatus === 'someday' ? '💤 Un jour'
       : '';
   const itemMeta = (i: Note['items'][number]) =>
-    category === 'habit' ? (i.frequency ? ` · 🔁 ${frequencyLabel(i.frequency)}` : '')
-    : i.status === 'waiting' ? ' · ⏳' : i.status === 'someday' ? ' · 💤' : '';
+    i.status === 'waiting' ? ' · ⏳' : i.status === 'someday' ? ' · 💤' : '';
 
   const toggle = (id: string) =>
     updateNote(note.id, { items: note.items.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i)) });
