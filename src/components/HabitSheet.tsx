@@ -3,7 +3,7 @@ import {
   addDays, currentPause, encouragement, habitConfig, history, iso, MOMENT_LABEL, parse, periodRange,
   pointsOf, progress, rhythmLabel, successRate,
 } from '../lib/habits';
-import { logHabit, pauseHabits, restoreNote, resumeHabit, trashNote } from '../lib/store';
+import { logHabit, pauseHabits, resumeHabit, updateNote } from '../lib/store';
 import { formatDate } from '../lib/text';
 import type { Note } from '../lib/types';
 import { Dialog } from './Dialog';
@@ -38,8 +38,8 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
     .sort(([a], [b]) => (a < b ? 1 : -1));
 
   const remove = () => {
-    void trashNote(note.id);
-    toast('Habitude placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(note.id) });
+    void updateNote(note.id, { archived: true, pinned: false });
+    toast('Habitude archivée ✓', { label: 'Annuler', run: () => void updateNote(note.id, { archived: false }) });
     onClose();
   };
 
@@ -127,7 +127,7 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
 
       <div className="row wrap sheet-actions">
         <button type="button" className="btn primary" onClick={onEdit}><Icon name="edit" size={18} /> Modifier</button>
-        <button type="button" className="btn" onClick={remove}><Icon name="trash" size={18} /> Supprimer</button>
+        <button type="button" className="btn" onClick={remove}><Icon name="check" size={18} /> Archiver</button>
       </div>
     </Dialog>
   );

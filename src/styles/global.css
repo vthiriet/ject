@@ -2144,3 +2144,8 @@ textarea.auto {
 .priority-btn .prio-num {
   -webkit-text-fill-color: #fff;
 }
+
+/* Deux boutons à droite d'une carte (Archives : désarchiver + supprimer) */
+.note-card.has-side:has(.card-side > :nth-child(2)) .card-body {
+  padding-right: 62px;
+}

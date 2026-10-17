@@ -147,7 +147,7 @@ export default function App() {
   }, []);
 
   const inboxAll = useMemo(
-    () => notes.filter((n) => n.inbox && n.trashedAt === null).sort((a, b) => b.createdAt - a.createdAt),
+    () => notes.filter((n) => n.inbox && !n.archived && n.trashedAt === null).sort((a, b) => b.createdAt - a.createdAt),
     [notes],
   );
   const inboxItems = useMemo(() => inboxAll.filter((n) => matchesQuery(n, query)), [inboxAll, query]);
@@ -156,7 +156,7 @@ export default function App() {
     if (section === 'inbox') return [];
     const list = notes.filter((n) => {
       if (section === 'trash') return n.trashedAt !== null && matchesQuery(n, query);
-      if (n.trashedAt !== null || n.inbox) return false;
+      if (n.trashedAt !== null || (n.inbox && section !== 'archive')) return false;
       if (section === 'archive' ? !n.archived : n.archived) return false;
       if (isCategory(section) && categoryOf(n) !== section) return false;
       if (labelId && !n.labelIds.includes(labelId)) return false;
@@ -243,6 +243,20 @@ export default function App() {
                   {n.priority && <span className="prio-num">{n.priority}</span>}
                 </button>
               )}
+              <IconButton
+                name="check"
+                label="Archiver"
+                size={22}
+                onClick={() => {
+                  void updateNote(n.id, { archived: true, pinned: false });
+                  toast('Archivée ✓', { label: 'Annuler', run: () => void updateNote(n.id, { archived: false, pinned: n.pinned }) });
+                }}
+              />
+            </>
+          ) : section === 'archive' ? (
+            // Dans les Archives : remettre en place, ou supprimer (corbeille, 7 jours).
+            <>
+              <IconButton name="unarchive" label="Désarchiver" size={20} onClick={() => void updateNote(n.id, { archived: false })} />
               <IconButton
                 name="trash"
                 label="Supprimer"

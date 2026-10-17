@@ -1,5 +1,5 @@
 import { categoryMeta } from '../lib/gtd';
-import { restoreNote, trashNote } from '../lib/store';
+import { updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { Note } from '../lib/types';
 import { Icon, IconButton } from './Icon';
@@ -55,9 +55,9 @@ function InboxRow({ item, onOpen, onFile }: { item: Note; onOpen: () => void; on
   const listItems = item.type === 'list' ? item.items.filter((i) => i.text.trim()) : [];
   const link = extractLinks(item)[0];
 
-  const remove = () => {
-    void trashNote(item.id);
-    toast('Élément supprimé', { label: 'Annuler', run: () => void restoreNote(item.id) });
+  const archive = () => {
+    void updateNote(item.id, { archived: true });
+    toast('Archivé ✓', { label: 'Annuler', run: () => void updateNote(item.id, { archived: false }) });
   };
 
   return (
@@ -81,7 +81,7 @@ function InboxRow({ item, onOpen, onFile }: { item: Note; onOpen: () => void; on
         </small>
       </div>
       <IconButton name="file" label="Ranger cet élément" onClick={onFile} />
-      <IconButton name="trash" label="Supprimer" onClick={remove} />
+      <IconButton name="check" label="Archiver" onClick={archive} />
     </div>
   );
 }

@@ -98,8 +98,10 @@ seules) / En attente / Un jour / Faites ; Projets en Actifs / Un jour ; un proje
 « Terminé » part dans les Archives (et redevient actif si on le désarchive). Les états et
 régularités s'affichent sur les cartes (⏳ En attente, 💤 Un jour, 🔁 Chaque jour…).
 
-**Cartes :** dans Actions, Habitudes, Projets et Ressources, chaque carte (texte ou liste) a une icône poubelle à
-droite, centrée verticalement (corbeille, avec « Annuler »), sans augmenter sa hauteur.
+**Cartes :** sur chaque carte (Inbox, Actions, Projets, Ressources) et dans la fiche d'une
+habitude, une **coche ✓ « Archiver »** remplace la poubelle : la carte part dans les
+Archives (« Annuler » possible). Dans les **Archives**, chaque carte propose
+**Désarchiver** et **Supprimer** (corbeille, vidée après 7 jours).
 
 **Bouton « précédent » du téléphone :** il revient à l'onglet affiché avant, et referme
 d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
@@ -362,3 +364,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Habitudes incitatives : rythmes détaillés, +1 en un geste, progression, encouragements, points et niveaux, routines à étapes, fiche détaillée, rattrapage, pauses. |
 | 17/10/2026 | Retours : glisser une carte au centre d'une autre pour fusionner en liste (bord = déplacer) ; priorité des actions (flamme 3/2/1) ; statuts retirés d'Actions et Projets ; Inbox sans aires ni export ; pas de zoom ; pas de titre pour un texte ; bouton « Ajouter » / « OK » dans une carte. |
 | 17/10/2026 | Flammes de priorité numérotées (1, 2, 3) ; tri rouge → orange → jaune → gris. |
+| 17/10/2026 | Coche « Archiver » à la place de la poubelle sur les cartes ; suppression depuis les Archives. |
