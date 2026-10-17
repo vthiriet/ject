@@ -41,10 +41,12 @@ function groupsFor(section: Section, notes: Note[]): { label: string; notes: Not
   const pinned = notes.filter((n) => n.pinned);
   const rest = notes.filter((n) => !n.pinned);
   const groups: { label: string; notes: Note[] }[] = [];
-  if (pinned.length) groups.push({ label: 'Épinglées', notes: pinned });
+  // Actions : rouge (1), orange (2), jaune (3), puis sans flamme ; à priorité égale, l'ordre choisi.
+  const byPriority = (list: Note[]) =>
+    section === 'action' ? [...list].sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4)) : list;
+  if (pinned.length) groups.push({ label: 'Épinglées', notes: byPriority(pinned) });
   if (section === 'action') {
-    // Les plus prioritaires d'abord (1 = rouge), puis l'ordre choisi.
-    groups.push({ label: pinned.length ? 'Autres' : '', notes: [...rest].sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4)) });
+    groups.push({ label: pinned.length ? 'Autres' : '', notes: byPriority(rest) });
   } else {
     groups.push({ label: pinned.length ? 'Autres' : '', notes: rest });
   }
@@ -238,6 +240,7 @@ export default function App() {
                   onClick={() => void updateNote(n.id, { priority: n.priority === 3 ? 2 : n.priority === 2 ? 1 : n.priority === 1 ? undefined : 3 })}
                 >
                   <Icon name="flame" size={20} />
+                  {n.priority && <span className="prio-num">{n.priority}</span>}
                 </button>
               )}
               <IconButton

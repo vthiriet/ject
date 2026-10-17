@@ -111,8 +111,9 @@ en liste », « Annuler » possible) ; lâcher sur un **bord** la déplace avant
 l'Inbox, triée par date).
 
 **Priorité des actions** : flamme à côté de la poubelle ; chaque appui : grise → jaune (3) →
-orange (2) → rouge (1, priorité maximale) → grise. Les actions les plus prioritaires
-s'affichent en premier.
+orange (2) → rouge (1, priorité maximale) → grise. Le chiffre (1, 2 ou 3) s'affiche sur la
+flamme. Les actions sont triées tout en haut : rouge, orange, jaune, puis grises (dans
+« Épinglées » comme dans le reste).
 
 **Saisie** : pas de champ titre pour un texte (sauf s'il en avait déjà un) ; bouton
 **« Ajouter »** (nouvelle carte) ou **« OK »** en haut à droite pour valider, avec le message
@@ -360,3 +361,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 13/10/2026 | Poubelle ajoutée aussi sur les cartes Projets. |
 | 17/10/2026 | Habitudes incitatives : rythmes détaillés, +1 en un geste, progression, encouragements, points et niveaux, routines à étapes, fiche détaillée, rattrapage, pauses. |
 | 17/10/2026 | Retours : glisser une carte au centre d'une autre pour fusionner en liste (bord = déplacer) ; priorité des actions (flamme 3/2/1) ; statuts retirés d'Actions et Projets ; Inbox sans aires ni export ; pas de zoom ; pas de titre pour un texte ; bouton « Ajouter » / « OK » dans une carte. |
+| 17/10/2026 | Flammes de priorité numérotées (1, 2, 3) ; tri rouge → orange → jaune → gris. |
