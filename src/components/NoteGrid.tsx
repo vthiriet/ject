@@ -17,6 +17,8 @@ interface Props {
   reorder?: boolean;
   /** Lâcher au centre d'une autre carte : les deux fusionnent en une liste. */
   onMerge?: (sourceId: string, targetId: string) => void;
+  /** Appui long sans déplacer (téléphone) : par exemple pour sélectionner. */
+  onHold?: (id: string) => void;
   render: (note: Note) => ReactNode;
 }
 
@@ -40,7 +42,7 @@ function startPoint(e: Event | null) {
 }
 
 /** Grille (ou liste) de cartes : déplacer pour réordonner, ou lâcher sur une carte pour fusionner. */
-export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, render }: Props) {
+export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, onHold, render }: Props) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [hint, setHint] = useState<Hint>(null);
   const sensors = useSensors(
@@ -74,10 +76,15 @@ export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, ren
     setHint({ id: String(over.id), mode: before ? 'before' : 'after' });
   };
 
-  const onDragEnd = ({ active }: DragEndEvent) => {
+  const onDragEnd = ({ active, delta }: DragEndEvent) => {
     const h = hint;
     setActiveId(null);
     setHint(null);
+    // Appui long relâché sur place : ce n'était pas un glisser.
+    if (!h && Math.abs(delta.x) < 10 && Math.abs(delta.y) < 10) {
+      onHold?.(String(active.id));
+      return;
+    }
     if (!h || h.id === active.id) return;
     const source = String(active.id);
     if (h.mode === 'merge') {

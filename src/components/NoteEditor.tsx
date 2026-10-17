@@ -17,6 +17,7 @@ import { LabelPicker } from './LabelPicker';
 import { LinkPreviewCard } from './LinkPreview';
 import { NotionExport } from './NotionExport';
 import { Segmented } from './Segmented';
+import { SortableRows, type RowDrag } from './SortableRows';
 import { toast } from './Toast';
 
 interface Props {
@@ -107,6 +108,16 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   // ----- Listes -----
   const setItems = (items: ChecklistItem[]) => edit({ items });
+  // Glisser-déposer d'un élément au sein de la liste.
+  const moveItem = (from: string, to: string) => {
+    const items = [...draft.items];
+    const a = items.findIndex((i) => i.id === from);
+    const b = items.findIndex((i) => i.id === to);
+    if (a === -1 || b === -1) return;
+    const [moved] = items.splice(a, 1);
+    items.splice(b, 0, moved);
+    setItems(items);
+  };
   const updateItem = (id: string, patch: Partial<ChecklistItem>) =>
     setItems(draft.items.map((i) => (i.id === id ? { ...i, ...patch } : i)));
 
@@ -238,10 +249,11 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
         ? `⏳ En attente${item.waitingFor ? ` · ${item.waitingFor}` : ''}`
         : item.status === 'someday' && '💤 Un jour';
 
-  const itemRow = (item: ChecklistItem, done: boolean) => {
+  const itemRow = (item: ChecklistItem, done: boolean, drag?: RowDrag) => {
     const badge = !done && hasItemOptions ? itemBadge(item) : '';
     return (
-      <li key={item.id} className={`item-row ${done ? 'done' : ''} ${badge ? 'has-badge' : ''}`}>
+      <li key={item.id} ref={drag?.ref} style={drag?.style} className={`item-row ${done ? 'done' : ''} ${badge ? 'has-badge' : ''} ${drag ? 'sortable' : ''}`}>
+        {item.text.trim() ? drag?.handle : <span className="drag-handle-space" />}
         <button
           type="button"
           className="check"
@@ -370,7 +382,9 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
             />
           ) : (
             <div className="editor-list">
-              <ul>{unchecked.map((i) => itemRow(i, false))}</ul>
+              <SortableRows ids={unchecked.map((i) => i.id)} onMove={moveItem}>
+                {(id, drag) => itemRow(unchecked.find((i) => i.id === id)!, false, drag)}
+              </SortableRows>
               <button type="button" className="add-item" onClick={() => insertAfter(unchecked[unchecked.length - 1]?.id ?? null)}>
                 <Icon name="add" size={24} /> Élément de liste
               </button>

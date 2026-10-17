@@ -2149,3 +2149,81 @@ textarea.auto {
 .note-card.has-side:has(.card-side > :nth-child(2)) .card-body {
   padding-right: 62px;
 }
+
+/* Poignée pour déplacer un élément de liste */
+.item-row.sortable {
+  padding-left: 0;
+}
+.drag-handle {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 44px;
+  flex: none;
+  color: var(--muted);
+  opacity: 0.6;
+  cursor: grab;
+  touch-action: none;
+}
+.drag-handle:active {
+  cursor: grabbing;
+  opacity: 1;
+}
+
+/* ---------- Inbox : sélection multiple ---------- */
+.inbox-head .link-btn {
+  margin-left: auto;
+}
+.inbox-head.selecting {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 4px 4px 4px 0;
+  margin: 0 0 12px;
+  border-radius: var(--radius);
+  background: var(--chip-on);
+  color: var(--chip-on-text);
+  font-weight: 600;
+}
+.inbox-head.selecting .icon-btn {
+  color: inherit;
+}
+.inbox-head.selecting .link-btn {
+  color: inherit;
+}
+.inbox-row.selecting {
+  padding-right: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.inbox-row.selecting .inbox-text p {
+  cursor: pointer;
+}
+.inbox-row.selected {
+  border-color: var(--chip-on-text);
+  background: var(--chip-on);
+}
+.select-box {
+  display: flex;
+  padding: 6px 8px 0 0;
+  color: var(--muted);
+}
+.inbox-row.selected .select-box {
+  color: var(--chip-on-text);
+}
+.file-item.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 30vh;
+  overflow-y: auto;
+  font-size: 15px;
+}
+.file-item.group > div + div {
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+.drag-handle-space {
+  width: 28px;
+  flex: none;
+}

@@ -51,6 +51,13 @@ attente d'être rangés.
 éléments défilent un par un (« Ranger · 2 / 7 ») ; le détail est décrit en 3.0 bis.
 Chaque ligne d'un élément rangé dans une liste devient une case à cocher.
 
+**Sélection multiple** : appui long sur un élément (téléphone) ou lien « Sélectionner »
+(ordinateur). Une case apparaît devant chaque élément ; toucher un élément le coche ou le
+décoche ; « Tout » / « Aucun » ; ✕ ou le bouton retour du téléphone quittent la sélection.
+« Ranger » ouvre alors une seule fenêtre « Ranger N éléments » : un type et une destination
+pour tous (N cartes seules, une nouvelle liste ou une liste existante). « Supprimer » les
+met tous à la corbeille. Le type est présélectionné si tous les éléments ont le même.
+
 ### 3.0 bis Onglets Actions, Habitudes, Projets, Ressources
 
 Inspiré de GTD (que faire de chaque élément) et de PARA (où il vit), en version simplifiée.
@@ -111,6 +118,9 @@ menu du +). Sur le premier écran, il quitte l'app.
 lâcher une carte **au centre** d'une autre les fusionne en une liste (cadre jaune « Fusionner
 en liste », « Annuler » possible) ; lâcher sur un **bord** la déplace avant ou après (pas dans
 l'Inbox, triée par date).
+
+**Éléments d'une liste** : dans une carte liste ouverte, la poignée ⋮⋮ à gauche de chaque
+élément non coché permet de le glisser plus haut ou plus bas.
 
 **Priorité des actions** : flamme à côté de la poubelle ; chaque appui : grise → jaune (3) →
 orange (2) → rouge (1, priorité maximale) → grise. Le chiffre (1, 2 ou 3) s'affiche sur la
@@ -332,7 +342,6 @@ En cas de conflit, la modification la plus récente l'emporte.
 ## 7. Pistes pour la suite
 
 - Inbox : « Coller une liste » (chaque ligne collée devient un élément distinct).
-- Réordonner les éléments d'une liste par glisser-déposer.
 - Export vers une **base de données** Notion (une ligne par élément), en plus des pages.
 - Gestion de projet dans Ject (Kanban, échéances, priorités, sous-tâches), si Notion
   ne suffit plus.
@@ -365,3 +374,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Retours : glisser une carte au centre d'une autre pour fusionner en liste (bord = déplacer) ; priorité des actions (flamme 3/2/1) ; statuts retirés d'Actions et Projets ; Inbox sans aires ni export ; pas de zoom ; pas de titre pour un texte ; bouton « Ajouter » / « OK » dans une carte. |
 | 17/10/2026 | Flammes de priorité numérotées (1, 2, 3) ; tri rouge → orange → jaune → gris. |
 | 17/10/2026 | Coche « Archiver » à la place de la poubelle sur les cartes ; suppression depuis les Archives. |
+| 17/10/2026 | Glisser-déposer des éléments au sein d'une liste (poignée ⋮⋮) ; Inbox : sélection multiple (appui long ou « Sélectionner ») pour ranger plusieurs éléments au même endroit. |

@@ -83,7 +83,7 @@ export default function App() {
   const [drawer, setDrawer] = useState(false);
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
-  const [filing, setFiling] = useState<string[] | null>(null);
+  const [filing, setFiling] = useState<{ ids: string[]; together?: boolean } | null>(null);
   const [sheet, setSheet] = useState<string | null>(null);
   const started = useRef(false);
   useBackClose(drawer, () => setDrawer(false));
@@ -327,7 +327,7 @@ export default function App() {
             items={inboxItems}
             total={inboxAll.length}
             onOpen={(id) => setEditing({ id, isNew: false })}
-            onFile={setFiling}
+            onFile={(ids, together) => setFiling({ ids, together })}
             onMerge={query ? undefined : (a, b) => void merge(a, b)}
           />
         )}
@@ -401,7 +401,7 @@ export default function App() {
           }}
         />
       )}
-      {filing && <FileDialog ids={filing} notes={notes} onClose={() => setFiling(null)} />}
+      {filing && <FileDialog ids={filing.ids} together={filing.together} notes={notes} onClose={() => setFiling(null)} />}
       {dialog === 'labels' && <LabelManager labels={labels} onClose={() => setDialog(null)} />}
       <Toaster />
     </div>

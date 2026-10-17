@@ -178,7 +178,8 @@ export async function fileInboxItems(ids: string[], target: FileTarget, d: FileD
   if (!items.length) return;
   if ('newCard' in target) {
     // L'élément devient une carte seule dans l'onglet choisi.
-    for (const n of items) await save('note', { ...n, ...cardFields(d), inbox: false, position: Date.now() });
+    // Sans aires précisées, chaque élément garde les siennes.
+    for (const n of items) await save('note', { ...n, ...cardFields(d), labelIds: d.labelIds ?? n.labelIds, inbox: false, position: Date.now() });
     return;
   }
   const created = items.flatMap((n) => linesOf(n).map((l) => itemFor(l, d)));
