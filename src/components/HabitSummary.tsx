@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { addDays, isPaused, iso } from '../lib/habits';
 import { pauseHabits, resumeHabit } from '../lib/store';
 import type { Note } from '../lib/types';
+import { Icon } from './Icon';
 import { toast } from './Toast';
 
 /** En-tête de l'onglet Habitudes : pause générale (vacances, maladie). */
@@ -42,7 +43,7 @@ export function HabitSummary({ habits }: { habits: Note[] }) {
             Reprendre toutes les habitudes
           </button>
         ) : (
-          <button type="button" className="link-btn" onClick={() => setPausing(true)}>⏸ Pause vacances / maladie</button>
+          <button type="button" className="link-btn" onClick={() => setPausing(true)}><Icon name="pause" size={16} /> Pause vacances / maladie</button>
         )}
       </div>
     </section>

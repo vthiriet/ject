@@ -41,7 +41,7 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
 
   const remove = () => {
     void updateNote(note.id, { archived: true, pinned: false });
-    toast('Habitude archivée ✓', { label: 'Annuler', run: () => void updateNote(note.id, { archived: false }) });
+    toast('Habitude archivée', { label: 'Annuler', run: () => void updateNote(note.id, { archived: false }) });
     onClose();
   };
 
@@ -109,7 +109,7 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
       <p className="section-label">Pause (vacances, maladie)</p>
       {pause ? (
         <div className="row wrap">
-          <span>⏸ En pause jusqu’au {formatDate(parse(pause.to).getTime())}</span>
+          <span className="row"><Icon name="pause" size={16} /> En pause jusqu’au {formatDate(parse(pause.to).getTime())}</span>
           <button type="button" className="btn" onClick={() => void resumeHabit(note.id, todayIso, iso(addDays(today, -1)))}>Reprendre</button>
         </div>
       ) : (
@@ -123,7 +123,7 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
 
       <div className="row wrap sheet-actions">
         <button type="button" className="btn primary" onClick={onEdit}><Icon name="edit" size={18} /> Modifier</button>
-        <button type="button" className="btn" onClick={remove}><Icon name="check" size={18} /> Archiver</button>
+        <button type="button" className="btn" onClick={remove}><Icon name="archive" size={18} /> Archiver</button>
       </div>
     </Dialog>
   );

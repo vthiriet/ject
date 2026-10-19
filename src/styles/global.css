@@ -1692,7 +1692,7 @@ textarea.auto {
   height: 8px;
   overflow: hidden;
   border-radius: var(--r-gelule);
-  background: var(--border);
+  background: var(--piste);
 }
 .habit-bar span {
   display: block;
@@ -1760,23 +1760,6 @@ textarea.auto {
     color: var(--erreur);
   }
 }
-.habit-check {
-  display: grid;
-  place-items: center;
-  align-self: stretch;
-  width: 64px;
-  flex: none;
-  border-left: 1px solid var(--border);
-  color: var(--muted);
-}
-.habit-check small {
-  font-size: var(--t-legende);
-  font-weight: 600;
-}
-.habit-check:hover,
-.habit-check.on {
-  color: var(--text);
-}
 .habit-card.done .habit-title {
   text-decoration: line-through;
   color: var(--muted);
@@ -1797,36 +1780,9 @@ textarea.auto {
   min-height: 34px;
   text-align: left;
 }
-.habit-steps button svg {
-  flex: none;
-  color: var(--muted);
-}
 .habit-steps button.on {
   color: var(--muted);
   text-decoration: line-through;
-}
-/* Petite fête au moment de cocher */
-.habit-burst {
-  position: absolute;
-  right: 12px;
-  top: 4px;
-  pointer-events: none;
-  color: var(--accent);
-  font-weight: 700;
-  font-size: var(--t-texte);
-  animation: burst-up 1.2s ease-out forwards;
-}
-.habit-burst span {
-  display: inline-block;
-  animation: burst-spin 1.2s ease-out forwards;
-}
-@keyframes burst-up {
-  0% { opacity: 0; transform: translateY(10px) scale(0.6); }
-  20% { opacity: 1; transform: translateY(0) scale(1.15); }
-  100% { opacity: 0; transform: translateY(-28px) scale(1); }
-}
-@keyframes burst-spin {
-  to { transform: rotate(180deg) scale(1.4); }
 }
 /* Fiche détaillée */
 .sheet-stats {
@@ -2135,20 +2091,6 @@ textarea.auto {
 .section-progress .grid-label span {
   font-weight: 600;
 }
-.habit-undo {
-  margin-left: 8px;
-  padding: 1px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: var(--t-legende);
-  cursor: pointer;
-}
-.habit-undo:hover {
-  color: var(--text);
-}
 
 /* ---------- Charte Ject : typographie (décisions 9, 38) ---------- */
 h1, h2, h3,
@@ -2444,4 +2386,75 @@ h1, h2, h3,
 .inbox-head.selecting .btn {
   min-height: 36px;
   padding: 0 12px;
+}
+
+/* ---------- Habitudes (étape 5, décisions 28, 52, 53) ---------- */
+.habit-card {
+  gap: 8px;
+  padding-right: 12px;
+}
+.habit-title {
+  font-size: var(--t-carte);
+}
+.habit-card.done .habit-title {
+  text-decoration: none;
+  color: var(--encre);
+}
+.habit-card.done {
+  opacity: 1;
+}
+.habit-round {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--contour-case);
+  border-radius: 50%;
+  color: var(--texte);
+}
+.habit-round.on {
+  border-color: var(--corail);
+  background: var(--corail);
+  color: var(--sur-corail);
+}
+.habit-star {
+  display: grid;
+}
+.habit-star.pop {
+  animation: rebond var(--m-cocher);
+}
+@keyframes rebond {
+  0% { transform: scale(0.3); }
+  50% { transform: scale(1.3); }
+  75% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.habit-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 8px;
+  color: var(--contour-case);
+}
+.habit-stars .on {
+  color: var(--corail);
+}
+.habit-card .habit-bar {
+  height: 8px;
+}
+.habit-msg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  color: var(--texte-secondaire);
+}
+.habit-steps button.on {
+  color: var(--texte-discret);
+}
+.summary-pause .link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }

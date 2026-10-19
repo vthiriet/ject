@@ -1,7 +1,7 @@
 import {
   ArchiveIcon, ArrowCounterClockwiseIcon, ArrowLeftIcon, ArrowsClockwiseIcon, BookmarkSimpleIcon, BoxArrowUpIcon, CardsIcon, CaretDownIcon, CaretRightIcon,
   CheckIcon, CheckCircleIcon, CheckSquareIcon, CloudIcon, CopyIcon, DotsSixVerticalIcon, DotsThreeVerticalIcon, DownloadSimpleIcon, FlagIcon, FlameIcon,
-  FolderSimpleIcon, FunnelSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListChecksIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
+  FolderSimpleIcon, FunnelSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListChecksIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PauseIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
   PushPinIcon, RowsIcon, ShareNetworkIcon, SignOutIcon, SquareIcon, SquaresFourIcon, StarIcon, TagIcon, TrashIcon, TrayArrowDownIcon, UploadSimpleIcon, XIcon,
   type Icon as PhosphorIcon,
 } from '@phosphor-icons/react';
@@ -50,6 +50,7 @@ const ICONS = {
   bookmark: BookmarkSimpleIcon,
   hourglass: HourglassIcon,
   moon: MoonIcon,
+  pause: PauseIcon,
   flame: FlameIcon,
   sync: ArrowsClockwiseIcon,
 } satisfies Record<string, PhosphorIcon>;

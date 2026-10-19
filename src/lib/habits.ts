@@ -114,7 +114,7 @@ const PERIOD_WORD: Record<Scale, string> = { day: "aujourd'hui", week: 'cette se
 export function encouragement(n: Note, p = progress(n)) {
   const c = habitConfig(n);
   const word = PERIOD_WORD[p.scale];
-  if (p.done) return c.avoid ? `Tenu ${word} 💪` : `Objectif atteint ${word} 🎉`;
+  if (p.done) return c.avoid ? `Tenu ${word}` : `Objectif atteint ${word}`;
   const left = p.goal - p.count;
   if (p.scale === 'day') return c.target ? `Objectif : ${c.target}` : '';
   if (left > p.daysLeft) return `Il reste ${p.daysLeft} jour${p.daysLeft > 1 ? 's' : ''} pour ${left} fois : on s'accroche !`;

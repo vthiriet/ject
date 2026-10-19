@@ -170,10 +170,11 @@ l'inbox » et « Actions ».
   2 jours pour 3 fois : on s'accroche ! »). Une fois l'objectif atteint, la carte descend en
   bas, barrée.
 - **Pas aujourd'hui** (jour non concerné) et **En pause**, en bas.
-- Petite animation au moment de cocher (✨🎉), avec « Annuler ».
-- **Corriger une erreur** : bouton « −1 » sur la carte dès qu'une fois est comptée (retire la
-  dernière fois de la période, avec « Annuler ») ; pour une routine quotidienne, « Fait
-  aujourd'hui ✓ −1 ».
+- Habitude quotidienne : rond de 44 px ; faite = pastille corail avec une étoile (la toucher
+  décoche). Habitude comptée : bouton rond « + » ; objectif atteint = pastille étoile ; une
+  étoile par fois prévue (jusqu'à 7, au-delà une barre). L'étoile rebondit quand c'est fait.
+- **Corriger une erreur** : « Annuler » dans la notification, ou « Retirer » dans la fiche
+  détaillée (pas de bouton −1 sur la carte, décision 53).
 
 **Motivation** :
 - Chaque section (Aujourd'hui, Cette semaine, Ce mois-ci, Cette année) a sa barre de
@@ -409,3 +410,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 2 : onglets dans une barre en bas ; bande du haut (menu, titre, recherche repliée, bouton « Aires ») ; tiroir (Archives, Corbeille, Aires, Réglages, affichage, synchro) ; le + ouvre directement une carte texte. |
 | 19/10/2026 | Refonte, étape 3 : éditeur (× / « Ajouter » pour une nouvelle carte, ← seule sinon ; barre Liste, Couleur et illustration, Aires, Plus ; export Notion dans Plus) ; cases à cocher de la charte ; 7 pastilles de couleur ; illustrations = aplat + emoji incliné, créables (emoji + couleur), plus d'import d'image (les images déjà importées restent affichées). |
 | 19/10/2026 | Refonte, étape 4 : Inbox avec un seul bouton « Ranger » par carte ; glisser vers la gauche pour archiver ; appui long = sélection seulement (plus de glisser-déposer dans l'Inbox), avec « Fusionner » et « Ranger » ; « Tout ranger » ; « Supprimer » en contour framboise. |
+| 19/10/2026 | Refonte, étape 5 : Habitudes avec rond / étoile corail, bouton « + », une étoile par fois prévue ; « −1 » et éclats d'emoji retirés (corriger via « Annuler » ou « Retirer ») ; icône pause. |
