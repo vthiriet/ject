@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
+import { markAdded } from '../lib/fresh';
 import { habitConfig } from '../lib/habits';
 import { useBackClose } from '../lib/history';
 import {
@@ -100,7 +101,10 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
       // Retire les lignes vides des listes.
       const items = draft.items.filter((i) => i.text.trim());
       await updateNote(noteId, { ...draft, items });
-      if (isNew) toast(note.inbox ? 'Ajouté à ton Inbox' : 'Ajouté');
+      if (isNew) {
+        markAdded(noteId);
+        toast(note.inbox ? 'Ajouté à ton Inbox' : 'Ajouté');
+      }
     }
     onClose();
   };

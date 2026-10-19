@@ -1,5 +1,6 @@
 import { categoryOf } from '../lib/gtd';
 import { habitConfig, rhythmLabel } from '../lib/habits';
+import { isFresh } from '../lib/fresh';
 import { updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
@@ -37,7 +38,7 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
 
   return (
     <article
-      className={`note-card ${sideAction ? 'has-side' : ''}`}
+      className={`note-card ${sideAction ? 'has-side' : ''} ${isFresh(note.id) ? 'new-card' : ''}`}
       data-color={note.color}
       tabIndex={0}
       onClick={onOpen}

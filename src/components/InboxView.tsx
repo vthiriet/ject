@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { isFresh } from '../lib/fresh';
 import { categoryMeta } from '../lib/gtd';
 import { useBackClose } from '../lib/history';
 import { updateNote } from '../lib/store';
@@ -181,7 +182,7 @@ function InboxRow({ item, selecting, checked, onOpen, onHold, onFile }: RowProps
   return (
     <li
       ref={rowRef}
-      className={`inbox-swipe ${dx ? 'swiping' : ''}`}
+      className={`inbox-swipe ${dx ? 'swiping' : ''} ${isFresh(item.id) ? 'new-card' : ''}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

@@ -400,7 +400,8 @@ export default function App() {
               <div className="section-progress">
                 <p className="section-label grid-label">
                   {g.label}
-                  <span>{g.progress.done} / {g.progress.total}</span>
+                  {/* Le compteur grossit un instant quand il change (décision 15). */}
+                  <span key={g.progress.done} className="bump">{g.progress.done} / {g.progress.total}</span>
                 </p>
                 <div className="habit-bar" aria-label={`${g.progress.done} sur ${g.progress.total} tenues`}>
                   <span style={{ width: `${Math.round((g.progress.done / g.progress.total) * 100)}%` }} />

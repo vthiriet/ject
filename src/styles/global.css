@@ -2458,3 +2458,44 @@ h1, h2, h3,
   align-items: center;
   gap: 4px;
 }
+
+/* ---------- Animations (décisions 15, 27) : rebonds, sans confettis ---------- */
+.case.on {
+  animation: rebond var(--m-cocher);
+}
+.bump {
+  display: inline-block;
+  animation: grossit var(--m-serie);
+}
+@keyframes grossit {
+  50% { transform: scale(1.25); }
+}
+.new-card {
+  animation: ressort var(--m-nouvelle-carte);
+}
+@keyframes ressort {
+  0% { opacity: 0; transform: scale(0.6) translateY(30px); }
+  70% { opacity: 1; transform: scale(1.05); }
+  100% { transform: none; }
+}
+.logo-dot.jump {
+  animation: saut 650ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+@keyframes saut {
+  40% { transform: translateY(-40%); }
+  70% { transform: translateY(5%); }
+}
+@keyframes fondu {
+  from { opacity: 0; }
+}
+/* Moins d'animations demandé par le système : simples fondus de 150 ms. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-name: fondu !important;
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+}

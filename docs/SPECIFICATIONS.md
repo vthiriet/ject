@@ -287,9 +287,15 @@ le dossier `design_handoff_charte_ject/` (maquettes, `tokens.css`, README de la 
 - Polices hébergées dans l'app : Bricolage Grotesque (600, 800 : titres, boutons) et Figtree
   (400, 600, 700 : texte). Échelle de 6 tailles, aucune sous 13 px.
 - Icônes Phosphor (au trait, pleines quand actives).
-- Refonte en 7 étapes, validées une à une sur la version de test : 1. fondations (couleurs,
-  polices, icônes) ; 2. navigation ; 3. cartes et éditeur ; 4. Inbox et rangement ;
-  5. Habitudes ; 6. Réglages, Notion, messages et textes ; 7. animations et finitions.
+- Animations « rebond » : case cochée et étoile d'habitude (450 ms), compteur qui grossit
+  (400 ms), nouvelle carte avec un ressort (380 ms), point du logo qui saute. Si le téléphone
+  demande moins d'animations : simples fondus de 150 ms. Focus clavier : anneau de 3 px.
+- Logo « ject. » (`public/icons/logo.svg`, version sombre `logo-sombre.svg`) et icône de
+  l'application « j. » (fond corail, point crème), dessinés en vectoriel depuis Bricolage
+  Grotesque 800.
+- Refonte faite en 7 étapes (19/10/2026) : 1. fondations (couleurs, polices, icônes) ;
+  2. navigation ; 3. cartes et éditeur ; 4. Inbox et rangement ; 5. Habitudes ; 6. Réglages,
+  Notion, messages et textes ; 7. animations et finitions.
 
 ## 4. Choix techniques
 
@@ -412,3 +418,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 4 : Inbox avec un seul bouton « Ranger » par carte ; glisser vers la gauche pour archiver ; appui long = sélection seulement (plus de glisser-déposer dans l'Inbox), avec « Fusionner » et « Ranger » ; « Tout ranger » ; « Supprimer » en contour framboise. |
 | 19/10/2026 | Refonte, étape 5 : Habitudes avec rond / étoile corail, bouton « + », une étoile par fois prévue ; « −1 » et éclats d'emoji retirés (corriger via « Annuler » ou « Retirer ») ; icône pause. |
 | 19/10/2026 | Refonte, étape 6 : « Réglages » partout ; erreurs inattendues = message rassurant + « Voir le détail » (journal des erreurs dans Réglages › Diagnostic) ; export Notion sans connexion : bouton « Se connecter » ; restauration d'une sauvegarde sans confirmation (« N cartes ajoutées ») ; textes au lexique « carte », plus d'emoji dans l'interface. |
+| 19/10/2026 | Refonte, étape 7 : animations (rebond, ressort, compteur, point du logo), fondus si moins d'animations ; logo et icône de l'application en vectoriel. |
