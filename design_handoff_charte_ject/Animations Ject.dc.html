@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+body{margin:0;background:#EEEBE6;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#1F1B18}a:hover{color:#000}
+@keyframes jFade{from{opacity:0}to{opacity:1}}
+@keyframes jPop{0%{transform:scale(.3)}55%{transform:scale(1.3)}80%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes jDot{0%,100%{transform:translateY(0)}30%{transform:translateY(-16px)}55%{transform:translateY(0)}72%{transform:translateY(-6px)}88%{transform:translateY(0)}}
+@keyframes jDotSoft{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes jCardFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes jCardSpring{0%{opacity:0;transform:scale(.6) translateY(30px)}60%{opacity:1;transform:scale(1.05)}100%{transform:none}}
+@keyframes jConf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@keyframes jStreak{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Q15 · Animations</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800">3 niveaux de récompense, à essayer</div>
+<div style="font-size:15px;color:#4A443F;max-width:700px;text-wrap:pretty">Cliquez sur le rond de l'habitude pour la cocher, et sur + pour ajouter une carte. La création d'une carte reste rapide dans les trois pistes : seul le retour visuel change.</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:12px;width:330px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="background:#1F1B18;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px">{{ o.id }}</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ o.name }}</div>
+</div>
+<div style="position:relative;height:500px;background:#FBFAF8;border-radius:28px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08);overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:20px 16px">
+<div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.03em;color:#1F1B18"><span>ject</span>{{ o.dot }}</div>
+<div style="background:#fff;border:1px solid #ECE7E1;border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:600">Habitudes du jour</div>
+{{ o.streak }}
+</div>
+<div style="position:relative;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none" onClick="{{ o.onToggle }}">
+<div style="position:relative;width:30px;height:30px;display:flex;align-items:center;justify-content:center">{{ o.check }}{{ o.burst }}</div>
+<div style="font-size:15px">Marcher 20 min</div>
+</div>
+<div style="font-size:13px;color:#6B635C;min-height:18px">{{ o.msg }}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+{{ o.newCard }}
+<div style="background:#FFE27A;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:6px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:600">Lecture</div>
+<div style="font-size:14px;line-height:1.4;color:#3D3732">Finir le chapitre 4.</div>
+</div>
+</div>
+<div style="position:absolute;right:16px;bottom:20px;width:60px;height:60px;border-radius:28px;background:#FF6A55;color:#2B0A05;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.15);cursor:pointer" style-active="transform:scale(.92)" onClick="{{ o.onAdd }}"><i class="ph ph-plus" style="font-size:28px"></i></div>
+</div>
+<div style="font-size:14px;line-height:1.45;color:#4A443F;text-wrap:pretty">{{ o.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { a: { done: false, t: 0, add: 0 }, b: { done: false, t: 0, add: 0 }, c: { done: false, t: 0, add: 0 } };
+  renderVals() {
+    const h = React.createElement;
+    const C = '#FF6A55';
+    const mk = (k, id, name, note, cfg) => {
+      const s = this.state[k];
+      const upd = (p) => this.setState(st => ({ [k]: { ...st[k], ...p(st[k]) } }));
+      const check = h('i', {
+        key: 'c' + s.t,
+        className: s.done ? 'ph-fill ph-check-circle' : 'ph ph-circle',
+        style: { fontSize: 30, color: s.done ? C : '#CFC7BF', animation: s.done && s.t ? cfg.check : 'none' }
+      });
+      const confs = ['#FF6A55', '#FFE27A', '#A5E6DC', '#DCC8FF', '#D2EC8F', '#BDD6FF'];
+      const burst = cfg.confetti && s.done && s.t ? h('div', { key: 'b' + s.t, style: { position: 'absolute', left: 15, top: 15, pointerEvents: 'none' } },
+        Array.from({ length: 14 }, (_, i) => {
+          const a = (i / 14) * Math.PI * 2, d = 36 + (i % 3) * 14;
+          return h('span', { key: i, style: { position: 'absolute', width: 7, height: i % 2 ? 7 : 4, borderRadius: i % 2 ? '50%' : 2, background: confs[i % 6], '--x': `${Math.cos(a) * d}px`, '--y': `${Math.sin(a) * d}px`, '--r': `${i * 50}deg`, animation: 'jConf 700ms cubic-bezier(.2,.7,.3,1) forwards' } });
+        })) : null;
+      const dot = h('span', { key: 'd' + s.add, style: { display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: C, marginLeft: 2, animation: s.add ? cfg.dot : 'none' } });
+      const streakN = s.done ? 5 : 4;
+      const streak = h('div', { key: 's' + s.t, style: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: '#C23A26', animation: cfg.streak && s.done && s.t ? cfg.streak : 'none' } },
+        h('i', { className: (s.done ? 'ph-fill' : 'ph') + ' ph-flame', style: { fontSize: 16 } }), `${streakN} j`);
+      const newCard = s.add ? h('div', { key: 'n' + s.add, style: { background: '#FFC9B8', borderRadius: 18, padding: 12, display: 'flex', flexDirection: 'column', gap: 6, animation: cfg.card } },
+        h('div', { style: { fontFamily: "'Bricolage Grotesque',sans-serif", fontSize: 15, fontWeight: 600 } }, 'Nouvelle carte'),
+        h('div', { style: { fontSize: 14, color: '#857C74' } }, 'Écris ici…')) : null;
+      return {
+        id, name, note, check, burst, dot, streak, newCard,
+        msg: s.done ? cfg.msg : '',
+        onToggle: () => upd(p => ({ done: !p.done, t: p.t + 1 })),
+        onAdd: () => upd(p => ({ add: p.add + 1 }))
+      };
+    };
+    return { options: [
+      mk('a', '15a', 'Discret', 'Des fondus courts et aucun mouvement. Calme, mais la réussite passe presque inaperçue.', { check: 'jFade 200ms ease-out', dot: 'jDotSoft 500ms ease', card: 'jCardFade 220ms ease-out', streak: '', confetti: false, msg: 'Fait.' }),
+      mk('b', '15b', 'Rebond', 'La coche rebondit, la série grossit un instant, et le point du logo saute à chaque nouvelle carte. C\'est ludique sans ralentir.', { check: 'jPop 450ms cubic-bezier(.3,1.6,.5,1)', dot: 'jDot 650ms ease-out', card: 'jCardSpring 380ms cubic-bezier(.3,1.4,.5,1)', streak: 'jStreak 400ms ease-out', confetti: false, msg: '5 jours d\'affilée, continue !' }),
+      mk('c', '15c', 'Festif', 'Comme 15b, avec des confettis quand une habitude est cochée. C\'est la piste la plus motivante, et elle risque de lasser si elle se répète chaque jour.', { check: 'jPop 450ms cubic-bezier(.3,1.6,.5,1)', dot: 'jDot 650ms ease-out', card: 'jCardSpring 380ms cubic-bezier(.3,1.4,.5,1)', streak: 'jStreak 400ms ease-out', confetti: true, msg: '5 jours d\'affilée, continue !' })
+    ] };
+  }
+}
+</script>
+</body>
+</html>

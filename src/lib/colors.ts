@@ -1,19 +1,23 @@
 import type { NoteColor } from './types';
 
-/** Palette inspirée de Google Keep : [nom, couleur claire, couleur sombre]. */
-export const NOTE_COLORS: Record<NoteColor, [string, string, string]> = {
-  default: ['Par défaut', 'transparent', 'transparent'],
-  coral: ['Corail', '#faafa8', '#77172e'],
-  peach: ['Pêche', '#f39f76', '#692b17'],
-  sand: ['Sable', '#fff8b8', '#7c4a03'],
-  mint: ['Menthe', '#e2f6d3', '#264d3b'],
-  sage: ['Sauge', '#b4ddd3', '#0c625d'],
-  fog: ['Brume', '#d4e4ed', '#256377'],
-  storm: ['Orage', '#aeccdc', '#284255'],
-  dusk: ['Crépuscule', '#d3bfdb', '#472e5b'],
-  blossom: ['Fleur', '#f6e2dd', '#6c394f'],
-  clay: ['Argile', '#e9e3d4', '#4b443a'],
-  chalk: ['Craie', '#efeff1', '#232427'],
+/** Les 7 couleurs de cartes de la charte : [nom, couleur claire, couleur sombre]. */
+export const NOTE_COLORS = {
+  default: ['Papier', '#FFFFFF', '#332C28'],
+  sun: ['Soleil', '#FFE27A', '#4A3D12'],
+  peach: ['Pêche', '#FFC9B8', '#4E2A22'],
+  pistachio: ['Pistache', '#D2EC8F', '#33421A'],
+  lagoon: ['Lagon', '#A5E6DC', '#163F3A'],
+  sky: ['Ciel', '#BDD6FF', '#1F3152'],
+  lilac: ['Lilas', '#DCC8FF', '#352A52'],
+} as const satisfies Partial<Record<NoteColor, readonly [string, string, string]>>;
+
+export type CardColor = keyof typeof NOTE_COLORS;
+export const COLOR_IDS = Object.keys(NOTE_COLORS) as CardColor[];
+
+/** Anciennes couleurs (Keep) → couleur la plus proche de la charte. */
+const LEGACY: Partial<Record<NoteColor, CardColor>> = {
+  coral: 'peach', sand: 'sun', mint: 'pistachio', sage: 'lagoon', fog: 'sky', storm: 'sky',
+  dusk: 'lilac', blossom: 'peach', clay: 'default', chalk: 'default',
 };
 
-export const COLOR_IDS = Object.keys(NOTE_COLORS) as NoteColor[];
+export const cardColor = (c: NoteColor): CardColor => (c in NOTE_COLORS ? (c as CardColor) : LEGACY[c] ?? 'default');

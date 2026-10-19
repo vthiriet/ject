@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>body{margin:0;background:#EEEBE6;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Revue UX · ranger · constat 1</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800">Les actions d'une carte dans l'Inbox</div>
+<div style="font-size:15px;color:#4A443F;max-width:760px;text-wrap:pretty">Aujourd'hui, chaque carte de l'Inbox a deux icônes : un dossier pour « Ranger » et une coche pour « Archiver ». Or la coche veut dire « fait » partout ailleurs dans Ject. Chaque piste montre trois cartes, et la deuxième est montrée pendant un geste quand la piste en prévoit un.</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:12px;width:375px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="background:#1F1B18;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px">{{ o.id }}</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ o.name }}</div>
+</div>
+<div style="background:#F0ECE7;border-radius:28px;box-shadow:0 8px 24px rgba(0,0,0,.1);padding:16px 12px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:8px;padding:0 4px 4px">
+<div style="flex:1;font-size:15px;color:#3D3732">3 cartes à ranger</div>
+<div style="height:40px;padding:0 14px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center">Tout ranger</div>
+</div>
+<sc-for list="{{ o.rows }}" as="r" hint-placeholder-count="3">
+<div style="position:relative;border-radius:18px;overflow:hidden;background:{{ r.under }}">
+<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:{{ r.underAlign }};padding:0 20px;gap:8px;color:{{ r.underFg }};font-size:15px;font-weight:700"><i class="{{ r.underIcon }}" style="font-size:22px"></i>{{ r.underLabel }}</div>
+<div style="position:relative;background:#fff;border-radius:18px;padding:12px;display:flex;align-items:flex-start;gap:8px;transform:translateX({{ r.shift }})">
+<div style="flex:1;display:flex;flex-direction:column;gap:4px;min-width:0">
+<div style="font-size:15px;line-height:1.4">{{ r.text }}</div>
+<div style="font-size:13px;color:#6E665F">{{ r.meta }}</div>
+</div>
+<sc-for list="{{ o.btns }}" as="b" hint-placeholder-count="2">
+<div style="flex:none;height:40px;min-width:40px;padding:0 {{ b.pad }};border-radius:12px;border:{{ b.border }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:600;color:#1F1B18"><i class="ph {{ b.icon }}" style="font-size:20px"></i>{{ b.label }}</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:14px;line-height:1.45;color:#4A443F;text-wrap:pretty">{{ o.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const base = [
+      { text: 'Acheter un cadeau pour Léa', meta: 'Aujourd\'hui · 9 h 12' },
+      { text: 'Film conseillé par Paul : Perfect Days', meta: 'Hier' },
+      { text: 'Idée : trier l\'Inbox d\'un geste', meta: 'Lundi' }
+    ];
+    const still = { under: 'transparent', underAlign: 'flex-start', underFg: 'transparent', underIcon: '', underLabel: '', shift: '0px' };
+    const rows = (swipe) => base.map((r, i) => ({ ...r, ...still, ...(swipe && i === 1 ? swipe : {}) }));
+    return { options: [
+      { id: 'R1', name: 'Actuel : dossier + coche', rows: rows(null), btns: [{ icon: 'ph-folder-simple', label: '', pad: '0', border: 'none' }, { icon: 'ph-check', label: '', pad: '0', border: 'none' }], note: 'Deux icônes sans libellé. La coche fait penser à « fait », mais elle archive la carte : on peut archiver par erreur une carte qu\'on voulait seulement cocher.' },
+      { id: 'R2', name: 'Bouton « Ranger » + glisser pour archiver', rows: rows({ under: '#E3DCD4', underAlign: 'flex-end', underFg: '#1F1B18', underIcon: 'ph ph-archive', underLabel: 'Archiver', shift: '-120px' }), btns: [{ icon: 'ph-folder-simple', label: 'Ranger', pad: '12px', border: '1px solid #D6CEC5' }], note: 'Une seule action visible, avec un libellé. On archive en glissant la carte vers la gauche, avec annulation possible. C\'est plus clair, et le geste est rapide à répéter pour vider l\'Inbox.' },
+      { id: 'R3', name: 'Glisser dans les deux sens', rows: rows({ under: '#FFD9D2', underAlign: 'flex-start', underFg: '#9E2C1B', underIcon: 'ph-fill ph-folder-simple', underLabel: 'Ranger', shift: '120px' }), btns: [], note: 'Aucun bouton : glisser vers la droite pour ranger, vers la gauche pour archiver. C\'est la piste la plus épurée et la plus rapide, mais le geste est invisible : il faut un petit indice la première fois.' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

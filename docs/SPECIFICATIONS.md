@@ -271,6 +271,24 @@ Ce qui suit décrit ce que serait la gestion de projet si elle arrivait un jour 
 - Dessins à main levée.
 - Import des notes Google Keep.
 
+### 3.x Charte graphique et design system
+
+Identité propre à Ject (« léger, ludique, motivant »), conçue avec Claude Design. **Font foi** :
+`docs/DECISIONS.md` (décisions numérotées), `CONTEXT.md` (lexique : « carte », « élément ») et
+le dossier `design_handoff_charte_ject/` (maquettes, `tokens.css`, README de la refonte).
+
+- Variables de la charte : `src/styles/tokens.css` (copie de `tokens.css`, clair et sombre).
+  `src/styles/colors.css` fait le pont avec les anciens noms de variables, en attendant la fin
+  de la refonte.
+- Accent corail `#FF6A55` (seule couleur pleine) ; 7 couleurs de cartes : Papier, Soleil, Pêche,
+  Pistache, Lagon, Ciel, Lilas. Les anciennes couleurs (Keep) s'affichent avec la plus proche.
+- Polices hébergées dans l'app : Bricolage Grotesque (600, 800 : titres, boutons) et Figtree
+  (400, 600, 700 : texte). Échelle de 6 tailles, aucune sous 13 px.
+- Icônes Phosphor (au trait, pleines quand actives).
+- Refonte en 7 étapes, validées une à une sur la version de test : 1. fondations (couleurs,
+  polices, icônes) ; 2. navigation ; 3. cartes et éditeur ; 4. Inbox et rangement ;
+  5. Habitudes ; 6. Réglages, Notion, messages et textes ; 7. animations et finitions.
+
 ## 4. Choix techniques
 
 | Brique | Choix | Pourquoi |
@@ -386,3 +404,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Glisser-déposer des éléments au sein d'une liste (poignée ⋮⋮) ; Inbox : sélection multiple (appui long ou « Sélectionner ») pour ranger plusieurs éléments au même endroit. |
 | 17/10/2026 | Inbox : l'appui long coche l'élément sans attendre que le doigt se lève. |
 | 19/10/2026 | Habitudes : section « Cette année » (X fois par an, chaque année) ; bouton « −1 » pour corriger une erreur ; points et niveaux retirés, barre de progression dans chaque section. |
+| 19/10/2026 | Refonte, étape 1 : couleurs, polices (Bricolage Grotesque, Figtree) et icônes (Phosphor) de la charte Ject ; 7 couleurs de cartes. |

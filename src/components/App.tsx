@@ -240,7 +240,7 @@ export default function App() {
                   title={n.priority ? `Priorité ${n.priority}` : 'Priorité'}
                   onClick={() => void updateNote(n.id, { priority: n.priority === 3 ? 2 : n.priority === 2 ? 1 : n.priority === 1 ? undefined : 3 })}
                 >
-                  <Icon name="flame" size={20} />
+                  <Icon name="flame" size={20} fill={!!n.priority} />
                   {n.priority && <span className="prio-num">{n.priority}</span>}
                 </button>
               )}
@@ -300,12 +300,12 @@ export default function App() {
       {isTab && (
         <nav className="tabs" aria-label="Onglets">
           <button type="button" className={section === 'inbox' ? 'on' : ''} aria-current={section === 'inbox'} onClick={() => navigate('inbox')}>
-            <Icon name="inbox" size={22} /> Inbox
+            <Icon name="inbox" size={22} fill={section === 'inbox'} /> Inbox
             {counts.inbox > 0 && <span className="badge">{counts.inbox}</span>}
           </button>
           {CATEGORIES.map((c) => (
             <button key={c.id} type="button" className={section === c.id ? 'on' : ''} aria-current={section === c.id} onClick={() => navigate(c.id)}>
-              <Icon name={c.icon} size={22} /> {c.plural}
+              <Icon name={c.icon} size={22} fill={section === c.id} /> {c.plural}
             </button>
           ))}
         </nav>

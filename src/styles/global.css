@@ -1,3 +1,4 @@
+@import './tokens.css';
 @import './colors.css';
 
 /* ---------- Base ---------- */
@@ -17,8 +18,8 @@ body {
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
-  font-family: Roboto, 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 15px;
+  font-family: var(--police-texte);
+  font-size: var(--t-texte);
   line-height: 1.45;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: contain;
@@ -38,25 +39,21 @@ button {
 a {
   color: var(--link);
 }
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
 .spacer {
   flex: 1;
 }
 .hint {
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .error {
-  color: #d93025;
-  font-size: 14px;
+  color: var(--erreur);
+  font-size: var(--t-texte);
 }
 .section-label {
   margin: 12px 0 6px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--t-legende);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -87,7 +84,7 @@ a {
   min-height: 40px;
   padding: 0 16px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--r-moyen);
   font-weight: 500;
   cursor: pointer;
 }
@@ -95,9 +92,13 @@ a {
   background: var(--hover);
 }
 .btn.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-text);
+  background: var(--corail);
+  border-color: var(--corail);
+  color: var(--sur-corail);
+}
+.btn.primary:hover {
+  background: var(--corail-appuye);
+  border-color: var(--corail-appuye);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -106,14 +107,14 @@ a {
 .link-btn {
   color: var(--link);
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .text-input {
   width: 100%;
   min-height: 42px;
   padding: 8px 12px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   background: var(--surface);
 }
 .text-input.flat {
@@ -148,7 +149,7 @@ a {
 }
 .topbar-title {
   display: none;
-  font-size: 20px;
+  font-size: var(--t-section);
   min-width: 120px;
 }
 .search {
@@ -159,8 +160,9 @@ a {
   min-width: 0;
   height: 44px;
   padding: 0 4px 0 12px;
-  border-radius: 22px;
-  background: var(--surface-2);
+  border: 1px solid var(--contour-champ);
+  border-radius: var(--r-moyen);
+  background: var(--surface);
   color: var(--muted);
 }
 .search input {
@@ -188,7 +190,7 @@ a {
   opacity: 0.5;
 }
 .sync-indicator.synced {
-  color: #34a853;
+  color: var(--succes);
   opacity: 1;
 }
 .sync-indicator.syncing {
@@ -197,7 +199,7 @@ a {
   animation: pulse 1s infinite alternate;
 }
 .sync-indicator.error {
-  color: #d93025;
+  color: var(--erreur);
   opacity: 1;
 }
 @keyframes pulse {
@@ -225,9 +227,9 @@ a {
   min-height: 34px;
   padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 17px;
+  border-radius: var(--r-gelule);
   background: var(--bg);
-  font-size: 14px;
+  font-size: var(--t-texte);
   white-space: nowrap;
 }
 .chip.on {
@@ -241,7 +243,7 @@ a {
   padding: 0 8px;
   border: 0;
   background: rgba(0, 0, 0, 0.08);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .chips {
   display: flex;
@@ -284,7 +286,7 @@ a {
   color: var(--muted);
   text-align: center;
   opacity: 0.7;
-  font-size: 18px;
+  font-size: var(--t-carte);
 }
 .trash-head {
   display: flex;
@@ -295,7 +297,7 @@ a {
   margin: 8px 0 16px;
   color: var(--muted);
   font-style: italic;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 
 /* ---------- Saisie rapide ---------- */
@@ -316,11 +318,11 @@ a {
   flex: 1;
   height: 48px;
   padding: 0 16px;
-  border-radius: 24px;
+  border-radius: var(--r-tres-grand);
   background: var(--surface-2);
   color: var(--muted);
   text-align: left;
-  font-size: 16px;
+  font-size: var(--t-texte);
 }
 @media (min-width: 700px) {
   .composer {
@@ -329,7 +331,7 @@ a {
     margin: 16px auto 24px;
     padding: 4px 4px 4px 0;
     border: 0;
-    border-radius: 8px;
+    border-radius: var(--r-moyen);
     background: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -354,7 +356,7 @@ a {
 .note-card {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: var(--radius);
   background: var(--note-bg);
   cursor: pointer;
@@ -375,7 +377,7 @@ a {
 }
 .card-title {
   margin: 0 0 6px;
-  font-size: 16px;
+  font-size: var(--t-texte);
   font-weight: 500;
   padding-right: 18px;
 }
@@ -407,7 +409,7 @@ a {
 .card-empty {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .card-pin {
   position: absolute;
@@ -431,12 +433,12 @@ a {
   gap: 4px;
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .notion-mention.block {
   display: block;
   padding: 0 20px;
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .notion-mention.block svg {
   vertical-align: -3px;
@@ -484,7 +486,7 @@ a {
   left: 14%;
   top: 14px;
   bottom: auto;
-  font-size: 28px;
+  font-size: var(--t-ecran);
   opacity: 0.55;
   transform: rotate(12deg);
 }
@@ -493,7 +495,7 @@ a {
   left: 46%;
   top: 8px;
   bottom: auto;
-  font-size: 18px;
+  font-size: var(--t-carte);
   opacity: 0.4;
 }
 
@@ -505,7 +507,7 @@ a {
   margin-top: 10px;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   color: var(--text);
   text-decoration: none;
   background: rgba(127, 127, 127, 0.06);
@@ -530,7 +532,7 @@ a {
 }
 .link-title {
   overflow: hidden;
-  font-size: 13px;
+  font-size: var(--t-legende);
   font-weight: 500;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -539,7 +541,7 @@ a {
 .link-site {
   overflow: hidden;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -552,7 +554,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(32, 33, 36, 0.6);
+  background: var(--voile);
 }
 .dialog {
   display: flex;
@@ -570,7 +572,7 @@ a {
 .dialog-head h2 {
   flex: 1;
   margin: 0;
-  font-size: 18px;
+  font-size: var(--t-carte);
   font-weight: 500;
 }
 .dialog-body {
@@ -590,7 +592,7 @@ a {
     width: min(520px, 92vw);
     height: auto;
     max-height: 85vh;
-    border-radius: 12px;
+    border-radius: var(--r-tres-grand);
     box-shadow: var(--shadow);
   }
 }
@@ -608,7 +610,7 @@ a {
     width: min(640px, 92vw);
     height: auto;
     max-height: 88vh;
-    border-radius: 12px;
+    border-radius: var(--r-tres-grand);
     overflow: hidden;
     box-shadow: var(--shadow);
   }
@@ -636,14 +638,14 @@ textarea.auto {
 }
 .editor-title {
   padding: 12px 20px 4px !important;
-  font-size: 27px;
+  font-size: var(--t-ecran);
   line-height: 1.3;
   font-weight: 500;
 }
 .editor-content {
   min-height: 160px;
   padding: 8px 20px !important;
-  font-size: 21px;
+  font-size: var(--t-section);
   line-height: 1.45;
 }
 .editor-list ul {
@@ -667,7 +669,7 @@ textarea.auto {
 }
 .item-row textarea {
   padding: 8px 0 !important;
-  font-size: 21px;
+  font-size: var(--t-section);
   line-height: 1.35;
 }
 .item-row.done textarea {
@@ -722,7 +724,7 @@ textarea.auto {
 }
 .item-row.exported small {
   display: block;
-  font-size: 12px;
+  font-size: var(--t-legende);
   opacity: 0.8;
 }
 .editor-links {
@@ -741,7 +743,7 @@ textarea.auto {
 .edited {
   flex: 1;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
   text-align: center;
 }
 
@@ -785,7 +787,7 @@ textarea.auto {
   box-shadow: inset 0 0 0 1px var(--border);
 }
 .swatch.selected {
-  border-color: #a142f4;
+  border-color: var(--focus);
 }
 .swatch-none {
   position: absolute;
@@ -805,14 +807,14 @@ textarea.auto {
   background-size: cover;
   background-position: center;
   box-shadow: inset 0 0 0 1px var(--border);
-  font-size: 24px;
+  font-size: var(--t-ecran);
 }
 .bg-thumb.selected {
-  border-color: #a142f4;
+  border-color: var(--focus);
 }
 .bg-thumb.import {
   gap: 0;
-  font-size: 10px;
+  font-size: var(--t-legende);
   color: var(--muted);
   border: 1px dashed var(--muted);
   box-shadow: none;
@@ -874,8 +876,8 @@ textarea.auto {
 .emoji-btn {
   width: 44px;
   height: 44px;
-  border-radius: 8px;
-  font-size: 22px;
+  border-radius: var(--r-moyen);
+  font-size: var(--t-section);
 }
 .emoji-btn:hover {
   background: var(--hover);
@@ -888,8 +890,8 @@ textarea.auto {
 }
 .emoji-grid button {
   height: 40px;
-  border-radius: 8px;
-  font-size: 22px;
+  border-radius: var(--r-moyen);
+  font-size: var(--t-section);
 }
 .emoji-grid button:hover {
   background: var(--hover);
@@ -913,7 +915,7 @@ textarea.auto {
   width: 100%;
   min-height: 44px;
   padding: 0 10px;
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   text-align: left;
 }
 .page-choice:hover {
@@ -949,24 +951,24 @@ textarea.auto {
 }
 .settings-section h3 {
   margin: 8px 0 12px;
-  font-size: 15px;
+  font-size: var(--t-texte);
   font-weight: 600;
 }
 .setting-label {
   margin: 16px 0 8px;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .segmented {
   display: flex;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--r-moyen);
 }
 .segmented button {
   flex: 1;
   min-height: 40px;
   padding: 0 8px;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .segmented button + button {
   border-left: 1px solid var(--border);
@@ -980,7 +982,7 @@ textarea.auto {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .sync-line .dot {
   width: 10px;
@@ -990,13 +992,13 @@ textarea.auto {
   background: var(--muted);
 }
 .sync-line.synced .dot {
-  background: #34a853;
+  background: var(--succes);
 }
 .sync-line.syncing .dot {
   background: var(--link);
 }
 .sync-line.error .dot {
-  background: #d93025;
+  background: var(--erreur);
 }
 .about {
   margin-top: 16px;
@@ -1008,7 +1010,7 @@ textarea.auto {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(32, 33, 36, 0.5);
+  background: var(--voile);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
@@ -1040,7 +1042,7 @@ textarea.auto {
   align-items: center;
   gap: 12px;
   padding: 12px 24px 16px;
-  font-size: 22px;
+  font-size: var(--t-section);
   font-weight: 500;
 }
 .drawer-item {
@@ -1052,7 +1054,7 @@ textarea.auto {
   padding: 0 16px 0 24px;
   border-radius: 0 24px 24px 0;
   text-align: left;
-  font-size: 14px;
+  font-size: var(--t-texte);
   font-weight: 500;
 }
 .drawer-item:hover {
@@ -1067,7 +1069,7 @@ textarea.auto {
   place-items: center;
   width: 24px;
   color: var(--muted);
-  font-size: 20px;
+  font-size: var(--t-section);
 }
 .drawer-item.active .drawer-icon {
   color: inherit;
@@ -1080,12 +1082,12 @@ textarea.auto {
 }
 .drawer-count {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .drawer-heading {
   margin: 16px 0 4px 24px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--t-legende);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1110,16 +1112,17 @@ textarea.auto {
   max-width: calc(100vw - 32px);
   margin: 0 auto;
   padding: 12px 16px;
-  border-radius: 8px;
-  background: #323232;
-  color: #fff;
-  font-size: 14px;
+  border-radius: var(--r-moyen);
+  min-height: 48px;
+  background: var(--notif-fond);
+  color: var(--notif-texte);
+  font-size: var(--t-texte);
   box-shadow: var(--shadow);
   animation: toast-in 0.2s;
 }
 .toast button {
-  color: #fdd663;
-  font-weight: 600;
+  color: var(--notif-action);
+  font-weight: 700;
   white-space: nowrap;
 }
 @keyframes toast-in {
@@ -1158,7 +1161,7 @@ textarea.auto {
   justify-content: center;
   gap: 2px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
   font-weight: 500;
 }
 .tabs button.on {
@@ -1178,10 +1181,10 @@ textarea.auto {
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  border-radius: 9px;
+  border-radius: var(--r-gelule);
   background: var(--accent);
   color: var(--accent-text);
-  font-size: 11px;
+  font-size: var(--t-legende);
   line-height: 18px;
   text-align: center;
 }
@@ -1213,7 +1216,7 @@ textarea.auto {
     flex-direction: row;
     gap: 8px;
     padding: 0 20px;
-    font-size: 14px;
+    font-size: var(--t-texte);
     border-bottom: 3px solid transparent;
   }
   .tabs button.on {
@@ -1255,11 +1258,11 @@ textarea.auto {
   min-height: 48px;
   padding: 12px 16px;
   border: 0;
-  border-radius: 24px;
+  border-radius: var(--r-tres-grand);
   outline: none;
   resize: none;
   background: var(--surface-2);
-  font-size: 16px;
+  font-size: var(--t-texte);
   line-height: 1.5;
 }
 .capture-send {
@@ -1283,7 +1286,7 @@ textarea.auto {
     margin: 16px 0 8px;
     padding: 6px;
     border: 0;
-    border-radius: 28px;
+    border-radius: var(--r-tres-grand);
     background: var(--surface);
     box-shadow: var(--shadow);
   }
@@ -1298,7 +1301,7 @@ textarea.auto {
   gap: 12px;
   margin: 8px 4px 12px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .inbox-list {
   list-style: none;
@@ -1311,9 +1314,8 @@ textarea.auto {
   gap: 2px;
   padding: 6px 0 6px 14px;
   margin-bottom: 8px;
-  border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--carte-papier);
 }
 .inbox-text {
   flex: 1;
@@ -1327,14 +1329,14 @@ textarea.auto {
   cursor: text;
 }
 .inbox-text textarea {
-  font-size: 15px;
+  font-size: var(--t-texte);
   line-height: 1.45;
 }
 .inbox-text small {
   display: block;
   margin: 4px 0 2px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 
 /* ---------- Fenêtre « Ranger » ---------- */
@@ -1344,14 +1346,14 @@ textarea.auto {
   border-radius: var(--radius);
   background: var(--chip-on);
   color: var(--chip-on-text);
-  font-size: 17px;
+  font-size: var(--t-carte);
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 .file-item small {
   display: block;
   margin-top: 6px;
-  font-size: 12px;
+  font-size: var(--t-legende);
   opacity: 0.8;
 }
 .file-item a {
@@ -1374,7 +1376,7 @@ textarea.auto {
   margin-bottom: 6px;
   padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--r-moyen);
   background: var(--note-bg);
   text-align: left;
 }
@@ -1401,7 +1403,7 @@ textarea.auto {
 /* ---------- Types de cartes ---------- */
 .tabs button {
   min-width: 0;
-  font-size: 11px;
+  font-size: var(--t-legende);
 }
 .capture {
   flex-direction: column;
@@ -1430,9 +1432,9 @@ textarea.auto {
   min-height: 30px;
   padding: 0 10px;
   border: 1px solid var(--border);
-  border-radius: 15px;
+  border-radius: var(--r-gelule);
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .type-chip.on {
   background: var(--chip-on);
@@ -1443,8 +1445,8 @@ textarea.auto {
 .type-chip.big {
   justify-content: center;
   min-height: 44px;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: var(--r-moyen);
+  font-size: var(--t-texte);
 }
 .type-grid {
   display: grid;
@@ -1457,15 +1459,15 @@ textarea.auto {
   gap: 3px;
   margin-right: 8px;
   padding: 1px 8px;
-  border-radius: 10px;
+  border-radius: var(--r-gelule);
   background: var(--chip);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
   vertical-align: middle;
 }
 .segmented.small button {
   min-height: 34px;
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .file-dialog .segmented,
 .file-dialog .frequency {
@@ -1512,10 +1514,10 @@ textarea.auto {
   display: inline-block;
   margin: -4px 0 6px;
   padding: 0 8px;
-  border-radius: 10px;
+  border-radius: var(--r-gelule);
   background: var(--chip);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .item-options {
   display: grid;
@@ -1528,11 +1530,11 @@ textarea.auto {
 .card-meta {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .item-meta {
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--t-legende);
   white-space: nowrap;
 }
 @media (max-width: 420px) {
@@ -1544,7 +1546,7 @@ textarea.auto {
     justify-content: center;
     min-width: 0;
     padding: 0 6px;
-    font-size: 12px;
+    font-size: var(--t-legende);
   }
   .type-chip:not(.big) svg {
     display: none;
@@ -1559,9 +1561,9 @@ textarea.auto {
   margin: 12px 0 0;
   padding: 12px;
   overflow-x: auto;
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   background: var(--surface-2);
-  font-size: 12px;
+  font-size: var(--t-legende);
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
@@ -1572,7 +1574,7 @@ textarea.auto {
   position: fixed;
   inset: 0;
   z-index: 12;
-  background: rgba(32, 33, 36, 0.35);
+  background: var(--voile);
 }
 .fab-wrap {
   position: fixed;
@@ -1589,10 +1591,10 @@ textarea.auto {
   place-items: center;
   width: 60px;
   height: 60px;
-  border-radius: 18px;
+  border-radius: var(--r-tres-grand);
   background: var(--accent);
   color: var(--accent-text);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.15s;
 }
 .fab-wrap.open .fab {
@@ -1613,7 +1615,7 @@ textarea.auto {
 }
 .fab-menu button > span:first-child {
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   background: var(--surface);
   box-shadow: var(--shadow);
 }
@@ -1623,7 +1625,7 @@ textarea.auto {
   width: 48px;
   height: 48px;
   margin-right: 6px;
-  border-radius: 14px;
+  border-radius: var(--r-moyen);
   background: var(--chip-on);
   color: var(--chip-on-text);
   box-shadow: var(--shadow);
@@ -1654,7 +1656,7 @@ textarea.auto {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .inbox-items svg {
   flex: none;
@@ -1676,8 +1678,8 @@ textarea.auto {
   justify-content: center;
   min-height: 56px;
   padding: 4px;
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: var(--r-moyen);
+  font-size: var(--t-legende);
 }
 .create-switches {
   display: grid;
@@ -1688,7 +1690,7 @@ textarea.auto {
   display: block;
   min-height: 96px;
   resize: none;
-  font-size: 16px;
+  font-size: var(--t-texte);
   line-height: 1.45;
 }
 .create-list {
@@ -1697,7 +1699,7 @@ textarea.auto {
 }
 .create-title {
   margin-bottom: 6px;
-  font-size: 17px;
+  font-size: var(--t-carte);
   font-weight: 500;
 }
 .create-item {
@@ -1709,7 +1711,7 @@ textarea.auto {
 }
 .create-item input {
   color: var(--text);
-  font-size: 16px;
+  font-size: var(--t-texte);
 }
 .create-page .add-item {
   padding: 0 8px;
@@ -1734,10 +1736,10 @@ textarea.auto {
 .editor .add-item,
 .editor .checked-toggle {
   min-height: 48px;
-  font-size: 18px;
+  font-size: var(--t-carte);
 }
 .editor .item-row.exported {
-  font-size: 18px;
+  font-size: var(--t-carte);
 }
 
 .file-target.card-first {
@@ -1757,7 +1759,7 @@ textarea.auto {
 .card-side .icon-btn {
   width: 32px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
 }
 
 /* ---------- Habitudes ---------- */
@@ -1769,20 +1771,20 @@ textarea.auto {
   display: block;
   height: 8px;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--r-gelule);
   background: var(--border);
 }
 .habit-bar span {
   display: block;
   height: 100%;
-  border-radius: 4px;
+  border-radius: var(--r-gelule);
   background: var(--accent);
   transition: width 0.4s ease;
 }
 .summary-pause {
   justify-content: flex-end;
   margin-top: 6px;
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .summary-pause .text-input {
   width: auto;
@@ -1792,12 +1794,8 @@ textarea.auto {
   display: flex;
   align-items: center;
   gap: 4px;
-  border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--note-bg);
-}
-.habit-card:not([data-color="default"]) {
-  border-color: transparent;
 }
 .habit-main {
   flex: 1;
@@ -1807,39 +1805,39 @@ textarea.auto {
 }
 .habit-title {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--t-texte);
   font-weight: 500;
 }
 .habit-meta {
   margin: 2px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .habit-card .habit-bar {
   margin-top: 8px;
 }
 .habit-msg {
   margin: 6px 0 0;
-  font-size: 13px;
+  font-size: var(--t-legende);
 }
 .avoid-badge {
   margin-right: 6px;
   padding: 1px 6px;
-  border-radius: 8px;
-  background: #fce8e6;
-  color: #a50e0e;
-  font-size: 11px;
+  border-radius: var(--r-gelule);
+  background: var(--erreur-fond);
+  color: var(--erreur);
+  font-size: var(--t-legende);
   font-weight: 600;
   vertical-align: 2px;
 }
 :root[data-theme="dark"] .avoid-badge {
-  background: #5c2b29;
-  color: #f6aea9;
+  background: var(--erreur-fond);
+  color: var(--erreur);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .avoid-badge {
-    background: #5c2b29;
-    color: #f6aea9;
+    background: var(--erreur-fond);
+    color: var(--erreur);
   }
 }
 .habit-check {
@@ -1852,7 +1850,7 @@ textarea.auto {
   color: var(--muted);
 }
 .habit-check small {
-  font-size: 11px;
+  font-size: var(--t-legende);
   font-weight: 600;
 }
 .habit-check:hover,
@@ -1895,7 +1893,7 @@ textarea.auto {
   pointer-events: none;
   color: var(--accent);
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--t-texte);
   animation: burst-up 1.2s ease-out forwards;
 }
 .habit-burst span {
@@ -1924,11 +1922,11 @@ textarea.auto {
   background: var(--surface-2);
 }
 .sheet-stats strong {
-  font-size: 20px;
+  font-size: var(--t-section);
 }
 .sheet-stats span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .history {
   display: flex;
@@ -1968,7 +1966,7 @@ textarea.auto {
   position: absolute;
   bottom: -18px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--t-legende);
   white-space: nowrap;
 }
 .logged-days {
@@ -1981,7 +1979,7 @@ textarea.auto {
   justify-content: space-between;
   padding: 6px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 14px;
+  font-size: var(--t-texte);
 }
 .habit-sheet .row .text-input {
   flex: 1;
@@ -2005,7 +2003,7 @@ textarea.auto {
 .field > span,
 .field-label {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--t-legende);
 }
 .day-chips {
   display: flex;
@@ -2042,7 +2040,7 @@ textarea.auto {
   place-items: center;
   width: 30px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: var(--r-moyen);
   color: var(--muted);
   opacity: 0.45;
 }
@@ -2087,10 +2085,10 @@ textarea.auto {
   top: -14px;
   transform: translateX(-50%);
   padding: 2px 10px;
-  border-radius: 10px;
+  border-radius: var(--r-moyen);
   background: var(--accent);
   color: var(--accent-text);
-  font-size: 12px;
+  font-size: var(--t-legende);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -2109,7 +2107,7 @@ textarea.auto {
   padding: 0 2px;
   border-radius: 7px;
   background: currentColor;
-  font-size: 10px;
+  font-size: var(--t-legende);
   font-weight: 700;
   line-height: 14px;
   text-align: center;
@@ -2193,7 +2191,7 @@ textarea.auto {
   gap: 10px;
   max-height: 30vh;
   overflow-y: auto;
-  font-size: 15px;
+  font-size: var(--t-texte);
 }
 .file-item.group > div + div {
   padding-top: 10px;
@@ -2206,7 +2204,9 @@ textarea.auto {
 
 /* Habitudes : barre de progression de chaque section, bouton « −1 » */
 .section-progress {
-  margin: 18px 4px 10px;
+  max-width: 640px;
+  margin: 18px auto 10px;
+  padding: 0 4px;
 }
 .section-progress .grid-label {
   display: flex;
@@ -2224,9 +2224,27 @@ textarea.auto {
   background: none;
   color: var(--muted);
   font: inherit;
-  font-size: 12px;
+  font-size: var(--t-legende);
   cursor: pointer;
 }
 .habit-undo:hover {
   color: var(--text);
+}
+
+/* ---------- Charte Ject : typographie (décisions 9, 38) ---------- */
+h1, h2, h3,
+.btn,
+.card-title,
+.habit-title,
+.dialog-head h2,
+.editor-title {
+  font-family: var(--police-titre);
+}
+.btn {
+  font-weight: 600;
+}
+.card-title,
+.habit-title {
+  color: var(--encre);
+  font-weight: 600;
 }

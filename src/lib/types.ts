@@ -27,8 +27,10 @@ export interface HabitConfig {
 }
 
 export type NoteColor =
-  | 'default' | 'coral' | 'peach' | 'sand' | 'mint' | 'sage'
-  | 'fog' | 'storm' | 'dusk' | 'blossom' | 'clay' | 'chalk';
+  // Charte Ject : Papier (default), Soleil, Pêche, Pistache, Lagon, Ciel, Lilas.
+  | 'default' | 'sun' | 'peach' | 'pistachio' | 'lagoon' | 'sky' | 'lilac'
+  // Anciennes couleurs (Keep), affichées avec la couleur la plus proche.
+  | 'coral' | 'sand' | 'mint' | 'sage' | 'fog' | 'storm' | 'dusk' | 'blossom' | 'clay' | 'chalk';
 
 export interface NotionMention {
   at: number;

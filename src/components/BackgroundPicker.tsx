@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { PRESET_BACKGROUNDS } from '../lib/backgrounds';
-import { COLOR_IDS, NOTE_COLORS } from '../lib/colors';
+import { cardColor, COLOR_IDS, NOTE_COLORS } from '../lib/colors';
 import { resizeImage } from '../lib/images';
 import { addBackgroundImage, deleteBackgroundImage, updateNote } from '../lib/store';
 import type { BackgroundImage, Note } from '../lib/types';
@@ -34,14 +34,13 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
           <button
             key={c}
             type="button"
-            className={`swatch ${note.color === c ? 'selected' : ''}`}
+            className={`swatch ${cardColor(note.color) === c ? 'selected' : ''}`}
             data-color={c}
             title={NOTE_COLORS[c][0]}
             aria-label={NOTE_COLORS[c][0]}
             onClick={() => void updateNote(note.id, { color: c })}
           >
-            {c === 'default' && <span className="swatch-none" />}
-            {note.color === c && <Icon name="check" size={18} />}
+            {cardColor(note.color) === c && <Icon name="check" size={18} />}
           </button>
         ))}
       </div>

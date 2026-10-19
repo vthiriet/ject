@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;family=Noto+Color+Emoji&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>body{margin:0;background:#FBFAF8;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<div style="max-width:1080px;margin:0 auto;padding:56px 24px 96px;display:flex;flex-direction:column;gap:72px">
+
+<header style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(72px,12vw,140px);letter-spacing:-.04em;line-height:.9"><span>ject</span><span style="display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#FF6A55;margin-left:.04em"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:12px 32px;align-items:baseline">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:600">Charte graphique · v2</div>
+<div style="font-size:15px;color:#6B635C">19 octobre 2026 · décisions 1 à 36, audit UX/UI intégré (<span style="font-family:ui-monospace,monospace">docs/DECISIONS.md</span>)</div>
+</div>
+</header>
+
+<section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Personnalité</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<div style="height:40px;padding:0 18px;border-radius:999px;background:#FFD9D2;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;display:flex;align-items:center">léger</div>
+<div style="height:40px;padding:0 18px;border-radius:999px;background:#FFD9D2;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;display:flex;align-items:center">ludique</div>
+<div style="height:40px;padding:0 18px;border-radius:999px;background:#FFD9D2;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;display:flex;align-items:center">motivant</div>
+</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732;text-wrap:pretty">On garde les gestes de Keep (grille de cartes, bouton +, couleurs de cartes), mais avec une identité visuelle propre à Ject. Le côté ludique ne doit jamais ralentir la prise de note.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Ton</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732">Tutoiement complice. Les boutons sont à l'infinitif.</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="padding:10px 14px;border-radius:12px;background:#F0ECE7;font-size:15px">« Tout est rangé. Tu peux souffler. »</div>
+<div style="padding:10px 14px;border-radius:12px;background:#F0ECE7;font-size:15px">« 5 jours d'affilée, continue ! »</div>
+<div style="display:flex;gap:8px"><div style="height:40px;padding:0 18px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center">Ranger</div></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Vocabulaire</div>
+<div style="display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.45;color:#3D3732">
+<div><strong style="color:#1F1B18">Carte</strong> : objet de la grille, soit une <strong style="color:#1F1B18">carte texte</strong>, soit une <strong style="color:#1F1B18">carte liste</strong>.</div>
+<div><strong style="color:#1F1B18">Élément</strong> : une ligne d'une carte liste, qu'on peut cocher.</div>
+<div><strong style="color:#1F1B18">Papier</strong> : la couleur de carte neutre.</div>
+<div style="color:#736A63">Mots abandonnés : « note », « Blanc ».</div>
+</div>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Logo et icône</div>
+<div style="font-size:15px;color:#3D3732;max-width:680px;text-wrap:pretty">Le logo : « ject » en Bricolage Grotesque ExtraBold, suivi d'un point corail qui rebondit à l'ajout d'une carte. L'icône de l'application : « j. » sur fond corail, avec le point crème. Ce sont des esquisses, à redessiner en vectoriel.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+<div style="height:180px;border-radius:28px;background:#FFFFFF;border:1px solid #ECE7E1;display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;letter-spacing:-.03em;color:#1F1B18"><span>ject</span><span style="display:inline-block;width:13px;height:13px;border-radius:50%;background:#FF6A55;margin-left:3px"></span></div></div>
+<div style="height:180px;border-radius:28px;background:#1A1614;display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;letter-spacing:-.03em;color:#FBFAF8"><span>ject</span><span style="display:inline-block;width:13px;height:13px;border-radius:50%;background:#FF6A55;margin-left:3px"></span></div></div>
+<div style="height:180px;border-radius:28px;background:#F0ECE7;display:flex;align-items:center;justify-content:center;gap:28px">
+<div style="width:96px;height:96px;border-radius:26px;background:#FF6A55;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.15)"><div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;line-height:1;color:#2B0A05"><span>j</span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#FBFAF8;margin-left:2px"></span></div></div>
+<div style="width:32px;height:32px;border-radius:8px;background:#FF6A55;display:flex;align-items:center;justify-content:center"><div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;line-height:1;color:#2B0A05"><span>j</span><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#FBFAF8;margin-left:1px"></span></div></div>
+</div>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:28px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Couleurs</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
+<sc-for list="{{ accent }}" as="c" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="height:100px;border-radius:18px;background:{{ c.hex }};border:1px solid rgba(0,0,0,.06);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:{{ c.on }}">Aa</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-weight:700;font-size:15px">{{ c.name }}</div>
+<div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ c.hex }}</div>
+<div style="font-size:13px;color:#3D3732;text-wrap:pretty">{{ c.use }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Cartes · clair / sombre</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px">
+<sc-for list="{{ cards }}" as="c" hint-placeholder-count="7">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:grid;grid-template-columns:1fr 1fr;border-radius:18px;overflow:hidden;height:90px">
+<div style="background:{{ c.light }};display:flex;align-items:flex-end;padding:10px;font-size:14px;font-weight:600;color:#1F1B18;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)">Aa</div>
+<div style="background:{{ c.dark }};display:flex;align-items:flex-end;padding:10px;font-size:14px;font-weight:600;color:#FBFAF8">Aa</div>
+</div>
+<div style="font-weight:700;font-size:14px">{{ c.name }}</div>
+<div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ c.light }} · {{ c.dark }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">États</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+<sc-for list="{{ states }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:{{ s.bg }}">
+<i class="{{ s.icon }}" style="font-size:20px;color:{{ s.fg }};flex:none;margin-top:1px"></i>
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:700;color:{{ s.fg }}">{{ s.name }} · {{ s.fgHex }}</div><div style="font-size:14px;color:{{ s.fg }}">{{ s.text }}</div></div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:14px;color:#3D3732">
+<div style="height:40px;padding:0 16px;border-radius:12px;background:#FFFFFF;color:#B4123F;border:2px solid #B4123F;box-sizing:border-box;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;display:flex;align-items:center;gap:6px"><i class="ph ph-trash" style="font-size:16px"></i>Supprimer</div>
+<div>La suppression est toujours en contour, jamais pleine : seul le corail est plein à l'écran.</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Mode sombre</div>
+<div style="background:#1A1614;border-radius:18px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+<sc-for list="{{ darkVals }}" as="v" hint-placeholder-count="12">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#D9D1CA">
+<div style="width:22px;height:22px;border-radius:6px;background:{{ v.hex }};border:1px solid rgba(255,255,255,.15);flex:none"></div>
+<div style="flex:1">{{ v.name }}</div>
+<div style="font-family:ui-monospace,monospace;color:#A39A92">{{ v.code }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Neutres</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px">
+<sc-for list="{{ neutrals }}" as="c" hint-placeholder-count="8">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="height:56px;border-radius:12px;background:{{ c.hex }};border:1px solid rgba(0,0,0,.08)"></div>
+<div style="font-size:13px;font-weight:600">{{ c.name }}</div>
+<div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ c.hex }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Typographie</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px">
+<div style="display:flex;flex-direction:column;gap:10px;padding:24px;border-radius:28px;background:#F0ECE7">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:72px;font-weight:800;letter-spacing:-.03em;line-height:1">Aa</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:600">Bricolage Grotesque</div>
+<div style="font-size:14px;color:#3D3732">SemiBold 600 et ExtraBold 800. Pour le logo, les titres, les titres de cartes et les boutons.</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.01em">Bonjour Vincent</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;padding:24px;border-radius:28px;background:#F0ECE7">
+<div style="font-size:72px;font-weight:600;line-height:1">Aa</div>
+<div style="font-size:24px;font-weight:600">Figtree</div>
+<div style="font-size:14px;color:#3D3732">Regular 400, SemiBold 600 et Bold 700. Pour le texte des cartes, les éléments, les champs et l'interface.</div>
+<div style="font-size:15px;line-height:1.45">Trier l'Inbox d'un seul geste, sans ouvrir la carte. RDV le 12/11 à 18 h 30.</div>
+</div>
+</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732;max-width:720px;text-wrap:pretty"><strong>Aucun texte sous 13 px</strong>, y compris les onglets, les métadonnées et les légendes. Les polices sont hébergées dans l'application, avec les caractères latins et les graisses ci-dessus seulement.</div>
+</section>
+
+<section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Icônes et états</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732;text-wrap:pretty">Les icônes Phosphor sont au trait par défaut et pleines quand elles sont actives. Chaque icône doit être vérifiée en version pleine avant d'être adoptée.</div>
+<div style="display:flex;justify-content:space-around;padding:10px 4px 12px;background:#fff;border-radius:18px">
+<sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:76px">
+<div style="width:56px;height:32px;border-radius:16px;background:{{ n.pill }};display:flex;align-items:center;justify-content:center"><i class="{{ n.cls }}" style="font-size:23px;color:{{ n.icon }}"></i></div>
+<div style="font-size:13px;font-weight:{{ n.weight }};color:{{ n.color }}">{{ n.label }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px;color:#3D3732">
+<div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;border-radius:6px;border:2px solid rgba(31,27,24,.55);box-sizing:border-box"></div>Élément à cocher</div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;border-radius:6px;background:#FF6A55;display:flex;align-items:center;justify-content:center"><i class="ph-bold ph-check" style="font-size:13px;color:#2B0A05"></i></div>Élément coché</div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(31,27,24,.55);box-sizing:border-box"></div>Habitude à faire</div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;border-radius:50%;background:#FF6A55;display:flex;align-items:center;justify-content:center"><i class="ph-fill ph-star" style="font-size:16px;color:#2B0A05"></i></div>Habitude faite</div>
+<div style="display:flex;align-items:center;gap:10px"><div style="height:32px;padding:0 12px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-weight:700;display:flex;align-items:center;outline:3px solid #1F1B18;outline-offset:3px">Ranger</div></div>
+<div style="display:flex;align-items:center">Focus clavier : anneau encre de 3 px (crème en sombre).</div>
+<div style="grid-column:1 / -1;font-size:14px;color:#3D3732;text-wrap:pretty">Zone tactile : la case de 18 px réagit sur 32 × 32 px, et chaque ligne d'élément fait 32 px de haut. Toucher le texte modifie l'élément, sans le cocher.</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Arrondis</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732">4 valeurs, plus la forme gélule pour les pastilles et les filtres.</div>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end">
+<sc-for list="{{ radii }}" as="r" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+<div style="width:{{ r.w }};height:56px;border-radius:{{ r.v }};background:#FFD9D2;border:2px solid #FF6A55;box-sizing:border-box"></div>
+<div style="font-size:13px;font-weight:600">{{ r.name }}</div>
+<div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ r.label }}</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C;margin-top:12px">Cartes et fond</div>
+<div style="background:#F0ECE7;border-radius:18px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div style="background:#fff;border-radius:14px;padding:10px;font-size:14px;font-weight:600">Papier</div>
+<div style="background:#A5E6DC;border-radius:14px;padding:10px;font-size:14px;font-weight:600">Lagon</div>
+</div>
+<div style="font-size:14px;color:#3D3732">Le fond de page est en <span style="font-family:ui-monospace,monospace">#F0ECE7</span> et les cartes n'ont ni bordure ni ombre.</div>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Illustrations et emoji</div>
+<div style="font-size:15px;line-height:1.5;color:#3D3732;max-width:740px;text-wrap:pretty">Les emoji sont réservés au contenu de l'utilisateur. Ils utilisent le jeu Noto Color Emoji, identique sur tous les appareils. Une illustration combine un aplat d'une des 7 couleurs et un emoji incliné de ±12°, qui occupe 45 % de la largeur de la carte (64 à 96 px) et déborde d'environ 15 %. L'utilisateur peut en créer en choisissant un emoji et une couleur.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+<sc-for list="{{ illus }}" as="p" hint-placeholder-count="5">
+<div style="border-radius:18px;overflow:hidden;background:{{ p.color }};container-type:inline-size">
+<div style="position:relative;height:92px;overflow:hidden">
+<div style="position:absolute;left:{{ p.ex }};top:10px;font-family:'Noto Color Emoji',sans-serif;font-size:clamp(64px,45cqw,96px);line-height:1;transform:rotate({{ p.rot }})">{{ p.emoji }}</div>
+</div>
+<div style="padding:10px 12px 12px;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:600">{{ p.name }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Animations</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+<sc-for list="{{ motion }}" as="m" hint-placeholder-count="5">
+<div style="padding:18px;border-radius:18px;background:#F0ECE7;display:flex;flex-direction:column;gap:6px">
+<div style="font-weight:700;font-size:15px">{{ m.name }}</div>
+<div style="font-size:14px;line-height:1.45;color:#3D3732">{{ m.desc }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px;padding:28px;border-radius:28px;border:2px dashed #E3DCD4">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800">À traiter dans le design system</div>
+<div style="display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.5;color:#3D3732">
+<sc-for list="{{ todo }}" as="c" hint-placeholder-count="5">
+<div style="display:flex;gap:12px"><i class="ph ph-arrow-right" style="font-size:20px;color:#C23A26;flex:none;margin-top:2px"></i><div style="text-wrap:pretty">{{ c }}</div></div>
+</sc-for>
+</div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const navItems = [['squares-four', 'Cartes'], ['tray-arrow-down', 'Inbox'], ['star', 'Habitudes'], ['gear-six', 'Réglages']];
+    return {
+      accent: [
+        { name: 'Corail', hex: '#FF6A55', on: '#2B0A05', use: 'Accent : bouton +, actions principales, cases cochées, point du logo, icône de l\'application.' },
+        { name: 'Corail texte', hex: '#C23A26', on: '#FFFFFF', use: 'Texte et liens corail sur fond clair, icône de l\'onglet actif.' },
+        { name: 'Corail foncé', hex: '#9E2C1B', on: '#FFFFFF', use: 'Libellé de l\'onglet actif sur le corail doux (5,7:1).' },
+        { name: 'Corail doux', hex: '#FFD9D2', on: '#2B0A05', use: 'Fond de l\'onglet actif, pastilles, surbrillance.' },
+        { name: 'Encre sur corail', hex: '#2B0A05', on: '#FF6A55', use: 'Texte, coches et icônes posés sur le corail.' }
+      ],
+      cards: [
+        { name: 'Papier', light: '#FFFFFF', dark: '#332C28' }, { name: 'Soleil', light: '#FFE27A', dark: '#4A3D12' },
+        { name: 'Pêche', light: '#FFC9B8', dark: '#4E2A22' }, { name: 'Pistache', light: '#D2EC8F', dark: '#33421A' },
+        { name: 'Lagon', light: '#A5E6DC', dark: '#163F3A' }, { name: 'Ciel', light: '#BDD6FF', dark: '#1F3152' },
+        { name: 'Lilas', light: '#DCC8FF', dark: '#352A52' }
+      ],
+      states: [
+        { name: 'Erreur', fgHex: '#B4123F', fg: '#B4123F', bg: '#FDE7EA', icon: 'ph-fill ph-wifi-slash', text: 'Pas de connexion. Tes cartes seront envoyées plus tard.' },
+        { name: 'Succès', fgHex: '#1F7A4D', fg: '#1F7A4D', bg: '#E3F4EA', icon: 'ph-fill ph-check-circle', text: '5 jours d\'affilée, continue !' },
+        { name: 'Alerte', fgHex: '#8A5A00', fg: '#8A5A00', bg: '#FFF1CC', icon: 'ph-fill ph-clock', text: 'Le rappel « Appeler Léa » est dans 10 min.' }
+      ],
+      darkVals: [
+        { name: 'Fond', hex: '#1A1614', code: '#1A1614' }, { name: 'Surface', hex: '#2A2421', code: '#2A2421' }, { name: 'Barre de navigation', hex: '#221D1A', code: '#221D1A' },
+        { name: 'Texte', hex: '#FBFAF8', code: '#FBFAF8' }, { name: 'Texte discret', hex: '#A39A92', code: '#A39A92' }, { name: 'Corail texte', hex: '#FF8A75', code: '#FF8A75' },
+        { name: 'Onglet actif (pastille)', hex: '#5A2C24', code: '#5A2C24' }, { name: 'Onglet actif (texte)', hex: '#FFB4A6', code: '#FFB4A6' }, { name: 'Erreur', hex: '#FF8FA3', code: '#FF8FA3' },
+        { name: 'Succès', hex: '#6FD3A0', code: '#6FD3A0' }, { name: 'Alerte', hex: '#F2C14E', code: '#F2C14E' }, { name: 'Contour case vide', hex: '#A7A29E', code: 'crème 60 %' }
+      ],
+      neutrals: [
+        { name: 'Fond de page', hex: '#F0ECE7' }, { name: 'Surface', hex: 'à définir' }, { name: 'Texte discret', hex: '#6E665F' },
+        { name: 'Texte secondaire', hex: '#6B635C' }, { name: 'Texte', hex: '#3D3732' }, { name: 'Encre', hex: '#1F1B18' },
+        { name: 'Crème', hex: '#FBFAF8' }, { name: 'Fond sombre', hex: '#1A1614' }
+      ],
+      nav: navItems.map(([c, l], i) => { const a = i === 2; return { label: l, cls: `${a ? 'ph-fill' : 'ph'} ph-${c}`, icon: a ? '#C23A26' : '#6E665F', color: a ? '#9E2C1B' : '#6E665F', pill: a ? '#FFD9D2' : 'transparent', weight: a ? 700 : 500 }; }),
+      radii: [
+        { name: 'Petit', label: '6 px', v: '6px', w: '56px' }, { name: 'Moyen', label: '12 px', v: '12px', w: '56px' },
+        { name: 'Grand', label: '18 px', v: '18px', w: '56px' }, { name: 'Très grand', label: '28 px', v: '28px', w: '56px' },
+        { name: 'Gélule', label: '999 px', v: '999px', w: '96px' }
+      ],
+      illus: [
+        { name: 'Courses', emoji: '🛒', color: '#D2EC8F', ex: 'calc(100% - 64px)', rot: '12deg' },
+        { name: 'Recettes', emoji: '🍲', color: '#FFC9B8', ex: '-8px', rot: '-12deg' },
+        { name: 'Idées', emoji: '💡', color: '#FFE27A', ex: 'calc(100% - 64px)', rot: '12deg' },
+        { name: 'Projets', emoji: '🚀', color: '#BDD6FF', ex: '-8px', rot: '-12deg' },
+        { name: 'Voyage', emoji: '✈️', color: '#A5E6DC', ex: 'calc(100% - 64px)', rot: '12deg' }
+      ],
+      motion: [
+        { name: 'Cocher', desc: 'La coche ou l\'étoile rebondit (≈ 450 ms).' },
+        { name: 'Série', desc: 'Le compteur de série grossit un instant (≈ 400 ms).' },
+        { name: 'Nouvelle carte', desc: 'Elle apparaît avec un léger ressort (≈ 380 ms).' },
+        { name: 'Logo', desc: 'Le point corail saute à chaque nouvelle carte.' },
+        { name: 'Mouvement réduit', desc: 'Si le téléphone le demande, tout devient un fondu de 150 ms.' }
+      ],
+      todo: [
+        'Redéfinir la « surface » (champ de recherche, filtres) : elle ne peut plus être #F0ECE7, devenu le fond de page.',
+        'Fixer l\'échelle des tailles de texte (13 px minimum) et la grille d\'espacement (multiples de 4 ou 8 px).',
+        'Vérifier la largeur de « Habitudes » en 13 px dans la barre de navigation.',
+        'Redessiner le logo et l\'icône de l\'application en vectoriel (espacement des lettres, taille du point).',
+        'Faire l\'inventaire des textes de l\'application pour passer au tutoiement.'
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

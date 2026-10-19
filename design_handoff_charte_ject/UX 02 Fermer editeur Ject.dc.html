@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>body{margin:0;background:#EEEBE6;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Revue UX · noter vite · constat 2</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800">Fermer l'éditeur</div>
+<div style="font-size:15px;color:#4A443F;max-width:740px;text-wrap:pretty">Aujourd'hui, la flèche ← et « Ajouter / OK » sont côte à côte en haut à gauche et font la même chose : enregistrer et fermer. L'enregistrement est déjà automatique. Chaque piste montre la barre du haut d'une nouvelle carte, puis d'une carte existante.</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:12px;width:375px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="background:#1F1B18;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px">{{ o.id }}</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ o.name }}</div>
+</div>
+<sc-for list="{{ o.bars }}" as="b" hint-placeholder-count="2">
+<div style="background:#FBFAF8;border-radius:18px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;color:#6E665F">{{ b.label }}</div>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="ph {{ b.backIcon }}" style="font-size:22px"></i></div>
+<sc-if value="{{ b.okLeft }}" hint-placeholder-val="{{ false }}"><div style="height:40px;padding:0 14px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px"><i class="ph ph-check" style="font-size:16px"></i>{{ b.okText }}</div></sc-if>
+<div style="flex:1"></div>
+<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="ph ph-push-pin" style="font-size:22px"></i></div>
+<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="ph ph-archive" style="font-size:22px"></i></div>
+<sc-if value="{{ b.okRight }}" hint-placeholder-val="{{ false }}"><div style="height:40px;padding:0 14px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center">{{ b.okText }}</div></sc-if>
+</div>
+</div>
+</sc-for>
+<div style="font-size:14px;line-height:1.45;color:#4A443F;text-wrap:pretty">{{ o.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { options: [
+      { id: 'F1', name: 'Actuel', bars: [{ label: 'Nouvelle carte', backIcon: 'ph-arrow-left', okLeft: true, okRight: false, okText: 'Ajouter' }, { label: 'Carte existante', backIcon: 'ph-arrow-left', okLeft: true, okRight: false, okText: 'OK' }], note: 'Deux boutons pour la même action, collés l\'un à l\'autre. Le bouton corail est placé là où l\'on attend un simple retour.' },
+      { id: 'F2', name: '« Ajouter » à droite, nouvelle carte seulement', bars: [{ label: 'Nouvelle carte', backIcon: 'ph-x', okLeft: false, okRight: true, okText: 'Ajouter' }, { label: 'Carte existante', backIcon: 'ph-arrow-left', okLeft: false, okRight: false, okText: '' }], note: 'Pour une nouvelle carte, « Ajouter » est à droite, à portée de pouce. Pour une carte existante, la flèche suffit, puisque tout est enregistré. Une carte vide fermée par × est supprimée sans message.' },
+      { id: 'F3', name: 'Flèche seule partout', bars: [{ label: 'Nouvelle carte', backIcon: 'ph-arrow-left', okLeft: false, okRight: false, okText: '' }, { label: 'Carte existante', backIcon: 'ph-arrow-left', okLeft: false, okRight: false, okText: '' }], note: 'Le plus épuré : on ferme avec la flèche ou le geste retour, et la notification « Ajouté à l\'Inbox » confirme l\'ajout. On perd le geste de validation, rassurant quand on note vite.' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

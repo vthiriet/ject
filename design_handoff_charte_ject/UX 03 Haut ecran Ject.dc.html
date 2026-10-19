@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>body{margin:0;background:#EEEBE6;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Revue UX · noter vite · constat 3</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800">Alléger le haut de l'écran</div>
+<div style="font-size:15px;color:#4A443F;max-width:760px;text-wrap:pretty">Onglet Actions, avec deux aires. Aujourd'hui, trois bandes s'empilent avant la première carte : la barre d'outils, les 5 onglets et les aires. La ligne pointillée marque le début des cartes.</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:12px;width:375px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="background:#1F1B18;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px">{{ o.id }}</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ o.name }}</div>
+</div>
+<div style="position:relative;height:620px;background:#F0ECE7;border-radius:28px;box-shadow:0 8px 24px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:4px;padding:10px 8px 6px">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><i class="ph ph-list" style="font-size:22px"></i></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;padding:0 4px">Actions</div>
+<sc-if value="{{ o.searchField }}" hint-placeholder-val="{{ false }}"><div style="flex:1;height:40px;border-radius:12px;background:#fff;border:1px solid #D6CEC5;box-sizing:border-box;display:flex;align-items:center;gap:6px;padding:0 10px;font-size:15px;color:#6E665F;min-width:0"><i class="ph ph-magnifying-glass" style="font-size:18px"></i>Rechercher</div></sc-if>
+<sc-if value="{{ o.searchIcon }}" hint-placeholder-val="{{ false }}"><div style="flex:1"></div><div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><i class="ph ph-magnifying-glass" style="font-size:22px"></i></div></sc-if>
+<sc-if value="{{ o.extra }}" hint-placeholder-val="{{ false }}"><div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><i class="ph ph-rows" style="font-size:22px"></i></div><div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center"><i class="ph ph-cloud-check" style="font-size:22px"></i></div></sc-if>
+<sc-if value="{{ o.filterIcon }}" hint-placeholder-val="{{ false }}"><div style="height:40px;padding:0 10px;border-radius:12px;display:flex;align-items:center;gap:4px;font-size:13px"><i class="ph ph-funnel" style="font-size:20px"></i>Aires</div></sc-if>
+</div>
+<sc-if value="{{ o.topTabs }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:4px;padding:4px 8px;overflow:hidden">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5"><div style="flex:none;height:36px;padding:0 10px;border-radius:999px;background:{{ t.bg }};display:flex;align-items:center;gap:4px;font-size:13px;font-weight:{{ t.w }};color:{{ t.c }}"><i class="{{ t.cls }}" style="font-size:16px"></i>{{ t.l }}</div></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ o.chips }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:6px;padding:6px 12px">
+<div style="height:32px;padding:0 12px;border-radius:999px;background:#1F1B18;color:#FBFAF8;font-size:13px;display:flex;align-items:center">Toutes les aires</div>
+<div style="height:32px;padding:0 12px;border-radius:999px;background:#fff;border:1px solid #D6CEC5;box-sizing:border-box;font-size:13px;display:flex;align-items:center">🏠 Maison</div>
+<div style="height:32px;padding:0 12px;border-radius:999px;background:#fff;border:1px solid #D6CEC5;box-sizing:border-box;font-size:13px;display:flex;align-items:center">💼 Travail</div>
+</div>
+</sc-if>
+<div style="margin:6px 12px 0;border-top:2px dashed #C23A26"></div>
+<div style="padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<sc-for list="{{ cards }}" as="c" hint-placeholder-count="4"><div style="background:{{ c.bg }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:4px;height:76px;box-sizing:border-box"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ c.t }}</div><div style="font-size:15px;color:#3D3732">{{ c.d }}</div></div></sc-for>
+</div>
+<sc-if value="{{ o.bottomTabs }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:auto;display:flex;justify-content:space-around;padding:8px 2px 12px;background:#fff">
+<sc-for list="{{ nav }}" as="n" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:72px"><div style="position:relative;width:52px;height:30px;border-radius:15px;background:{{ n.pill }};display:flex;align-items:center;justify-content:center"><i class="{{ n.cls }}" style="font-size:22px;color:{{ n.icon }}"></i><sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:0;min-width:20px;height:20px;padding:0 5px;box-sizing:border-box;border-radius:10px;background:#FF6A55;color:#2B0A05;font-size:13px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center">3</span></sc-if></div><div style="font-size:13px;font-weight:{{ n.w }};color:{{ n.c }}">{{ n.l }}</div></div></sc-for>
+</div>
+</sc-if>
+<div style="position:absolute;right:16px;bottom:{{ o.fabBottom }};width:60px;height:60px;border-radius:28px;background:#FF6A55;color:#2B0A05;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.2)"><i class="ph ph-plus" style="font-size:28px"></i></div>
+</div>
+<div style="font-size:14px;line-height:1.45;color:#4A443F;text-wrap:pretty">{{ o.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const T = [['tray-arrow-down', 'Inbox'], ['check-circle', 'Actions'], ['star', 'Habitudes'], ['flag', 'Projets'], ['bookmark-simple', 'Ressources']];
+    return {
+      tabs: T.map(([c, l], i) => { const a = i === 1; return { l, cls: `${a ? 'ph-fill' : 'ph'} ph-${c}`, bg: a ? '#FFD9D2' : 'transparent', c: a ? '#9E2C1B' : '#6E665F', w: a ? 700 : 500 }; }),
+      nav: T.map(([c, l], i) => { const a = i === 1; return { l, cls: `${a ? 'ph-fill' : 'ph'} ph-${c}`, pill: a ? '#FFD9D2' : 'transparent', icon: a ? '#C23A26' : '#6E665F', c: a ? '#9E2C1B' : '#6E665F', w: a ? 700 : 500, badge: i === 0 }; }),
+      cards: [{ t: 'Appeler Léa', d: 'Avant vendredi.', bg: '#fff' }, { t: 'Impôts', d: 'Déclarer.', bg: '#FFE27A' }, { t: 'Vélo', d: 'Réviser.', bg: '#A5E6DC' }, { t: 'Banque', d: 'RDV.', bg: '#DCC8FF' }],
+      options: [
+        { id: 'H1', name: 'Actuel : trois bandes', searchField: true, searchIcon: false, extra: true, filterIcon: false, topTabs: true, chips: true, bottomTabs: false, fabBottom: '20px', note: 'Barre d\'outils, onglets et aires s\'empilent. Les 5 onglets ne tiennent pas en largeur, et il faut faire défiler. Tout est en haut, loin du pouce.' },
+        { id: 'H2', name: 'Haut compact', searchField: false, searchIcon: true, extra: false, filterIcon: true, topTabs: true, chips: false, bottomTabs: false, fabBottom: '20px', note: 'La recherche devient une icône qui s\'ouvre au toucher. Les aires passent derrière un bouton « Aires », et la bascule grille/liste et la synchro vont dans le tiroir. Il reste deux bandes, mais les onglets sont toujours en haut.' },
+        { id: 'H3', name: 'Onglets en bas', searchField: false, searchIcon: true, extra: false, filterIcon: true, topTabs: false, chips: false, bottomTabs: true, fabBottom: '86px', note: 'Les 5 onglets passent dans une barre en bas, à portée de pouce, avec le compteur de l\'Inbox. Il ne reste qu\'une bande en haut, et les cartes commencent tout de suite. C\'est une refonte de la navigation.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

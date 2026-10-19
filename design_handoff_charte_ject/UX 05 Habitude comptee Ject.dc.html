@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>body{margin:0;background:#EEEBE6;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<section style="padding:48px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#6B635C">Revue UX · habitudes · constat 2</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800">Habitude quotidienne et habitude comptée</div>
+<div style="font-size:15px;color:#4A443F;max-width:760px;text-wrap:pretty">Une habitude quotidienne se coche, alors qu'une habitude hebdomadaire ou mensuelle se compte (« +1 »), par exemple 3 séances de sport par semaine. La décision 28 a fixé la pastille étoile pour la quotidienne. Chaque piste montre une quotidienne faite, une comptée en cours (2 sur 3) et une comptée terminée (3 sur 3).</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:12px;width:375px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="background:#1F1B18;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px">{{ o.id }}</div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">{{ o.name }}</div>
+</div>
+<div style="background:#F0ECE7;border-radius:28px;box-shadow:0 8px 24px rgba(0,0,0,.1);padding:16px 12px;display:flex;flex-direction:column;gap:10px">
+<div style="background:#fff;border-radius:18px;padding:12px;display:flex;align-items:center;gap:12px">
+<div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">Boire 1,5 L</div><div style="font-size:13px;color:#6E665F">Tous les jours</div></div>
+<div style="width:44px;height:44px;border-radius:50%;background:#FF6A55;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-fill ph-star" style="font-size:22px;color:#2B0A05"></i></div>
+</div>
+<sc-for list="{{ o.counted }}" as="h" hint-placeholder-count="2">
+<div style="background:#fff;border-radius:18px;padding:12px;display:flex;align-items:center;gap:12px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600">Sport</div>
+<div style="font-size:13px;color:#6E665F">3 fois par semaine</div>
+<sc-if value="{{ o.bar }}" hint-placeholder-val="{{ false }}">
+<div style="height:8px;border-radius:4px;background:#E3DCD4;overflow:hidden"><div style="width:{{ h.pct }};height:100%;border-radius:4px;background:#FF6A55"></div></div>
+</sc-if>
+<sc-if value="{{ o.dots }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:6px"><sc-for list="{{ h.dots }}" as="d" hint-placeholder-count="3"><div style="width:22px;height:22px;border-radius:50%;background:{{ d.bg }};border:{{ d.border }};box-sizing:border-box;display:flex;align-items:center;justify-content:center"><i class="ph-fill ph-star" style="font-size:12px;color:#2B0A05;opacity:{{ d.on }}"></i></div></sc-for></div>
+</sc-if>
+<div style="font-size:13px;color:#3D3732"><strong>{{ h.count }}</strong> · {{ h.msg }}</div>
+</div>
+<div style="width:44px;height:44px;border-radius:{{ o.btnRadius }};background:{{ h.btnBg }};border:{{ h.btnBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:#2B0A05;gap:2px"><i class="{{ h.btnIcon }}" style="font-size:{{ h.iconSize }};color:{{ h.btnFg }}"></i>{{ h.btnTxt }}</div>
+</div>
+</sc-for>
+</div>
+<div style="font-size:14px;line-height:1.45;color:#4A443F;text-wrap:pretty">{{ o.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const dots = (n) => [0, 1, 2].map(i => ({ bg: i < n ? '#FF6A55' : 'transparent', border: i < n ? 'none' : '2px solid rgba(31,27,24,.55)', on: i < n ? 1 : 0 }));
+    const states = [{ n: 2, pct: '66%', count: '2 / 3', msg: 'Encore une, tu y es presque !' }, { n: 3, pct: '100%', count: '3 / 3', msg: 'Semaine tenue, bravo !' }];
+    return { options: [
+      { id: 'C1', name: 'Actuel : coche « +1 »', bar: true, dots: false, btnRadius: '12px', note: 'Le bouton « ✓ +1 » utilise une coche, comme pour « fait », alors qu\'il ajoute une fois. Quand la période est tenue, rien ne change sur le bouton.',
+        counted: states.map(s => ({ ...s, dots: dots(s.n), btnBg: 'transparent', btnBorder: '1px solid #D6CEC5', btnIcon: 'ph-bold ph-check', iconSize: '18px', btnFg: '#1F1B18', btnTxt: '+1' })) },
+      { id: 'C2', name: 'Bouton « + » rond, étoile quand c\'est tenu', bar: true, dots: false, btnRadius: '50%', note: 'Le bouton est un rond au contour, avec un +, qui ajoute une fois. Quand l\'objectif est atteint, il devient la pastille étoile, comme une quotidienne faite. On a la même forme pour toutes les habitudes, avec deux états lisibles.',
+        counted: states.map(s => s.n >= 3 ? ({ ...s, dots: dots(s.n), btnBg: '#FF6A55', btnBorder: 'none', btnIcon: 'ph-fill ph-star', iconSize: '22px', btnFg: '#2B0A05', btnTxt: '' }) : ({ ...s, dots: dots(s.n), btnBg: 'transparent', btnBorder: '2px solid rgba(31,27,24,.55)', btnIcon: 'ph-bold ph-plus', iconSize: '20px', btnFg: '#1F1B18', btnTxt: '' })) },
+      { id: 'C3', name: 'Comme C2, avec des étoiles au lieu de la barre', bar: false, dots: true, btnRadius: '50%', note: 'La barre de progression est remplacée par une étoile par fois prévue, qui se remplit à chaque fois. C\'est très parlant et ludique pour de petits objectifs (jusqu\'à 7), mais il faudra garder la barre au-delà.',
+        counted: states.map(s => s.n >= 3 ? ({ ...s, dots: dots(s.n), btnBg: '#FF6A55', btnBorder: 'none', btnIcon: 'ph-fill ph-star', iconSize: '22px', btnFg: '#2B0A05', btnTxt: '' }) : ({ ...s, dots: dots(s.n), btnBg: 'transparent', btnBorder: '2px solid rgba(31,27,24,.55)', btnIcon: 'ph-bold ph-plus', iconSize: '20px', btnFg: '#1F1B18', btnTxt: '' })) }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

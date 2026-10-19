@@ -1,5 +1,11 @@
 ---
 import App from '../components/App';
+// Polices de la charte, hébergées dans l'app (sous-ensemble latin, graisses utiles seulement).
+import '@fontsource/bricolage-grotesque/latin-600.css';
+import '@fontsource/bricolage-grotesque/latin-800.css';
+import '@fontsource/figtree/latin-400.css';
+import '@fontsource/figtree/latin-600.css';
+import '@fontsource/figtree/latin-700.css';
 import '../styles/global.css';
 ---
 <!doctype html>
@@ -12,8 +18,8 @@ import '../styles/global.css';
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#202124" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F0ECE7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1A1614" media="(prefers-color-scheme: dark)" />
     <script is:inline>
       // Applique le thème choisi avant l'affichage (évite un flash blanc en mode sombre).
       try {
@@ -22,7 +28,7 @@ import '../styles/global.css';
         const dark = t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
         document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
           m.removeAttribute('media');
-          m.setAttribute('content', dark ? '#202124' : '#ffffff');
+          m.setAttribute('content', dark ? '#1A1614' : '#F0ECE7');
         });
       } catch {}
     </script>

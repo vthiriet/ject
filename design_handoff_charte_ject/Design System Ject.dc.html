@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;600;700&amp;family=Noto+Color+Emoji&amp;display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<style>body{margin:0;background:#FBFAF8;font-family:"Figtree",system-ui,sans-serif;color:#1F1B18}a{color:#C23A26}a:hover{color:#1F1B18}</style>
+</helmet>
+<div style="max-width:1200px;margin:0 auto;padding:56px 24px 96px;display:flex;flex-direction:column;gap:64px">
+
+<header style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:baseline;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;letter-spacing:-.04em;line-height:.9"><span>ject</span><span style="display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#FF6A55;margin-left:.04em"></span></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:34px;font-weight:800">Design system</div>
+<div style="font-size:15px;color:#6B635C;max-width:760px;text-wrap:pretty">Il applique les décisions 1 à 53 (<span style="font-family:ui-monospace,monospace">docs/DECISIONS.md</span>). Chaque composant est montré en clair et en sombre, dans ses états. Les noms entre parenthèses renvoient aux fichiers de <span style="font-family:ui-monospace,monospace">src/components</span>, sur la branche <span style="font-family:ui-monospace,monospace">preview</span>.</div>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:24px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">Fondations</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px">
+<div style="background:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Couleurs · variables</div>
+<div style="display:grid;grid-template-columns:1fr auto auto;gap:6px 12px;align-items:center;font-size:13px">
+<div style="color:#6E665F">Variable</div><div style="color:#6E665F">Clair</div><div style="color:#6E665F">Sombre</div>
+<sc-for list="{{ tokenRows }}" as="r" hint-placeholder-count="20">
+<div style="font-family:ui-monospace,monospace">{{ r.name }}</div>
+<div style="display:flex;align-items:center;gap:6px;font-family:ui-monospace,monospace;color:#6B635C"><span style="width:14px;height:14px;border-radius:4px;background:{{ r.l }};border:1px solid rgba(0,0,0,.15)"></span>{{ r.l }}</div>
+<div style="display:flex;align-items:center;gap:6px;font-family:ui-monospace,monospace;color:#6B635C"><span style="width:14px;height:14px;border-radius:4px;background:{{ r.d }};border:1px solid rgba(0,0,0,.15)"></span>{{ r.d }}</div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="background:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Texte</div>
+<sc-for list="{{ typeRows }}" as="s" hint-placeholder-count="6">
+<div style="display:flex;align-items:baseline;gap:12px"><div style="width:84px;flex:none;font-family:ui-monospace,monospace;font-size:13px;color:#6E665F">{{ s.token }}</div><div style="font-family:{{ s.ff }};font-size:{{ s.size }};font-weight:{{ s.w }};line-height:1.2">{{ s.role }}</div></div>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600">Espacements · arrondis · mouvement</div>
+<div style="display:flex;align-items:flex-end;gap:10px">
+<sc-for list="{{ spaces }}" as="s" hint-placeholder-count="6"><div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:{{ s.px }};height:{{ s.px }};background:#FF6A55;border-radius:2px"></div><div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ s.v }}</div></div></sc-for>
+</div>
+<div style="display:flex;align-items:flex-end;gap:10px">
+<sc-for list="{{ radii }}" as="r" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:{{ r.w }};height:40px;border-radius:{{ r.v }};background:#FFD9D2;border:2px solid #FF6A55;box-sizing:border-box"></div><div style="font-family:ui-monospace,monospace;font-size:13px;color:#6B635C">{{ r.label }}</div></div></sc-for>
+</div>
+<div style="font-size:13px;line-height:1.5;color:#3D3732">Cocher 450 ms · série 400 ms · nouvelle carte 380 ms · mouvement réduit : fondu 150 ms · focus : anneau 3 px décalé de 3 px · zone tactile minimale 32 px (44 px pour les boutons).</div>
+</div>
+</div>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">1 · Carte</div><div style="font-size:14px;color:#6B635C">Carte texte, carte liste, carte illustrée, carte épinglée et carte sélectionnée (NoteCard). Les cartes n'ont ni bordure ni ombre. Marge intérieure de 12 et écart de 12 entre les cartes.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div style="background:{{ t.c.papier }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Appeler Léa</div><i class="ph-fill ph-push-pin" style="font-size:16px;color:{{ t.accentText }}"></i></div>
+<div style="font-size:15px;line-height:1.4;color:{{ t.text }}">Avant vendredi, pour le dîner.</div>
+<div style="display:flex;align-items:center;gap:4px;font-size:13px;color:{{ t.muted }}"><i class="ph ph-bell" style="font-size:13px"></i>Jeu. 18 h</div>
+</div>
+<div style="background:{{ t.c.peche }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:4px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Courses</div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.muted }}"><div style="width:18px;height:18px;border-radius:6px;background:#FF6A55;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-bold ph-check" style="font-size:12px;color:#2B0A05"></i></div><span style="text-decoration:line-through">Pain</span></div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.ink }}"><div style="width:18px;height:18px;border-radius:6px;border:2px solid {{ t.checkBorder }};box-sizing:border-box;flex:none"></div>Tomates</div>
+</div>
+<div style="background:{{ t.c.ciel }};border-radius:18px;overflow:hidden;container-type:inline-size">
+<div style="position:relative;height:84px;overflow:hidden"><div style="position:absolute;left:calc(100% - 64px);top:10px;font-family:'Noto Color Emoji',sans-serif;font-size:clamp(64px,45cqw,96px);line-height:1;transform:rotate(12deg)">🚀</div></div>
+<div style="padding:8px 12px 12px;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Projets</div>
+</div>
+<div style="background:{{ t.c.soleil }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:4px;outline:3px solid {{ t.focus }};outline-offset:3px">
+<div style="display:flex;justify-content:space-between"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Lecture</div><div style="width:22px;height:22px;border-radius:50%;background:{{ t.ink }};display:flex;align-items:center;justify-content:center"><i class="ph-bold ph-check" style="font-size:13px;color:{{ t.page }}"></i></div></div>
+<div style="font-size:15px;line-height:1.4;color:{{ t.text }}">Chapitre 4.</div>
+<div style="font-size:13px;color:{{ t.muted }}">Sélectionnée · focus</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">2 · Élément de liste</div><div style="font-size:14px;color:#6B635C">États à cocher, coché et en déplacement, avec la poignée et le bouton supprimer (NoteEditor, SortableRows). La case fait 18 px, avec une zone tactile de 32 px. Toucher le texte permet de le modifier.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="background:{{ t.c.papier }};border-radius:18px;padding:8px 12px;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.ink }}"><i class="ph ph-dots-six-vertical" style="font-size:16px;color:{{ t.muted }}"></i><div style="width:18px;height:18px;border-radius:6px;border:2px solid {{ t.checkBorder }};box-sizing:border-box;flex:none"></div><span style="flex:1">Tomates</span></div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.ink }};background:{{ t.field }};border-radius:12px;margin:0 -8px;padding:0 8px;box-shadow:0 4px 12px rgba(0,0,0,.18)"><i class="ph ph-dots-six-vertical" style="font-size:16px;color:{{ t.ink }}"></i><div style="width:18px;height:18px;border-radius:6px;border:2px solid {{ t.checkBorder }};box-sizing:border-box;flex:none"></div><span style="flex:1">Beurre · en déplacement</span></div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.ink }}"><i class="ph ph-dots-six-vertical" style="font-size:16px;color:{{ t.muted }}"></i><div style="width:18px;height:18px;border-radius:6px;border:2px solid {{ t.checkBorder }};box-sizing:border-box;flex:none"></div><span style="flex:1;border-bottom:2px solid {{ t.accent }}">Œufs|</span><i class="ph ph-x" style="font-size:16px;color:{{ t.muted }}"></i></div>
+<div style="height:1px;background:{{ t.fieldBorder }};margin:4px 0"></div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.muted }}"><i class="ph ph-dots-six-vertical" style="font-size:16px;opacity:0"></i><div style="width:18px;height:18px;border-radius:6px;background:#FF6A55;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-bold ph-check" style="font-size:12px;color:#2B0A05"></i></div><span style="text-decoration:line-through">Pain</span></div>
+<div style="display:flex;align-items:center;gap:8px;min-height:32px;font-size:15px;color:{{ t.muted }}"><i class="ph ph-plus" style="font-size:16px"></i>Ajouter un élément</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">3 · Habitude</div><div style="font-size:14px;color:#6B635C">Habitude quotidienne (rond vide, puis pastille étoile) et habitude comptée : bouton « + », une étoile par fois prévue jusqu'à 7, puis la pastille étoile quand c'est tenu (HabitCard, HabitSummary). Pas d'emoji ni de confettis : seule l'étoile rebondit.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="background:{{ t.c.papier }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Habitudes du jour</div><div style="font-size:13px;font-weight:700;color:{{ t.accentText }}">2 / 3</div></div>
+<div style="height:8px;border-radius:4px;background:{{ t.track }};overflow:hidden"><div style="width:66%;height:100%;border-radius:4px;background:#FF6A55"></div></div>
+<sc-for list="{{ habits }}" as="h" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;min-height:44px">
+<sc-if value="{{ h.done }}" hint-placeholder-val="{{ true }}"><div style="width:28px;height:28px;border-radius:50%;background:#FF6A55;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-fill ph-star" style="font-size:16px;color:#2B0A05"></i></div></sc-if>
+<sc-if value="{{ h.todo }}" hint-placeholder-val="{{ false }}"><div style="width:28px;height:28px;border-radius:50%;border:2px solid {{ t.checkBorder }};box-sizing:border-box;flex:none"></div></sc-if>
+<div style="flex:1;font-size:15px;color:{{ t.ink }}">{{ h.label }}</div>
+</div>
+</sc-for>
+</div>
+<div style="background:{{ t.c.papier }};border-radius:18px;padding:12px;display:flex;align-items:center;gap:12px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Sport</div>
+<div style="font-size:13px;color:{{ t.muted }}">3 fois par semaine</div>
+<div style="display:flex;gap:6px">
+<div style="width:22px;height:22px;border-radius:50%;background:#FF6A55;display:flex;align-items:center;justify-content:center"><i class="ph-fill ph-star" style="font-size:12px;color:#2B0A05"></i></div>
+<div style="width:22px;height:22px;border-radius:50%;background:#FF6A55;display:flex;align-items:center;justify-content:center"><i class="ph-fill ph-star" style="font-size:12px;color:#2B0A05"></i></div>
+<div style="width:22px;height:22px;border-radius:50%;border:2px solid {{ t.checkBorder }};box-sizing:border-box"></div>
+</div>
+<div style="font-size:13px;color:{{ t.text }}"><strong>2 / 3</strong> · Encore une, tu y es presque !</div>
+</div>
+<div style="width:44px;height:44px;border-radius:50%;border:2px solid {{ t.checkBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-bold ph-plus" style="font-size:20px;color:{{ t.ink }}"></i></div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">4 · Boutons</div><div style="font-size:14px;color:#6B635C">Le bouton principal est le seul élément plein en corail. Le bouton secondaire a un contour, et la suppression un contour framboise. Le bouton icône fait 40 px. Les états montrés : normal, appuyé, focus et désactivé. Hauteur de 44 px, arrondi de 12.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+<div style="height:44px;padding:0 18px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center">Ranger</div>
+<div style="height:44px;padding:0 18px;border-radius:12px;background:#E85A46;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center;transform:scale(.97)">Ranger</div>
+<div style="height:44px;padding:0 18px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center;outline:3px solid {{ t.focus }};outline-offset:3px">Ranger</div>
+<div style="height:44px;padding:0 18px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center;opacity:.4">Ranger</div>
+<div style="flex-basis:100%;height:0"></div>
+<div style="height:44px;padding:0 18px;border-radius:12px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;color:{{ t.ink }};font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;display:flex;align-items:center">Annuler</div>
+<div style="height:44px;padding:0 18px;border-radius:12px;background:{{ t.field }};border:2px solid {{ t.err }};box-sizing:border-box;color:{{ t.err }};font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center;gap:6px"><i class="ph ph-trash" style="font-size:18px"></i>Supprimer</div>
+<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-palette" style="font-size:22px"></i></div>
+<div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:{{ t.accentSoft }};color:{{ t.accentText }}"><i class="ph-fill ph-push-pin" style="font-size:22px"></i></div>
+</div>
+<div style="font-size:13px;color:{{ t.muted }}">Ligne 1 : principal (normal, appuyé, focus, désactivé) · ligne 2 : secondaire, suppression, icône, icône active</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">5 · Bouton +</div><div style="font-size:14px;color:#6B635C">Il fait 60 px avec un arrondi de 28, en bas à droite, à 16 px au-dessus de la barre d'onglets (Fab). Un appui ouvre directement une carte texte ; la bascule en liste se fait dans l'éditeur (section 15).</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;min-height:150px">
+<div style="font-size:13px;color:{{ t.muted }};align-self:flex-start">{{ t.label }}</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+<div style="width:60px;height:60px;border-radius:28px;background:#FF6A55;color:#2B0A05;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.2)"><i class="ph ph-plus" style="font-size:28px"></i></div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">6 · Champs</div><div style="font-size:14px;color:#6B635C">Recherche et champ texte dans leurs états normal, focus, erreur et désactivé, plus l'interrupteur (Settings, HabitConfigForm). Hauteur de 44, arrondi de 12, contour de 1 px, qui passe à 2 px au focus.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="height:44px;border-radius:12px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 12px;font-size:15px;color:{{ t.muted }}"><i class="ph ph-magnifying-glass" style="font-size:18px"></i>Rechercher dans les cartes</div>
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:13px;font-weight:600;color:{{ t.text }}">Nom de l'habitude</div><div style="height:44px;border-radius:12px;background:{{ t.field }};border:2px solid {{ t.ink }};box-sizing:border-box;display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{ t.ink }}">Marcher 20 min|</div></div>
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:13px;font-weight:600;color:{{ t.text }}">Heure du rappel</div><div style="height:44px;border-radius:12px;background:{{ t.field }};border:2px solid {{ t.err }};box-sizing:border-box;display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{ t.ink }}">32 h</div><div style="display:flex;align-items:center;gap:4px;font-size:13px;color:{{ t.err }}"><i class="ph-fill ph-warning-circle" style="font-size:14px"></i>Cette heure n'existe pas.</div></div>
+<div style="height:44px;border-radius:12px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{ t.muted }};opacity:.5">Désactivé</div>
+<div style="display:flex;gap:24px">
+<div style="display:flex;align-items:center;gap:10px;font-size:15px;color:{{ t.ink }}"><div style="width:44px;height:26px;border-radius:13px;background:#FF6A55;position:relative"><div style="position:absolute;right:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#2B0A05"></div></div>Rappels</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:15px;color:{{ t.ink }}"><div style="width:44px;height:26px;border-radius:13px;background:{{ t.track }};border:2px solid {{ t.checkBorder }};box-sizing:border-box;position:relative"><div style="position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:{{ t.muted }}"></div></div>Sons</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">7 · Filtres et étiquettes</div><div style="font-size:14px;color:#6B635C">Filtres en forme de gélule de 32 px de haut, et étiquettes posées sur une carte (LabelPicker, LabelManager). Le filtre actif est en encre plein.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="height:32px;padding:0 14px;border-radius:999px;background:{{ t.ink }};color:{{ t.page }};font-size:13px;font-weight:600;display:flex;align-items:center">Toutes</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;color:{{ t.ink }};font-size:13px;display:flex;align-items:center">Maison</div>
+<div style="height:32px;padding:0 14px;border-radius:999px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;color:{{ t.ink }};font-size:13px;display:flex;align-items:center">Travail</div>
+<div style="height:32px;padding:0 12px;border-radius:999px;border:1px dashed {{ t.checkBorder }};box-sizing:border-box;color:{{ t.text }};font-size:13px;display:flex;align-items:center;gap:4px"><i class="ph ph-plus" style="font-size:13px"></i>Étiquette</div>
+</div>
+<div style="background:{{ t.c.lagon }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Vacances</div>
+<div style="display:flex;gap:6px"><div style="height:24px;padding:0 10px;border-radius:999px;background:{{ t.chipOnCard }};color:{{ t.ink }};font-size:13px;display:flex;align-items:center">Maison</div><div style="height:24px;padding:0 10px;border-radius:999px;background:{{ t.chipOnCard }};color:{{ t.ink }};font-size:13px;display:flex;align-items:center">Été</div></div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">8 · Navigation</div><div style="font-size:14px;color:#6B635C">En haut, une seule bande : menu, titre, recherche (icône qui s'ouvre) et bouton « Aires ». En bas, les 5 onglets en 13 px, avec l'onglet actif sur une pastille et le compteur de l'Inbox. Le tiroir regroupe Archives, Corbeille, Aires, Réglages, l'affichage grille/liste et l'état de synchro (App, Drawer).</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;overflow:hidden;display:flex;flex-direction:column">
+<div style="padding:16px 16px 8px;font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:flex;align-items:center;gap:4px;padding:0 8px 12px">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-list" style="font-size:22px"></i></div>
+<div style="flex:1;font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;color:{{ t.ink }}">Inbox</div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-magnifying-glass" style="font-size:22px"></i></div>
+<div style="height:40px;padding:0 10px;display:flex;align-items:center;gap:4px;font-size:13px;color:{{ t.ink }}"><i class="ph ph-funnel" style="font-size:20px"></i>Aires</div>
+</div>
+<div style="margin:0 16px 16px;background:{{ t.sheet }};border-radius:18px;padding:8px;display:flex;flex-direction:column;width:260px">
+<sc-for list="{{ t.drawer }}" as="d" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:12px;height:44px;padding:0 12px;border-radius:12px;background:{{ d.bg }};color:{{ d.color }};font-size:15px;font-weight:{{ d.w }}"><i class="{{ d.cls }}" style="font-size:20px"></i><span style="flex:1">{{ d.label }}</span><span style="font-size:13px;font-weight:700;color:{{ t.accentText }}">{{ d.count }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;justify-content:space-around;padding:10px 2px 14px;background:{{ t.nav }}">
+<sc-for list="{{ t.navItems }}" as="n" hint-placeholder-count="5">
+<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px">
+<div style="position:relative;width:52px;height:32px;border-radius:16px;background:{{ n.pill }};display:flex;align-items:center;justify-content:center"><i class="{{ n.cls }}" style="font-size:22px;color:{{ n.icon }}"></i><sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-6px;right:0;min-width:20px;height:20px;padding:0 5px;box-sizing:border-box;border-radius:10px;background:#FF6A55;color:#2B0A05;font-size:13px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center">3</span></sc-if></div>
+<div style="font-size:13px;font-weight:{{ n.weight }};color:{{ n.color }}">{{ n.label }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">9 · Sélecteur segmenté</div><div style="font-size:14px;color:#6B635C">Choix exclusif entre 2 et 4 options (Segmented). Hauteur de 40, et le segment actif est en blanc ou en surface.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);height:40px;padding:4px;border-radius:12px;background:{{ t.track }};box-sizing:border-box;gap:4px">
+<div style="border-radius:8px;background:{{ t.field }};box-shadow:0 1px 2px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:{{ t.ink }}">Jour</div>
+<div style="border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ t.text }}">Semaine</div>
+<div style="border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ t.text }}">Mois</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">10 · Sélecteur de couleur et d'illustration</div><div style="font-size:14px;color:#6B635C">7 pastilles de 44 px sur une ligne, la couleur choisie étant marquée par une coche. Galerie d'illustrations, avec une case pour en créer une à partir d'un emoji et d'une couleur (BackgroundPicker, Background).</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.sheet }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+<sc-for list="{{ t.swatches }}" as="s" hint-placeholder-count="7">
+<div style="display:flex;justify-content:center"><div style="width:44px;height:44px;border-radius:50%;background:{{ s.hex }};border:1px solid {{ t.swatchBorder }};box-sizing:border-box;display:flex;align-items:center;justify-content:center"><i class="ph-bold ph-check" style="font-size:20px;color:{{ s.ink }};opacity:{{ s.on }}"></i></div></div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+<sc-for list="{{ t.gallery }}" as="g" hint-placeholder-count="3">
+<div style="height:64px;border-radius:12px;background:{{ g.bg }};position:relative;overflow:hidden;outline:{{ g.sel }};outline-offset:2px"><div style="position:absolute;right:-6px;top:6px;font-family:'Noto Color Emoji',sans-serif;font-size:44px;line-height:1;transform:rotate(12deg)">{{ g.e }}</div></div>
+</sc-for>
+<div style="height:64px;border-radius:12px;border:1px dashed {{ t.checkBorder }};box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;color:{{ t.text }}"><i class="ph ph-plus" style="font-size:18px"></i>Créer</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">11 · Fenêtres</div><div style="font-size:14px;color:#6B635C">Boîte de dialogue de confirmation et panneau qui monte du bas de l'écran, avec sa poignée (Dialog, HabitSheet, FileDialog). Arrondi de 28 en haut du panneau, et voile sombre sur le reste de l'écran.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="position:relative;background:{{ t.page }};border-radius:28px;overflow:hidden;height:420px">
+<div style="position:absolute;inset:0;background:rgba(26,22,20,.45)"></div>
+<div style="position:absolute;left:24px;right:24px;top:24px;background:{{ t.sheet }};border-radius:28px;padding:20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;color:{{ t.ink }}">Supprimer « Courses » ?</div>
+<div style="font-size:15px;line-height:1.4;color:{{ t.text }}">La carte part à la corbeille pendant 7 jours.</div>
+<div style="display:flex;gap:8px;justify-content:flex-end">
+<div style="height:44px;padding:0 16px;border-radius:12px;border:1px solid {{ t.fieldBorder }};box-sizing:border-box;color:{{ t.ink }};font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;display:flex;align-items:center">Annuler</div>
+<div style="height:44px;padding:0 16px;border-radius:12px;border:2px solid {{ t.err }};box-sizing:border-box;color:{{ t.err }};font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center">Supprimer</div>
+</div>
+</div>
+<div style="position:absolute;left:0;right:0;bottom:0;background:{{ t.sheet }};border-radius:28px 28px 0 0;padding:8px 20px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="align-self:center;width:36px;height:4px;border-radius:2px;background:{{ t.checkBorder }}"></div>
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:600;color:{{ t.ink }}">Nouvelle habitude</div>
+<div style="height:44px;border-radius:12px;background:{{ t.field }};border:1px solid {{ t.fieldBorder }};box-sizing:border-box;display:flex;align-items:center;padding:0 12px;font-size:15px;color:{{ t.muted }}">Nom de l'habitude</div>
+<div style="height:44px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center">Créer</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">12 · Messages</div><div style="font-size:14px;color:#6B635C">Notification temporaire en bas de l'écran, avec une action (Toast), et bandeaux d'erreur, de succès et d'alerte. L'icône est toujours accompagnée d'un texte.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 8px 0 16px;border-radius:12px;background:{{ t.toastBg }};color:{{ t.toastFg }};font-size:15px"><span style="flex:1">Carte archivée.</span><div style="height:36px;padding:0 12px;border-radius:8px;display:flex;align-items:center;font-weight:700;color:{{ t.toastAction }}">Annuler</div></div>
+<sc-for list="{{ t.states }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;background:{{ s.bg }}"><i class="{{ s.icon }}" style="font-size:20px;color:{{ s.fg }};flex:none;margin-top:1px"></i><div style="font-size:15px;line-height:1.4;color:{{ s.fg }}">{{ s.text }}</div></div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">13 · Aperçu de lien</div><div style="font-size:14px;color:#6B635C">Bloc placé dans une carte, sous le texte (LinkPreview, LinkedText). Les liens du texte sont soulignés.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="background:{{ t.c.pistache }};border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px;max-width:240px">
+<div style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:600;color:{{ t.ink }}">Recette</div>
+<div style="font-size:15px;line-height:1.4;color:{{ t.text }}">À tester : <span style="text-decoration:underline;color:{{ t.ink }}">marmiton.org/…</span></div>
+<div style="display:flex;gap:8px;align-items:center;padding:8px;border-radius:12px;background:{{ t.chipOnCard }}">
+<div style="width:40px;height:40px;border-radius:8px;background:{{ t.track }};flex:none;display:flex;align-items:center;justify-content:center"><i class="ph ph-link" style="font-size:18px;color:{{ t.text }}"></i></div>
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0"><div style="font-size:13px;font-weight:700;color:{{ t.ink }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Curry de légumes</div><div style="font-size:13px;color:{{ t.text }}">marmiton.org</div></div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">14 · Carte de l'Inbox et sélection</div><div style="font-size:14px;color:#6B635C">Un seul bouton visible « Ranger ». On archive en glissant vers la gauche, avec annulation. L'appui long sélectionne, et la barre de sélection propose « Fusionner en liste » dès 2 cartes (InboxView).</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.page }};border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;color:{{ t.muted }}">{{ t.label }}</div>
+<div style="background:{{ t.c.papier }};border-radius:18px;padding:12px;display:flex;align-items:flex-start;gap:8px">
+<div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="font-size:15px;color:{{ t.ink }}">Acheter un cadeau pour Léa</div><div style="font-size:13px;color:{{ t.muted }}">Aujourd'hui · 9 h 12</div></div>
+<div style="height:40px;padding:0 12px;border-radius:12px;border:1px solid {{ t.fieldBorder }};box-sizing:border-box;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:{{ t.ink }}"><i class="ph ph-folder-simple" style="font-size:20px"></i>Ranger</div>
+</div>
+<div style="position:relative;border-radius:18px;overflow:hidden;background:{{ t.track }}">
+<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding:0 20px;gap:8px;color:{{ t.ink }};font-size:15px;font-weight:700"><i class="ph ph-archive" style="font-size:22px"></i>Archiver</div>
+<div style="position:relative;background:{{ t.c.papier }};border-radius:18px;padding:12px;transform:translateX(-120px);display:flex;flex-direction:column;gap:4px"><div style="font-size:15px;color:{{ t.ink }}">Film conseillé par Paul</div><div style="font-size:13px;color:{{ t.muted }}">Hier</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:18px;background:{{ t.sheet }}">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-x" style="font-size:20px"></i></div>
+<div style="flex:1;font-size:15px;font-weight:600;color:{{ t.ink }}">2 sélectionnées</div>
+<div style="height:40px;padding:0 12px;border-radius:12px;border:1px solid {{ t.fieldBorder }};box-sizing:border-box;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:{{ t.ink }}"><i class="ph ph-stack" style="font-size:18px"></i>Fusionner</div>
+<div style="height:40px;padding:0 14px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center">Ranger</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800">15 · Barres de l'éditeur</div><div style="font-size:14px;color:#6B635C">En haut, pour une nouvelle carte : × à gauche et « Ajouter » à droite ; pour une carte existante : la flèche ← seule. En bas, au-dessus du clavier : Liste, Couleur, Aires et Plus. L'export Notion est dans Plus (NoteEditor).</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+<div style="background:{{ t.sheet }};border-radius:28px;padding:12px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;color:{{ t.muted }};padding:0 4px">{{ t.label }}</div>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-x" style="font-size:22px"></i></div>
+<div style="flex:1"></div>
+<div style="height:40px;padding:0 14px;border-radius:12px;background:#FF6A55;color:#2B0A05;font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;display:flex;align-items:center">Ajouter</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-arrow-left" style="font-size:22px"></i></div>
+<div style="flex:1"></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-push-pin" style="font-size:22px"></i></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-archive" style="font-size:22px"></i></div>
+</div>
+<div style="display:flex;align-items:center;gap:4px;padding:6px 4px;border-top:1px solid {{ t.fieldBorder }}">
+<div style="display:flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:12px;background:{{ t.accentSoft }};color:{{ t.activeLabel }};font-size:13px;font-weight:700"><i class="ph-fill ph-check-square" style="font-size:20px;color:{{ t.accentText }}"></i>Liste</div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-palette" style="font-size:22px"></i></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-tag" style="font-size:22px"></i></div>
+<div style="flex:1"></div>
+<div style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:{{ t.ink }}"><i class="ph ph-dots-three-vertical" style="font-size:22px"></i></div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const cardsL = { papier: '#FFFFFF', soleil: '#FFE27A', peche: '#FFC9B8', pistache: '#D2EC8F', lagon: '#A5E6DC', ciel: '#BDD6FF', lilas: '#DCC8FF' };
+    const cardsD = { papier: '#332C28', soleil: '#4A3D12', peche: '#4E2A22', pistache: '#33421A', lagon: '#163F3A', ciel: '#1F3152', lilas: '#352A52' };
+    const navDef = [['tray-arrow-down', 'Inbox'], ['check-circle', 'Actions'], ['star', 'Habitudes'], ['flag', 'Projets'], ['bookmark-simple', 'Ressources']];
+    const names = ['Papier', 'Soleil', 'Pêche', 'Pistache', 'Lagon', 'Ciel', 'Lilas'];
+    const mk = (dark) => {
+      const t = dark ? {
+        label: 'Sombre', page: '#1A1614', field: '#2A2421', fieldBorder: '#4A413C', sheet: '#221D1A', nav: '#221D1A', ink: '#FBFAF8', text: '#D9D1CA', muted: '#A39A92',
+        accent: '#FF6A55', accentText: '#FF8A75', accentSoft: '#5A2C24', activeLabel: '#FFB4A6', err: '#FF8FA3', focus: '#FBFAF8', checkBorder: 'rgba(251,250,248,.6)',
+        track: '#3A332F', chipOnCard: 'rgba(251,250,248,.12)', swatchBorder: 'rgba(251,250,248,.2)', toastBg: '#FBFAF8', toastFg: '#1F1B18', toastAction: '#C23A26', c: cardsD,
+        states: [{ bg: '#3A1820', fg: '#FF8FA3', icon: 'ph-fill ph-wifi-slash', text: 'Pas de connexion. Tes cartes seront envoyées plus tard.' }, { bg: '#15301F', fg: '#6FD3A0', icon: 'ph-fill ph-check-circle', text: '5 jours d\'affilée, continue !' }, { bg: '#3A2E10', fg: '#F2C14E', icon: 'ph-fill ph-clock', text: 'Rappel « Appeler Léa » dans 10 min.' }]
+      } : {
+        label: 'Clair', page: '#F0ECE7', field: '#FFFFFF', fieldBorder: '#D6CEC5', sheet: '#FBFAF8', nav: '#FFFFFF', ink: '#1F1B18', text: '#3D3732', muted: '#6E665F',
+        accent: '#FF6A55', accentText: '#C23A26', accentSoft: '#FFD9D2', activeLabel: '#9E2C1B', err: '#B4123F', focus: '#1F1B18', checkBorder: 'rgba(31,27,24,.55)',
+        track: '#E3DCD4', chipOnCard: 'rgba(255,255,255,.6)', swatchBorder: 'rgba(31,27,24,.15)', toastBg: '#1F1B18', toastFg: '#FBFAF8', toastAction: '#FF8A75', c: cardsL,
+        states: [{ bg: '#FDE7EA', fg: '#B4123F', icon: 'ph-fill ph-wifi-slash', text: 'Pas de connexion. Tes cartes seront envoyées plus tard.' }, { bg: '#E3F4EA', fg: '#1F7A4D', icon: 'ph-fill ph-check-circle', text: '5 jours d\'affilée, continue !' }, { bg: '#FFF1CC', fg: '#8A5A00', icon: 'ph-fill ph-clock', text: 'Rappel « Appeler Léa » dans 10 min.' }]
+      };
+      const cards = dark ? cardsD : cardsL;
+      t.navItems = navDef.map(([c, l], i) => { const a = i === 0; return { label: l, cls: `${a ? 'ph-fill' : 'ph'} ph-${c}`, icon: a ? t.accentText : t.muted, color: a ? t.activeLabel : t.muted, pill: a ? t.accentSoft : 'transparent', weight: a ? 700 : 500, badge: i === 0 }; });
+      t.drawer = [['ph ph-archive', 'Archives', '', false], ['ph ph-trash', 'Corbeille', '', false], ['ph ph-tag', 'Aires', '', false], ['ph ph-gear-six', 'Réglages', '', false], ['ph ph-rows', 'Affichage : grille', '', false], ['ph ph-cloud-check', 'Synchronisé', '', false]]
+        .map(([cls, label, count, a]) => ({ cls, label, count, bg: a ? t.accentSoft : 'transparent', color: a ? t.activeLabel : t.ink, w: a ? 700 : 400 }));
+      t.swatches = Object.values(cards).map((hex, i) => ({ hex, name: names[i], on: i === 2 ? 1 : 0, ink: dark ? '#FBFAF8' : '#1F1B18' }));
+      t.gallery = [['🛒', cards.pistache], ['💡', cards.soleil], ['🚀', cards.ciel]].map(([e, bg], i) => ({ e, bg, sel: i === 1 ? `3px solid ${t.focus}` : 'none' }));
+      return t;
+    };
+    return {
+      themes: [mk(false), mk(true)],
+      habits: [{ label: 'Boire 1,5 L', streak: '12 j', done: true, todo: false }, { label: 'Marcher 20 min', streak: '5 j', done: true, todo: false }, { label: 'Méditer', streak: '0 j', done: false, todo: true }],
+      tokenRows: [
+        ['--fond', '#F0ECE7', '#1A1614'], ['--surface', '#FFFFFF', '#2A2421'], ['--contour-champ', '#D6CEC5', '#4A413C'], ['--panneau', '#FBFAF8', '#221D1A'],
+        ['--encre', '#1F1B18', '#FBFAF8'], ['--texte', '#3D3732', '#D9D1CA'], ['--texte-secondaire', '#6B635C', '#B3AAA2'], ['--texte-discret', '#6E665F', '#A39A92'],
+        ['--corail', '#FF6A55', '#FF6A55'], ['--sur-corail', '#2B0A05', '#2B0A05'], ['--corail-texte', '#C23A26', '#FF8A75'], ['--corail-doux', '#FFD9D2', '#5A2C24'], ['--onglet-actif', '#9E2C1B', '#FFB4A6'],
+        ['--erreur', '#B4123F', '#FF8FA3'], ['--erreur-fond', '#FDE7EA', '#3A1820'], ['--succes', '#1F7A4D', '#6FD3A0'], ['--succes-fond', '#E3F4EA', '#15301F'], ['--alerte', '#8A5A00', '#F2C14E'], ['--alerte-fond', '#FFF1CC', '#3A2E10'],
+        ['--focus', '#1F1B18', '#FBFAF8'],
+        ['--carte-papier', '#FFFFFF', '#332C28'], ['--carte-soleil', '#FFE27A', '#4A3D12'], ['--carte-peche', '#FFC9B8', '#4E2A22'], ['--carte-pistache', '#D2EC8F', '#33421A'], ['--carte-lagon', '#A5E6DC', '#163F3A'], ['--carte-ciel', '#BDD6FF', '#1F3152'], ['--carte-lilas', '#DCC8FF', '#352A52']
+      ].map(([name, l, d]) => ({ name, l, d })),
+      typeRows: [
+        ['--t-legende 13', "'Figtree',sans-serif", 13, 400, 'Légende, onglet'], ['--t-texte 15', "'Figtree',sans-serif", 15, 400, 'Texte des cartes'], ['--t-carte 17', "'Bricolage Grotesque',sans-serif", 17, 600, 'Titre de carte, bouton'],
+        ['--t-section 20', "'Bricolage Grotesque',sans-serif", 20, 600, 'Titre de section'], ['--t-ecran 26', "'Bricolage Grotesque',sans-serif", 26, 800, 'Titre d\'écran'], ['--t-grand 34', "'Bricolage Grotesque',sans-serif", 34, 800, 'Grand titre']
+      ].map(([token, ff, s, w, role]) => ({ token, ff, size: s + 'px', w, role })),
+      spaces: [4, 8, 12, 16, 24, 32].map(v => ({ v, px: v + 'px' })),
+      radii: [['6', '6px', '40px'], ['12', '12px', '40px'], ['18', '18px', '40px'], ['28', '28px', '40px'], ['gélule', '999px', '72px']].map(([label, v, w]) => ({ label, v, w }))
+    };
+  }
+}
+</script>
+</body>
+</html>

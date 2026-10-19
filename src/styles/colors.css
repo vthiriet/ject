@@ -1,94 +1,52 @@
-/* ---------- Thème ---------- */
+/*
+ * Pont entre les anciennes variables de l'app et celles de la charte (tokens.css).
+ * Les styles existants utilisent encore --bg, --text, --accent… : ils prennent ainsi
+ * les valeurs de la charte. À remplacer peu à peu par les noms de tokens.css.
+ */
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #f1f3f4;
-  --text: #202124;
-  --muted: #5f6368;
-  --border: #e0e0e0;
-  --hover: rgba(95, 99, 104, 0.1);
-  --chip: #f1f3f4;
-  --chip-on: #feefc3;
-  --chip-on-text: #3c2c00;
-  --accent: #f9ab00;
-  --accent-text: #202124;
-  --shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 2px 6px rgba(60, 64, 67, 0.15);
-  --link: #1a73e8;
-  --radius: 12px;
+  --bg: var(--fond);
+  --surface-2: var(--piste);
+  --text: var(--texte);
+  --muted: var(--texte-discret);
+  --border: var(--contour-champ);
+  --hover: rgba(31, 27, 24, 0.06);
+  --chip: var(--surface);
+  --chip-on: var(--corail-doux);
+  --chip-on-text: var(--onglet-actif);
+  --accent: var(--corail);
+  --accent-text: var(--sur-corail);
+  --shadow: none;
+  --link: var(--corail-texte);
+  --radius: var(--r-grand);
   --topbar-h: 56px;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-  --bg: #202124;
-  --surface: #2d2e31;
-  --surface-2: #35363a;
-  --text: #e8eaed;
-  --muted: #9aa0a6;
-  --border: #5f6368;
-  --hover: rgba(232, 234, 237, 0.08);
-  --chip: #3c4043;
-  --chip-on: #41331c;
-  --chip-on-text: #fdd663;
-  --accent: #fdd663;
-  --accent-text: #202124;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
-  --link: #8ab4f8;
-  color-scheme: dark;
+    --hover: rgba(251, 250, 248, 0.08);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #202124;
-  --surface: #2d2e31;
-  --surface-2: #35363a;
-  --text: #e8eaed;
-  --muted: #9aa0a6;
-  --border: #5f6368;
-  --hover: rgba(232, 234, 237, 0.08);
-  --chip: #3c4043;
-  --chip-on: #41331c;
-  --chip-on-text: #fdd663;
-  --accent: #fdd663;
-  --accent-text: #202124;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
-  --link: #8ab4f8;
+  --hover: rgba(251, 250, 248, 0.08);
   color-scheme: dark;
 }
 
-/* Couleurs des notes (palette inspirée de Keep) */
-[data-color] { --note-bg: var(--surface); }
-[data-color="coral"] { --note-bg: #faafa8; }
-[data-color="peach"] { --note-bg: #f39f76; }
-[data-color="sand"] { --note-bg: #fff8b8; }
-[data-color="mint"] { --note-bg: #e2f6d3; }
-[data-color="sage"] { --note-bg: #b4ddd3; }
-[data-color="fog"] { --note-bg: #d4e4ed; }
-[data-color="storm"] { --note-bg: #aeccdc; }
-[data-color="dusk"] { --note-bg: #d3bfdb; }
-[data-color="blossom"] { --note-bg: #f6e2dd; }
-[data-color="clay"] { --note-bg: #e9e3d4; }
-[data-color="chalk"] { --note-bg: #efeff1; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) [data-color="coral"] { --note-bg: #77172e; }
-  :root:not([data-theme="light"]) [data-color="peach"] { --note-bg: #692b17; }
-  :root:not([data-theme="light"]) [data-color="sand"] { --note-bg: #7c4a03; }
-  :root:not([data-theme="light"]) [data-color="mint"] { --note-bg: #264d3b; }
-  :root:not([data-theme="light"]) [data-color="sage"] { --note-bg: #0c625d; }
-  :root:not([data-theme="light"]) [data-color="fog"] { --note-bg: #256377; }
-  :root:not([data-theme="light"]) [data-color="storm"] { --note-bg: #284255; }
-  :root:not([data-theme="light"]) [data-color="dusk"] { --note-bg: #472e5b; }
-  :root:not([data-theme="light"]) [data-color="blossom"] { --note-bg: #6c394f; }
-  :root:not([data-theme="light"]) [data-color="clay"] { --note-bg: #4b443a; }
-  :root:not([data-theme="light"]) [data-color="chalk"] { --note-bg: #232427; }
-}
-:root[data-theme="dark"] [data-color="coral"] { --note-bg: #77172e; }
-:root[data-theme="dark"] [data-color="peach"] { --note-bg: #692b17; }
-:root[data-theme="dark"] [data-color="sand"] { --note-bg: #7c4a03; }
-:root[data-theme="dark"] [data-color="mint"] { --note-bg: #264d3b; }
-:root[data-theme="dark"] [data-color="sage"] { --note-bg: #0c625d; }
-:root[data-theme="dark"] [data-color="fog"] { --note-bg: #256377; }
-:root[data-theme="dark"] [data-color="storm"] { --note-bg: #284255; }
-:root[data-theme="dark"] [data-color="dusk"] { --note-bg: #472e5b; }
-:root[data-theme="dark"] [data-color="blossom"] { --note-bg: #6c394f; }
-:root[data-theme="dark"] [data-color="clay"] { --note-bg: #4b443a; }
-:root[data-theme="dark"] [data-color="chalk"] { --note-bg: #232427; }
+/* Couleurs des cartes : Papier, Soleil, Pêche, Pistache, Lagon, Ciel, Lilas (décisions 8, 13, 32). */
+[data-color] { --note-bg: var(--carte-papier); }
+[data-color="sun"] { --note-bg: var(--carte-soleil); }
+[data-color="peach"] { --note-bg: var(--carte-peche); }
+[data-color="pistachio"] { --note-bg: var(--carte-pistache); }
+[data-color="lagoon"] { --note-bg: var(--carte-lagon); }
+[data-color="sky"] { --note-bg: var(--carte-ciel); }
+[data-color="lilac"] { --note-bg: var(--carte-lilas); }
+
+/* Anciennes couleurs (Keep) : la couleur la plus proche de la charte. */
+[data-color="sand"] { --note-bg: var(--carte-soleil); }
+[data-color="coral"],
+[data-color="blossom"] { --note-bg: var(--carte-peche); }
+[data-color="mint"] { --note-bg: var(--carte-pistache); }
+[data-color="sage"] { --note-bg: var(--carte-lagon); }
+[data-color="fog"],
+[data-color="storm"] { --note-bg: var(--carte-ciel); }
+[data-color="dusk"] { --note-bg: var(--carte-lilas); }

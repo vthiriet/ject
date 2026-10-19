@@ -1,0 +1,140 @@
+/* Ject — variables du design system (décisions 1 à 55, docs/DECISIONS.md).
+   Copie de design_handoff_charte_ject/tokens.css, qui fait foi.
+   Thème clair par défaut ; thème sombre via [data-theme="dark"] ou prefers-color-scheme. */
+:root {
+  /* Fonds et surfaces */
+  --fond: #F0ECE7;
+  --surface: #FFFFFF;          /* champs, filtres inactifs */
+  --contour-champ: #D6CEC5;
+  --panneau: #FBFAF8;          /* fenêtres, tiroir, éditeur */
+  --barre-nav: #FFFFFF;
+  --piste: #E3DCD4;            /* barre de progression, interrupteur éteint, segmenté */
+  --voile: rgba(26, 22, 20, .45);
+
+  /* Texte */
+  --encre: #1F1B18;
+  --texte: #3D3732;
+  --texte-secondaire: #6B635C;
+  --texte-discret: #6E665F;    /* 4,8:1 sur --fond */
+
+  /* Accent */
+  --corail: #FF6A55;
+  --corail-appuye: #E85A46;
+  --sur-corail: #2B0A05;
+  --corail-texte: #C23A26;
+  --corail-doux: #FFD9D2;
+  --onglet-actif: #9E2C1B;
+
+  /* États */
+  --erreur: #B4123F;  --erreur-fond: #FDE7EA;
+  --succes: #1F7A4D;  --succes-fond: #E3F4EA;
+  --alerte: #8A5A00;  --alerte-fond: #FFF1CC;
+
+  /* Contrôles */
+  --focus: #1F1B18;
+  --contour-case: rgba(31, 27, 24, .55);
+  --notif-fond: #1F1B18;  --notif-texte: #FBFAF8;  --notif-action: #FF8A75;
+
+  /* Cartes */
+  --carte-papier: #FFFFFF;
+  --carte-soleil: #FFE27A;
+  --carte-peche: #FFC9B8;
+  --carte-pistache: #D2EC8F;
+  --carte-lagon: #A5E6DC;
+  --carte-ciel: #BDD6FF;
+  --carte-lilas: #DCC8FF;
+
+  /* Typographie : aucune autre taille autorisée */
+  --police-titre: 'Bricolage Grotesque', system-ui, sans-serif;  /* 600, 800 */
+  --police-texte: 'Figtree', system-ui, sans-serif;              /* 400, 600, 700 */
+  --police-emoji: 'Noto Color Emoji', sans-serif;
+  --t-legende: 13px;   /* légende, onglet, métadonnée — Figtree */
+  --t-texte: 15px;     /* texte des cartes et de l'interface — Figtree */
+  --t-carte: 17px;     /* titre de carte, bouton — Bricolage 600/800 */
+  --t-section: 20px;   /* titre de section — Bricolage 600 */
+  --t-ecran: 26px;     /* titre d'écran — Bricolage 800 */
+  --t-grand: 34px;     /* grand titre — Bricolage 800 */
+
+  /* Espacements (grille de 4) */
+  --e-1: 4px; --e-2: 8px; --e-3: 12px; --e-4: 16px; --e-6: 24px; --e-8: 32px;
+
+  /* Arrondis */
+  --r-petit: 6px;      /* case à cocher */
+  --r-moyen: 12px;     /* champ, bouton */
+  --r-grand: 18px;     /* carte */
+  --r-tres-grand: 28px;/* fenêtre, bouton + */
+  --r-gelule: 999px;   /* filtres, pastilles */
+
+  /* Mouvement */
+  --m-cocher: 450ms cubic-bezier(.3, 1.6, .5, 1);
+  --m-serie: 400ms ease-out;
+  --m-nouvelle-carte: 380ms cubic-bezier(.3, 1.4, .5, 1);
+}
+
+:root[data-theme="dark"] {
+  --fond: #1A1614;
+  --surface: #2A2421;
+  --contour-champ: #4A413C;
+  --panneau: #221D1A;
+  --barre-nav: #221D1A;
+  --piste: #3A332F;
+  --encre: #FBFAF8;
+  --texte: #D9D1CA;
+  --texte-secondaire: #B3AAA2;
+  --texte-discret: #A39A92;
+  --corail-texte: #FF8A75;
+  --corail-doux: #5A2C24;
+  --onglet-actif: #FFB4A6;
+  --erreur: #FF8FA3;  --erreur-fond: #3A1820;
+  --succes: #6FD3A0;  --succes-fond: #15301F;
+  --alerte: #F2C14E;  --alerte-fond: #3A2E10;
+  --focus: #FBFAF8;
+  --contour-case: rgba(251, 250, 248, .6);
+  --notif-fond: #FBFAF8;  --notif-texte: #1F1B18;  --notif-action: #C23A26;
+  --carte-papier: #332C28;
+  --carte-soleil: #4A3D12;
+  --carte-peche: #4E2A22;
+  --carte-pistache: #33421A;
+  --carte-lagon: #163F3A;
+  --carte-ciel: #1F3152;
+  --carte-lilas: #352A52;
+}
+
+/* Thème sombre du système, sauf si l'utilisateur a choisi le clair dans les Réglages. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #1A1614;
+    --surface: #2A2421;
+    --contour-champ: #4A413C;
+    --panneau: #221D1A;
+    --barre-nav: #221D1A;
+    --piste: #3A332F;
+    --encre: #FBFAF8;
+    --texte: #D9D1CA;
+    --texte-secondaire: #B3AAA2;
+    --texte-discret: #A39A92;
+    --corail-texte: #FF8A75;
+    --corail-doux: #5A2C24;
+    --onglet-actif: #FFB4A6;
+    --erreur: #FF8FA3;  --erreur-fond: #3A1820;
+    --succes: #6FD3A0;  --succes-fond: #15301F;
+    --alerte: #F2C14E;  --alerte-fond: #3A2E10;
+    --focus: #FBFAF8;
+    --contour-case: rgba(251, 250, 248, .6);
+    --notif-fond: #FBFAF8;  --notif-texte: #1F1B18;  --notif-action: #C23A26;
+    --carte-papier: #332C28;
+    --carte-soleil: #4A3D12;
+    --carte-peche: #4E2A22;
+    --carte-pistache: #33421A;
+    --carte-lagon: #163F3A;
+    --carte-ciel: #1F3152;
+    --carte-lilas: #352A52;
+  }
+}
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --m-cocher: 150ms ease-out; --m-serie: 150ms ease-out; --m-nouvelle-carte: 150ms ease-out; }
+  /* Remplacer les rebonds et déplacements par des fondus (opacity) de 150 ms. */
+}
