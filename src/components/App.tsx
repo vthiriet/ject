@@ -24,14 +24,6 @@ import { NoteGrid } from './NoteGrid';
 import { Settings } from './Settings';
 import { toast, Toaster } from './Toast';
 
-const SYNC_LABEL = {
-  local: 'Notes sur cet appareil uniquement',
-  syncing: 'Synchronisation…',
-  synced: 'Synchronisé',
-  offline: 'Hors ligne',
-  error: 'Erreur de synchronisation',
-};
-
 const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id === s);
 
 type Group = { label: string; notes: Note[]; progress?: { done: number; total: number } };
@@ -96,6 +88,16 @@ export default function App() {
   const [sheet, setSheet] = useState<string | null>(null);
   const started = useRef(false);
   useBackClose(drawer, () => setDrawer(false));
+  // Recherche repliée en icône, filtre des aires replié derrière le bouton « Aires ».
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [airesOpen, setAiresOpen] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const closeSearch = () => {
+    setQuery('');
+    setSearchOpen(false);
+  };
+  useBackClose(searchOpen, closeSearch);
+  useBackClose(airesOpen, () => setAiresOpen(false));
 
   // L'éditeur s'ouvre immédiatement ; l'enregistrement se fait en parallèle.
   // Depuis l'Inbox, la carte est un élément brut ; ailleurs, elle prend le type de l'onglet.
@@ -193,6 +195,7 @@ export default function App() {
     setLabelId(label);
     pushView({ section: s, labelId: label });
     setDrawer(false);
+    setAiresOpen(false);
     window.scrollTo(0, 0);
   };
 
@@ -278,44 +281,66 @@ export default function App() {
     section === 'inbox' ? 'Inbox'
     : section === 'archive' ? 'Archives'
     : section === 'trash' ? 'Corbeille'
-    : categoryMeta(section).plural + (currentLabel ? ` · ${currentLabel.emoji} ${currentLabel.name}` : '');
+    : categoryMeta(section).plural;
   const isTab = section === 'inbox' || isCategory(section);
 
   return (
     <div className="app">
       <header className="topbar">
         <IconButton name="menu" label="Menu" onClick={() => setDrawer(true)} />
-        <span className="topbar-title">{heading}</span>
-        <label className="search">
+        <h1 className="topbar-title">{heading}</h1>
+        <label className={`search ${searchOpen || query ? 'open' : ''}`}>
           <Icon name="search" size={20} />
-          <input type="search" value={query} placeholder="Rechercher" onChange={(e) => setQuery(e.target.value)} aria-label="Rechercher" />
-          {query && <IconButton name="close" label="Effacer la recherche" size={18} onClick={() => setQuery('')} />}
+          <input ref={searchRef} type="search" value={query} placeholder="Rechercher" onChange={(e) => setQuery(e.target.value)} aria-label="Rechercher" />
+          {(query || searchOpen) && <IconButton name="close" label="Fermer la recherche" size={18} onClick={closeSearch} />}
         </label>
-        {section !== 'inbox' && section !== 'habit' && <IconButton name={layout === 'grid' ? 'list' : 'grid'} label={layout === 'grid' ? 'Affichage en liste' : 'Affichage en grille'} onClick={() => setLayout(layout === 'grid' ? 'list' : 'grid')} />}
-        <button type="button" className={`sync-indicator ${status}`} title={SYNC_LABEL[status]} aria-label={SYNC_LABEL[status]} onClick={() => setDialog('settings')}>
-          <Icon name="cloud" size={22} />
-        </button>
+        <IconButton
+          name="search"
+          label="Rechercher"
+          className="search-toggle"
+          onClick={() => {
+            setSearchOpen(true);
+            setTimeout(() => searchRef.current?.focus(), 0);
+          }}
+        />
+        {section !== 'inbox' && section !== 'trash' && labels.length > 0 && (
+          <button
+            type="button"
+            className={`aires-btn ${labelId || airesOpen ? 'on' : ''}`}
+            aria-expanded={airesOpen}
+            onClick={() => setAiresOpen(!airesOpen)}
+          >
+            <Icon name="funnel" size={20} fill={!!labelId} />
+            <span>{currentLabel ? currentLabel.name : 'Aires'}</span>
+          </button>
+        )}
       </header>
 
       {isTab && (
         <nav className="tabs" aria-label="Onglets">
           <button type="button" className={section === 'inbox' ? 'on' : ''} aria-current={section === 'inbox'} onClick={() => navigate('inbox')}>
-            <Icon name="inbox" size={22} fill={section === 'inbox'} /> Inbox
-            {counts.inbox > 0 && <span className="badge">{counts.inbox}</span>}
+            <span className="tab-pill">
+              <Icon name="inbox" size={22} fill={section === 'inbox'} />
+              {counts.inbox > 0 && <span className="badge">{counts.inbox}</span>}
+            </span>
+            Inbox
           </button>
           {CATEGORIES.map((c) => (
             <button key={c.id} type="button" className={section === c.id ? 'on' : ''} aria-current={section === c.id} onClick={() => navigate(c.id)}>
-              <Icon name={c.icon} size={22} fill={section === c.id} /> {c.plural}
+              <span className="tab-pill">
+                <Icon name={c.icon} size={22} fill={section === c.id} />
+              </span>
+              {c.plural}
             </button>
           ))}
         </nav>
       )}
 
-      {section !== 'inbox' && section !== 'trash' && labels.length > 0 && (
+      {airesOpen && section !== 'inbox' && section !== 'trash' && (
         <div className="label-bar" role="toolbar" aria-label="Filtrer par aire">
-          <button type="button" className={`chip ${!labelId ? 'on' : ''}`} onClick={() => setLabelId(null)}>Toutes les aires</button>
+          <button type="button" className={`chip ${!labelId ? 'on' : ''}`} onClick={() => { setLabelId(null); setAiresOpen(false); }}>Toutes les aires</button>
           {labels.map((l) => (
-            <button key={l.id} type="button" className={`chip ${labelId === l.id ? 'on' : ''}`} onClick={() => setLabelId(labelId === l.id ? null : l.id)}>
+            <button key={l.id} type="button" className={`chip ${labelId === l.id ? 'on' : ''}`} onClick={() => { setLabelId(labelId === l.id ? null : l.id); setAiresOpen(false); }}>
               {l.emoji} {l.name}
             </button>
           ))}
@@ -385,7 +410,7 @@ export default function App() {
         )}
       </main>
 
-      {isTab && <Fab onPick={(type) => newNote(type, isCategory(section) ? section : null)} />}
+      {isTab && <Fab onNew={() => newNote('text', isCategory(section) ? section : null)} />}
 
       <Drawer
         open={drawer}
@@ -393,6 +418,9 @@ export default function App() {
         labelId={labelId}
         labels={labels}
         counts={counts}
+        layout={layout}
+        onToggleLayout={() => setLayout(layout === 'grid' ? 'list' : 'grid')}
+        syncStatus={status}
         onNavigate={(s, l) => navigate(s, l ?? null)}
         onEditLabels={() => { setDrawer(false); setDialog('labels'); }}
         onSettings={() => { setDrawer(false); setDialog('settings'); }}

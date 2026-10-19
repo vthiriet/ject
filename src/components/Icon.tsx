@@ -1,7 +1,7 @@
 import {
   ArchiveIcon, ArrowCounterClockwiseIcon, ArrowLeftIcon, ArrowsClockwiseIcon, BookmarkSimpleIcon, BoxArrowUpIcon, CardsIcon, CaretDownIcon, CaretRightIcon,
   CheckIcon, CheckCircleIcon, CheckSquareIcon, CloudIcon, CopyIcon, DotsSixVerticalIcon, DotsThreeVerticalIcon, DownloadSimpleIcon, FlagIcon, FlameIcon,
-  FolderSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
+  FolderSimpleIcon, FunnelSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
   PushPinIcon, RowsIcon, ShareNetworkIcon, SignOutIcon, SquareIcon, SquaresFourIcon, StarIcon, TagIcon, TrashIcon, TrayArrowDownIcon, UploadSimpleIcon, XIcon,
   type Icon as PhosphorIcon,
 } from '@phosphor-icons/react';
@@ -41,6 +41,7 @@ const ICONS = {
   logout: SignOutIcon,
   check: CheckIcon,
   file: FolderSimpleIcon,
+  funnel: FunnelSimpleIcon,
   next: CaretRightIcon,
   task: CheckCircleIcon,
   repeat: StarIcon,

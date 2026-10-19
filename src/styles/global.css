@@ -144,17 +144,23 @@ a {
   height: var(--topbar-h);
   padding: 0 4px;
   padding-top: env(safe-area-inset-top);
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  background: var(--fond);
 }
 .topbar-title {
-  display: none;
+  flex: 1;
+  min-width: 0;
+  margin: 0 0 0 4px;
+  overflow: hidden;
+  color: var(--encre);
   font-size: var(--t-section);
-  min-width: 120px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+/* Recherche : icône sur téléphone, qui s'ouvre en champ au toucher (décision 45). */
 .search {
   flex: 1;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   min-width: 0;
@@ -343,12 +349,12 @@ a {
     padding: 0 12px;
     gap: 8px;
   }
-  .topbar-title {
-    display: block;
-  }
   .search {
-    max-width: 720px;
-    margin-right: auto;
+    display: flex;
+    max-width: 480px;
+  }
+  .search-toggle {
+    display: none;
   }
 }
 
@@ -1139,7 +1145,7 @@ textarea.auto {
   }
 }
 
-/* ---------- Onglets Inbox / Listes ---------- */
+/* ---------- Barre d'onglets en bas (décisions 45, 55) ---------- */
 .tabs {
   position: fixed;
   z-index: 11;
@@ -1147,92 +1153,58 @@ textarea.auto {
   right: 0;
   bottom: 0;
   display: flex;
-  height: calc(60px + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  background: var(--bg);
-  border-top: 1px solid var(--border);
+  justify-content: center;
+  padding: 10px 2px calc(14px + env(safe-area-inset-bottom));
+  background: var(--barre-nav);
 }
 .tabs button {
-  position: relative;
   flex: 1;
+  max-width: 120px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
-  color: var(--muted);
+  gap: 4px;
+  color: var(--texte-discret);
   font-size: var(--t-legende);
   font-weight: 500;
 }
-.tabs button.on {
-  color: var(--text);
+.tab-pill {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 32px;
+  border-radius: 16px;
 }
-.tabs button.on svg {
-  padding: 2px 18px;
-  box-sizing: content-box;
-  border-radius: 14px;
-  background: var(--chip-on);
-  color: var(--chip-on-text);
+.tabs button.on {
+  color: var(--onglet-actif);
+  font-weight: 700;
+}
+.tabs button.on .tab-pill {
+  background: var(--corail-doux);
+  color: var(--corail-texte);
 }
 .badge {
   position: absolute;
-  top: 6px;
-  left: calc(50% + 14px);
-  min-width: 18px;
-  height: 18px;
+  top: -6px;
+  left: calc(100% - 14px);
+  min-width: 20px;
+  height: 20px;
   padding: 0 5px;
-  border-radius: var(--r-gelule);
-  background: var(--accent);
-  color: var(--accent-text);
+  border-radius: 10px;
+  background: var(--corail);
+  color: var(--sur-corail);
   font-size: var(--t-legende);
-  line-height: 18px;
+  font-weight: 700;
+  line-height: 20px;
   text-align: center;
 }
 .content.with-tabs {
-  padding-bottom: 170px;
+  padding-bottom: 180px;
 }
-.content.with-tabs .composer {
-  bottom: calc(60px + env(safe-area-inset-bottom));
-}
-@media (max-width: 699px) {
-  .app:has(.tabs) .toast {
-    bottom: calc(140px + env(safe-area-inset-bottom));
-  }
-}
-@media (min-width: 700px) {
-  .tabs {
-    position: sticky;
-    top: var(--topbar-h);
-    bottom: auto;
-    justify-content: center;
-    gap: 8px;
-    height: 52px;
-    padding: 0;
-    border-top: 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .tabs button {
-    flex: 0 0 auto;
-    flex-direction: row;
-    gap: 8px;
-    padding: 0 20px;
-    font-size: var(--t-texte);
-    border-bottom: 3px solid transparent;
-  }
-  .tabs button.on {
-    border-bottom-color: var(--accent);
-  }
-  .tabs button.on svg {
-    padding: 0;
-    background: none;
-    color: inherit;
-  }
-  .badge {
-    position: static;
-  }
-  .content.with-tabs {
-    padding-bottom: 48px;
-  }
+.app:has(.tabs) .toast {
+  bottom: calc(150px + env(safe-area-inset-bottom));
 }
 
 /* ---------- Inbox ---------- */
@@ -1569,22 +1541,12 @@ textarea.auto {
   word-break: break-word;
 }
 
-/* ---------- Bouton + (comme Google Keep) ---------- */
-.fab-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 12;
-  background: var(--voile);
-}
+/* ---------- Bouton + (décision 45) ---------- */
 .fab-wrap {
   position: fixed;
   z-index: 13;
   right: 16px;
-  bottom: calc(76px + env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 14px;
+  bottom: calc(88px + 16px + env(safe-area-inset-bottom));
 }
 .fab {
   display: grid;
@@ -1592,54 +1554,13 @@ textarea.auto {
   width: 60px;
   height: 60px;
   border-radius: var(--r-tres-grand);
-  background: var(--accent);
-  color: var(--accent-text);
+  background: var(--corail);
+  color: var(--sur-corail);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.15s;
 }
-.fab-wrap.open .fab {
-  background: var(--surface);
-  color: var(--text);
-}
-.fab-menu {
-  display: grid;
-  gap: 12px;
-  justify-items: end;
-  animation: toast-in 0.15s;
-}
-.fab-menu button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 500;
-}
-.fab-menu button > span:first-child {
-  padding: 6px 12px;
-  border-radius: var(--r-moyen);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-.fab-mini {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  margin-right: 6px;
-  border-radius: var(--r-moyen);
-  background: var(--chip-on);
-  color: var(--chip-on-text);
-  box-shadow: var(--shadow);
-}
-@media (min-width: 700px) {
-  .fab-wrap {
-    right: 32px;
-    bottom: 32px;
-  }
-}
-@media (max-width: 699px) {
-  .app:has(.tabs) .toast {
-    bottom: calc(150px + env(safe-area-inset-bottom));
-  }
+.fab:active {
+  background: var(--corail-appuye);
 }
 .inbox-text {
   cursor: pointer;
@@ -2247,4 +2168,72 @@ h1, h2, h3,
 .habit-title {
   color: var(--encre);
   font-weight: 600;
+}
+
+/* ---------- Bande du haut (décision 45) ---------- */
+.search.open {
+  display: flex;
+}
+.topbar:has(.search.open) .topbar-title,
+.topbar:has(.search.open) .search-toggle {
+  display: none;
+}
+.aires-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  max-width: 40vw;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--r-gelule);
+  color: var(--texte-secondaire);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.aires-btn span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.aires-btn.on {
+  background: var(--corail-doux);
+  color: var(--onglet-actif);
+}
+.topbar:has(.search.open) .aires-btn {
+  display: none;
+}
+.label-bar {
+  flex-wrap: wrap;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.topbar .icon-btn:first-child {
+  width: 40px;
+  height: 40px;
+}
+
+/* ---------- Tiroir (décision 45) ---------- */
+.drawer {
+  background: var(--panneau);
+}
+.drawer-brand {
+  padding: 12px 24px 20px;
+}
+.drawer-item {
+  min-height: 44px;
+}
+.drawer-emoji {
+  font-family: var(--police-emoji);
+}
+.logo {
+  color: var(--encre);
+  font-family: var(--police-titre);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.logo-dot {
+  display: inline-block;
+  color: var(--corail);
 }

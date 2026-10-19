@@ -405,3 +405,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Inbox : l'appui long coche l'élément sans attendre que le doigt se lève. |
 | 19/10/2026 | Habitudes : section « Cette année » (X fois par an, chaque année) ; bouton « −1 » pour corriger une erreur ; points et niveaux retirés, barre de progression dans chaque section. |
 | 19/10/2026 | Refonte, étape 1 : couleurs, polices (Bricolage Grotesque, Figtree) et icônes (Phosphor) de la charte Ject ; 7 couleurs de cartes. |
+| 19/10/2026 | Refonte, étape 2 : onglets dans une barre en bas ; bande du haut (menu, titre, recherche repliée, bouton « Aires ») ; tiroir (Archives, Corbeille, Aires, Réglages, affichage, synchro) ; le + ouvre directement une carte texte. |
