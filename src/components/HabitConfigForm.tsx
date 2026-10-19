@@ -9,6 +9,8 @@ const RHYTHMS: [HabitRhythm, string][] = [
   ['weekly', 'Chaque semaine'],
   ['perMonth', 'X fois par mois'],
   ['monthly', 'Chaque mois'],
+  ['perYear', 'X fois par an'],
+  ['yearly', 'Chaque année'],
 ];
 
 /** Réglages d'une habitude : rythme, objectif, sens, moment. */
@@ -24,7 +26,7 @@ export function HabitConfigForm({ value, onChange }: { value: HabitConfig; onCha
         </select>
       </label>
 
-      {(value.rhythm === 'perWeek' || value.rhythm === 'perMonth') && (
+      {(value.rhythm === 'perWeek' || value.rhythm === 'perMonth' || value.rhythm === 'perYear') && (
         <label className="field">
           <span>Nombre de fois</span>
           <input
@@ -32,7 +34,7 @@ export function HabitConfigForm({ value, onChange }: { value: HabitConfig; onCha
             type="number"
             inputMode="numeric"
             min={1}
-            max={value.rhythm === 'perWeek' ? 7 : 31}
+            max={value.rhythm === 'perWeek' ? 7 : value.rhythm === 'perMonth' ? 31 : 365}
             value={value.times ?? 1}
             onChange={(e) => set({ times: Math.max(1, Number(e.target.value) || 1) })}
           />

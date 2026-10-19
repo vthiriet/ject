@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { encouragement, habitConfig, iso, isPaused, MOMENT_LABEL, periodKey, POINTS, progress, rhythmLabel } from '../lib/habits';
+import { encouragement, habitConfig, iso, isPaused, MOMENT_LABEL, periodKey, progress, rhythmLabel, type Scale } from '../lib/habits';
 import { logHabit, toggleHabitStep } from '../lib/store';
 import type { Note } from '../lib/types';
 import { Icon } from './Icon';
@@ -9,12 +9,12 @@ import { toast } from './Toast';
 interface Props {
   note: Note;
   onOpen: () => void;
-  /** Appelé après une fois faite (pour fêter un éventuel passage de niveau). */
-  onDone: (points: number) => void;
 }
 
-/** Carte d'habitude : rappel du jour, ou progression de la semaine / du mois avec bouton « fait ». */
-export function HabitCard({ note, onOpen, onDone }: Props) {
+const PERIOD: Record<Scale, string> = { day: "aujourd'hui", week: 'cette semaine', month: 'ce mois-ci', year: 'cette année' };
+
+/** Carte d'habitude : rappel du jour, ou progression de la semaine / du mois / de l'année avec bouton « fait ». */
+export function HabitCard({ note, onOpen }: Props) {
   const [burst, setBurst] = useState(0);
   const today = new Date();
   const day = iso(today);
@@ -25,11 +25,15 @@ export function HabitCard({ note, onOpen, onDone }: Props) {
   const period = periodKey(p.scale, today);
   const stepsDone = note.habitSteps?.period === period ? note.habitSteps.done : [];
   const text = note.title.trim() || (note.type === 'text' ? note.content.trim() : '') || 'Habitude sans titre';
-  const points = POINTS[p.scale];
+  const celebrate = () => setBurst(Date.now());
 
-  const celebrate = () => {
-    setBurst(Date.now());
-    if (points) onDone(points);
+  // Retirer une fois comptée par erreur (la dernière, de préférence aujourd'hui).
+  const undo = async () => {
+    const log = note.habitLog ?? {};
+    const last = log[day] ? day : Object.keys(log).filter((d) => d <= day && d >= period).sort().pop();
+    if (!last) return;
+    await logHabit(note.id, last, -1);
+    toast('Une fois retirée', { label: 'Annuler', run: () => void logHabit(note.id, last, 1) });
   };
 
   const check = async () => {
@@ -41,7 +45,7 @@ export function HabitCard({ note, onOpen, onDone }: Props) {
     }
     await logHabit(note.id, day, 1);
     celebrate();
-    toast(c.avoid ? 'Période tenue, bravo !' : `+1 ${p.scale === 'week' ? 'cette semaine' : 'ce mois-ci'}`, {
+    toast(c.avoid ? 'Période tenue, bravo !' : `+1 ${PERIOD[p.scale]}`, {
       label: 'Annuler',
       run: () => void logHabit(note.id, day, -1),
     });
@@ -75,9 +79,14 @@ export function HabitCard({ note, onOpen, onDone }: Props) {
               <span style={{ width: `${pct}%` }} />
             </div>
             <p className="habit-msg">
-              <strong>{Math.min(p.count, p.goal)} / {p.goal}</strong> · {encouragement(note, p)}
+              <strong>{p.count} / {p.goal}</strong> · {encouragement(note, p)}
+              {p.count > 0 && <UndoButton onClick={undo} />}
             </p>
           </>
+        ) : steps.length > 0 && p.count > 0 ? (
+          <p className="habit-msg">
+            Fait aujourd’hui ✓<UndoButton onClick={undo} />
+          </p>
         ) : null}
         {steps.length > 0 && !paused && (
           <ul className="habit-steps" onClick={(e) => e.stopPropagation()}>
@@ -107,9 +116,26 @@ export function HabitCard({ note, onOpen, onDone }: Props) {
       )}
       {burst > 0 && (
         <span key={burst} className="habit-burst" aria-hidden="true">
-          {points && p.scale !== 'day' ? `+${points} pts` : '✓'} <span>✨</span><span>🎉</span><span>✨</span>
+          ✓ <span>✨</span><span>🎉</span><span>✨</span>
         </span>
       )}
     </article>
+  );
+}
+
+function UndoButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className="habit-undo"
+      aria-label="Retirer une fois (erreur)"
+      title="Retirer une fois (erreur)"
+      onClick={(e) => {
+        e.stopPropagation();
+        void onClick();
+      }}
+    >
+      −1
+    </button>
   );
 }

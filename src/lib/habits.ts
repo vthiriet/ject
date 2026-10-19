@@ -1,11 +1,11 @@
 import type { HabitConfig, Note } from './types';
 
 /**
- * Calculs des habitudes : périodes (jour, semaine du lundi, mois), progression,
- * pourcentage de réussite, points et niveau.
+ * Calculs des habitudes : périodes (jour, semaine du lundi, mois, année), progression
+ * et pourcentage de réussite.
  */
 
-export type Scale = 'day' | 'week' | 'month';
+export type Scale = 'day' | 'week' | 'month' | 'year';
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -37,12 +37,13 @@ export const habitConfig = (n: Note): HabitConfig => n.habit ?? fromFrequency(n.
 export function scaleOf(c: HabitConfig): Scale {
   if (c.rhythm === 'daily' || c.rhythm === 'days') return 'day';
   if (c.rhythm === 'perWeek' || c.rhythm === 'weekly') return 'week';
+  if (c.rhythm === 'perYear' || c.rhythm === 'yearly') return 'year';
   return 'month';
 }
 
 /** Nombre de fois à faire par période. */
 export function goalOf(c: HabitConfig) {
-  if (c.rhythm === 'perWeek' || c.rhythm === 'perMonth') return Math.max(1, c.times ?? 1);
+  if (c.rhythm === 'perWeek' || c.rhythm === 'perMonth' || c.rhythm === 'perYear') return Math.max(1, c.times ?? 1);
   return 1;
 }
 
@@ -55,6 +56,7 @@ export function periodRange(scale: Scale, date: Date): [Date, Date] {
     const start = addDays(d, -weekday(d));
     return [start, addDays(start, 6)];
   }
+  if (scale === 'year') return [new Date(d.getFullYear(), 0, 1), new Date(d.getFullYear(), 11, 31)];
   return [new Date(d.getFullYear(), d.getMonth(), 1), new Date(d.getFullYear(), d.getMonth() + 1, 0)];
 }
 
@@ -106,7 +108,7 @@ export function progress(n: Note, today = new Date()): Progress {
   return { scale, goal, count, done: count >= goal, daysLeft };
 }
 
-const PERIOD_WORD: Record<Scale, string> = { day: "aujourd'hui", week: 'cette semaine', month: 'ce mois-ci' };
+const PERIOD_WORD: Record<Scale, string> = { day: "aujourd'hui", week: 'cette semaine', month: 'ce mois-ci', year: 'cette année' };
 
 /** Petit message d'encouragement selon l'avancement. */
 export function encouragement(n: Note, p = progress(n)) {
@@ -121,20 +123,8 @@ export function encouragement(n: Note, p = progress(n)) {
   return `${left} fois ${word}`;
 }
 
-/** Points gagnés par fois faite : les habitudes rares rapportent plus. */
-export const POINTS: Record<Scale, number> = { day: 0, week: 10, month: 30 };
-
-export function pointsOf(n: Note) {
-  const per = POINTS[scaleOf(habitConfig(n))];
-  return Object.values(n.habitLog ?? {}).reduce((a, b) => a + b, 0) * per;
-}
-
-export function level(points: number) {
-  return { level: Math.floor(points / 100) + 1, inLevel: points % 100 };
-}
-
 /**
- * Réussite sur les dernières périodes (4 semaines ou 3 mois) : périodes tenues /
+ * Réussite sur les dernières périodes (4 semaines, 3 mois ou 3 ans) : périodes tenues /
  * périodes comptées. La période en cours ne compte que si elle est déjà réussie ;
  * les périodes en pause sont ignorées. Renvoie null pour une habitude quotidienne.
  */
@@ -143,13 +133,16 @@ export function successRate(n: Note, today = new Date()) {
   const scale = scaleOf(c);
   if (scale === 'day') return null;
   const count = scale === 'week' ? 4 : 3;
+  const back = (i: number) =>
+    scale === 'week' ? addDays(today, -7 * i)
+    : scale === 'year' ? new Date(today.getFullYear() - i, 0, 1)
+    : new Date(today.getFullYear(), today.getMonth() - i, 1);
   const goal = goalOf(c);
   const created = new Date(n.createdAt);
   let ok = 0;
   let total = 0;
   for (let i = 0; i < count; i++) {
-    const ref = scale === 'week' ? addDays(today, -7 * i) : new Date(today.getFullYear(), today.getMonth() - i, 1);
-    const [from, to] = periodRange(scale, ref);
+    const [from, to] = periodRange(scale, back(i));
     if (to < periodRange(scale, created)[0]) break; // avant la création de l'habitude
     if (isPaused(n, from) && isPaused(n, to)) continue;
     const done = countIn(n, from, to) >= goal;
@@ -169,11 +162,13 @@ export function history(n: Note, periods: number, today = new Date()) {
     const ref =
       scale === 'day' ? addDays(today, -i)
       : scale === 'week' ? addDays(today, -7 * i)
+      : scale === 'year' ? new Date(today.getFullYear() - i, 0, 1)
       : new Date(today.getFullYear(), today.getMonth() - i, 1);
     const [from, to] = periodRange(scale, ref);
     const label =
       scale === 'day' ? DAY_NAMES[weekday(from)]
       : scale === 'week' ? `${from.getDate()}/${from.getMonth() + 1}`
+      : scale === 'year' ? String(from.getFullYear())
       : from.toLocaleDateString('fr-FR', { month: 'short' });
     out.push({ label, count: countIn(n, from, to), goal: goalOf(c), paused: isPaused(n, from) && isPaused(n, to) });
   }
@@ -195,6 +190,10 @@ export function rhythmLabel(c: HabitConfig) {
       return `${goalOf(c)} fois par mois`;
     case 'monthly':
       return c.monthDay ? `Chaque mois (le ${c.monthDay})` : 'Chaque mois';
+    case 'perYear':
+      return `${goalOf(c)} fois par an`;
+    case 'yearly':
+      return 'Chaque année';
   }
 }
 

@@ -1765,29 +1765,6 @@ textarea.auto {
   max-width: 640px;
   margin: 8px auto 4px;
 }
-.summary-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-  gap: 8px;
-}
-.summary-tiles > div {
-  display: grid;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  background: var(--surface-2);
-}
-.summary-tiles strong {
-  font-size: 18px;
-}
-.summary-tiles span {
-  color: var(--muted);
-  font-size: 12px;
-}
-.summary-tiles .level {
-  grid-column: 1 / -1;
-}
-.level-bar,
 .habit-bar {
   display: block;
   height: 8px;
@@ -1795,7 +1772,6 @@ textarea.auto {
   border-radius: 4px;
   background: var(--border);
 }
-.level-bar span,
 .habit-bar span {
   display: block;
   height: 100%;
@@ -2226,4 +2202,31 @@ textarea.auto {
 .drag-handle-space {
   width: 28px;
   flex: none;
+}
+
+/* Habitudes : barre de progression de chaque section, bouton « −1 » */
+.section-progress {
+  margin: 18px 4px 10px;
+}
+.section-progress .grid-label {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 6px;
+}
+.section-progress .grid-label span {
+  font-weight: 600;
+}
+.habit-undo {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.habit-undo:hover {
+  color: var(--text);
 }

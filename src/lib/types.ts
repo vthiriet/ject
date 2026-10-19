@@ -7,7 +7,7 @@ export type ActionStatus = 'todo' | 'waiting' | 'someday' | 'done';
 export type ProjectStatus = 'active' | 'someday' | 'done';
 
 /** Rythme d'une habitude. */
-export type HabitRhythm = 'daily' | 'days' | 'perWeek' | 'weekly' | 'perMonth' | 'monthly';
+export type HabitRhythm = 'daily' | 'days' | 'perWeek' | 'weekly' | 'perMonth' | 'monthly' | 'perYear' | 'yearly';
 
 export interface HabitConfig {
   rhythm: HabitRhythm;

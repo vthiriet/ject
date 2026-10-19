@@ -3,7 +3,7 @@ import { db } from '../lib/db';
 import { describe, logError, withTimeout } from '../lib/diagnostics';
 import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
-import { appliesOn, habitConfig, isPaused, level, pointsOf, progress, scaleOf } from '../lib/habits';
+import { appliesOn, habitConfig, isPaused, progress, scaleOf } from '../lib/habits';
 import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
@@ -34,13 +34,15 @@ const SYNC_LABEL = {
 
 const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id === s);
 
+type Group = { label: string; notes: Note[]; progress?: { done: number; total: number } };
+
 /** Regroupe les cartes d'un onglet en sections (épinglées, puis par état). */
-function groupsFor(section: Section, notes: Note[]): { label: string; notes: Note[] }[] {
+function groupsFor(section: Section, notes: Note[]): Group[] {
   if (!isCategory(section)) return [{ label: '', notes }];
   if (section === 'habit') return habitGroups(notes);
   const pinned = notes.filter((n) => n.pinned);
   const rest = notes.filter((n) => !n.pinned);
-  const groups: { label: string; notes: Note[] }[] = [];
+  const groups: Group[] = [];
   // Actions : rouge (1), orange (2), jaune (3), puis sans flamme ; à priorité égale, l'ordre choisi.
   const byPriority = (list: Note[]) =>
     section === 'action' ? [...list].sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4)) : list;
@@ -53,17 +55,24 @@ function groupsFor(section: Section, notes: Note[]): { label: string; notes: Not
   return groups.filter((g) => g.notes.length);
 }
 
-/** Habitudes : par rythme, celles déjà tenues en bas ; puis « pas aujourd'hui » et « en pause ». */
-function habitGroups(notes: Note[]) {
+/**
+ * Habitudes : par rythme, celles déjà tenues en bas, avec une barre de progression par
+ * section ; puis « pas aujourd'hui » et « en pause ».
+ */
+function habitGroups(notes: Note[]): Group[] {
   const today = new Date();
+  const tally = (list: Note[]) => ({ done: list.filter((n) => progress(n, today).done).length, total: list.length });
   const doneLast = (list: Note[]) => [...list.filter((n) => !progress(n, today).done), ...list.filter((n) => progress(n, today).done)];
   const active = notes.filter((n) => !isPaused(n, today));
   const of = (scale: string) => active.filter((n) => scaleOf(habitConfig(n)) === scale);
   const daily = of('day');
   return [
-    { label: "Aujourd'hui", notes: doneLast(daily.filter((n) => appliesOn(habitConfig(n), today))) },
-    { label: 'Cette semaine', notes: doneLast(of('week')) },
-    { label: 'Ce mois-ci', notes: doneLast(of('month')) },
+    ...([
+      ["Aujourd'hui", daily.filter((n) => appliesOn(habitConfig(n), today))],
+      ['Cette semaine', of('week')],
+      ['Ce mois-ci', of('month')],
+      ['Cette année', of('year')],
+    ] as const).map(([label, list]) => ({ label, notes: doneLast(list), progress: tally(list) })),
     { label: "Pas aujourd'hui", notes: daily.filter((n) => !appliesOn(habitConfig(n), today)) },
     { label: 'En pause', notes: notes.filter((n) => isPaused(n, today)) },
   ].filter((g) => g.notes.length);
@@ -197,18 +206,10 @@ export default function App() {
   const groups = groupsFor(section, visible);
 
   const habits = useMemo(() => notes.filter((n) => categoryOf(n) === 'habit' && !n.inbox && !n.archived && n.trashedAt === null), [notes]);
-  const totalPoints = habits.reduce((sum, h) => sum + pointsOf(h), 0);
 
   const card = (n: Note) =>
     section === 'habit' ? (
-      <HabitCard
-        note={n}
-        onOpen={() => setSheet(n.id)}
-        onDone={(pts) => {
-          const next = level(totalPoints + pts).level;
-          if (next > level(totalPoints).level) setTimeout(() => toast(`🏆 Niveau ${next} atteint, bravo !`), 900);
-        }}
-      />
+      <HabitCard note={n} onOpen={() => setSheet(n.id)} />
     ) : section === 'trash' ? (
       <NoteCard
         note={n}
@@ -346,7 +347,18 @@ export default function App() {
 
         {groups.map((g) => (
           <section key={g.label || 'all'}>
-            {g.label && <p className="section-label grid-label">{g.label}</p>}
+            {g.label && !g.progress && <p className="section-label grid-label">{g.label}</p>}
+            {g.progress && (
+              <div className="section-progress">
+                <p className="section-label grid-label">
+                  {g.label}
+                  <span>{g.progress.done} / {g.progress.total}</span>
+                </p>
+                <div className="habit-bar" aria-label={`${g.progress.done} sur ${g.progress.total} tenues`}>
+                  <span style={{ width: `${Math.round((g.progress.done / g.progress.total) * 100)}%` }} />
+                </div>
+              </div>
+            )}
             <NoteGrid
               notes={g.notes}
               layout={section === 'habit' ? 'list' : layout}

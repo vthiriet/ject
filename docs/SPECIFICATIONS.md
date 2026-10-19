@@ -148,34 +148,41 @@ l'inbox » et « Actions ».
 
 **Réglages d'une habitude** (dans la carte ouverte) :
 - rythme : chaque jour · certains jours (lun…dim) · X fois par semaine · chaque semaine ·
-  X fois par mois · chaque mois (jour conseillé facultatif) ;
+  X fois par mois · chaque mois (jour conseillé facultatif) · X fois par an · chaque année ;
 - objectif affiché facultatif (« 160 g », « 7 000 pas ») ;
 - « à éviter » : cocher = période tenue ;
 - moment facultatif (matin, journée, soir) ;
 - « pas le week-end » pour une habitude quotidienne.
 - Une carte **liste** est une **routine** : on coche ses étapes ; toutes cochées = une fois
   faite, et les étapes se décochent pour la fois suivante.
-- Les semaines commencent le lundi.
+- Les semaines commencent le lundi ; les années le 1er janvier.
+- **Remise à zéro automatique** : chaque coche est enregistrée à sa date. Une habitude
+  quotidienne cochée aujourd'hui apparaît décochée le lendemain ; les compteurs repartent
+  à 0 le lundi (semaine), le 1er du mois (mois) et le 1er janvier (année). L'historique est
+  conservé.
 
 **Affichage, par rythme** :
 - **Aujourd'hui** : habitudes quotidiennes du jour, en simple rappel. Case facultative qui
-  barre l'habitude pour la journée, sans statistiques ni points.
-- **Cette semaine** / **Ce mois-ci** : bouton « +1 » en un geste, barre de progression
+  barre l'habitude pour la journée ; la toucher à nouveau la décoche.
+- **Cette semaine** / **Ce mois-ci** / **Cette année** : bouton « +1 » en un geste, barre de progression
   « 2 / 3 », message d'encouragement (« Plus qu'une fois cette semaine ! », « Il reste
   2 jours pour 3 fois : on s'accroche ! »). Une fois l'objectif atteint, la carte descend en
   bas, barrée.
 - **Pas aujourd'hui** (jour non concerné) et **En pause**, en bas.
-- Petite animation au moment de cocher (+ points, ✨🎉), avec « Annuler ».
+- Petite animation au moment de cocher (✨🎉), avec « Annuler ».
+- **Corriger une erreur** : bouton « −1 » sur la carte dès qu'une fois est comptée (retire la
+  dernière fois de la période, avec « Annuler ») ; pour une routine quotidienne, « Fait
+  aujourd'hui ✓ −1 ».
 
 **Motivation** :
-- En-tête : « X / Y tenues cette semaine », « X / Y tenues ce mois-ci », niveau et points.
-- Points : +10 par fois faite pour une habitude hebdomadaire, +30 pour une mensuelle,
-  0 pour une quotidienne ; un niveau tous les 100 points (message au passage de niveau).
+- Chaque section (Aujourd'hui, Cette semaine, Ce mois-ci, Cette année) a sa barre de
+  progression « X / Y » : habitudes tenues sur habitudes de la section.
+- Pas de points ni de niveaux (retirés le 19/10/2026).
 - Pas de série 🔥, de calendrier en pastilles ni de records (choix explicite).
 
-**Fiche détaillée** (toucher une habitude) : avancement, % de réussite (4 dernières semaines
-ou 3 derniers mois ; la période en cours ne compte que si elle est réussie ; les périodes en
-pause sont ignorées), points gagnés, historique en barres, **rattrapage** d'un oubli (choisir
+**Fiche détaillée** (toucher une habitude) : avancement, % de réussite (4 dernières semaines,
+3 derniers mois ou 3 dernières années ; la période en cours ne compte que si elle est réussie ; les périodes en
+pause sont ignorées), historique en barres, **rattrapage** d'un oubli (choisir
 un jour de la période en cours), liste des jours cochés (avec « Retirer »), **pause** jusqu'à
 une date / « Reprendre », « Modifier », « Supprimer ».
 
@@ -378,3 +385,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 17/10/2026 | Coche « Archiver » à la place de la poubelle sur les cartes ; suppression depuis les Archives. |
 | 17/10/2026 | Glisser-déposer des éléments au sein d'une liste (poignée ⋮⋮) ; Inbox : sélection multiple (appui long ou « Sélectionner ») pour ranger plusieurs éléments au même endroit. |
 | 17/10/2026 | Inbox : l'appui long coche l'élément sans attendre que le doigt se lève. |
+| 19/10/2026 | Habitudes : section « Cette année » (X fois par an, chaque année) ; bouton « −1 » pour corriger une erreur ; points et niveaux retirés, barre de progression dans chaque section. |

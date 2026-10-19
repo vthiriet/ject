@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   addDays, currentPause, encouragement, habitConfig, history, iso, MOMENT_LABEL, parse, periodRange,
-  pointsOf, progress, rhythmLabel, successRate,
+  progress, rhythmLabel, successRate,
 } from '../lib/habits';
 import { logHabit, pauseHabits, resumeHabit, updateNote } from '../lib/store';
 import { formatDate } from '../lib/text';
@@ -16,7 +16,9 @@ interface Props {
   onEdit: () => void;
 }
 
-const SCALE_WORD = { day: 'jours', week: 'semaines', month: 'mois' } as const;
+const SCALE_WORD = { day: 'jours', week: 'semaines', month: 'mois', year: 'ans' } as const;
+const ONE_WORD = { day: 'jour', week: 'semaine', month: 'mois', year: 'an' } as const;
+const PERIOD = { day: "aujourd'hui", week: 'cette semaine', month: 'ce mois-ci', year: 'cette année' } as const;
 
 /** Fiche détaillée : avancement, réussite, historique, rattrapage et pause. */
 export function HabitSheet({ note, onClose, onEdit }: Props) {
@@ -25,7 +27,7 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
   const c = habitConfig(note);
   const p = progress(note, today);
   const rate = successRate(note, today);
-  const hist = history(note, p.scale === 'day' ? 14 : p.scale === 'week' ? 8 : 6, today);
+  const hist = history(note, p.scale === 'day' ? 14 : p.scale === 'week' ? 8 : p.scale === 'year' ? 4 : 6, today);
   const max = Math.max(1, ...hist.map((h) => Math.max(h.count, h.goal)));
   const [from] = periodRange(p.scale, today);
   const [catchUp, setCatchUp] = useState(iso(addDays(today, -1)) >= iso(from) ? iso(addDays(today, -1)) : todayIso);
@@ -55,19 +57,13 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
         {p.scale !== 'day' && (
           <div>
             <strong>{Math.min(p.count, p.goal)} / {p.goal}</strong>
-            <span>{p.scale === 'week' ? 'cette semaine' : 'ce mois-ci'}</span>
+            <span>{PERIOD[p.scale]}</span>
           </div>
         )}
         {rate && (
           <div>
             <strong>{rate.rate} %</strong>
-            <span>réussite sur {rate.periods} {rate.periods > 1 ? SCALE_WORD[rate.scale] : rate.scale === 'week' ? 'semaine' : 'mois'}</span>
-          </div>
-        )}
-        {p.scale !== 'day' && (
-          <div>
-            <strong>{pointsOf(note)}</strong>
-            <span>points gagnés</span>
+            <span>réussite sur {rate.periods} {rate.periods > 1 ? SCALE_WORD[rate.scale] : ONE_WORD[rate.scale]}</span>
           </div>
         )}
       </div>
