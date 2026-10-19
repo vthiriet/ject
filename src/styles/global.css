@@ -2348,3 +2348,100 @@ h1, h2, h3,
 .note-card:has(> .banner) .card-side {
   top: calc(88px + (100% - 88px) / 2);
 }
+
+/* ---------- Inbox (étape 4, décisions 49 à 51) ---------- */
+.inbox-head {
+  color: var(--texte-secondaire);
+}
+.inbox-head.selecting {
+  top: calc(var(--topbar-h) + env(safe-area-inset-top));
+  gap: 8px;
+  padding: 4px 8px 4px 0;
+  border-radius: var(--r-moyen);
+  background: var(--corail-doux);
+  color: var(--onglet-actif);
+}
+.inbox-head.selecting > span {
+  flex: 1;
+}
+.inbox-head .btn {
+  font-size: var(--t-legende);
+}
+.inbox-swipe {
+  position: relative;
+  margin-bottom: var(--e-3);
+  overflow: hidden;
+  border-radius: var(--r-grand);
+  background: var(--piste);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.swipe-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-right: 20px;
+  color: var(--texte);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.inbox-swipe:not(.swiping) .swipe-reveal {
+  visibility: hidden;
+}
+.inbox-row {
+  position: relative;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--r-grand);
+  background: var(--carte-papier);
+  transition: transform 0.2s ease;
+}
+.inbox-row.selecting {
+  padding-right: 12px;
+}
+.inbox-row.selected {
+  background: var(--carte-papier);
+  box-shadow: inset 0 0 0 3px var(--encre);
+}
+.select-box {
+  padding: 0;
+}
+.file-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--contour-champ);
+  border-radius: var(--r-moyen);
+  background: var(--surface);
+  color: var(--texte);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.inbox-items li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* Suppression : toujours un bouton contour framboise, jamais plein (décision 21). */
+.btn.danger {
+  border: 2px solid var(--erreur);
+  background: none;
+  color: var(--erreur);
+}
+.btn.danger:hover {
+  background: var(--erreur-fond);
+}
+.inbox-head.selecting .btn {
+  min-height: 36px;
+  padding: 0 12px;
+}

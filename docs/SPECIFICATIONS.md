@@ -47,18 +47,19 @@ attente d'être rangés.
 - Le partage Android (« Partager › Ject ») et le raccourci « Ajouter à l'inbox » arrivent ici.
 - Pastille sur l'onglet : nombre d'éléments à ranger.
 
-**Ranger** : bouton en haut de l'Inbox (tous les éléments) ou sur chaque élément. Les
-éléments défilent un par un (« Ranger · 2 / 7 ») ; le détail est décrit en 3.0 bis.
-Chaque ligne d'un élément rangé dans une liste devient une case à cocher.
+**Ranger** : « Tout ranger » en haut de l'Inbox, ou le bouton « Ranger » de chaque carte (le
+seul bouton visible). Les cartes défilent une par une (« Ranger · 2 / 7 ») ; le détail est
+décrit en 3.0 bis. Chaque ligne d'une carte rangée dans une liste devient une case à cocher.
 
-**Sélection multiple** : appui long sur un élément (téléphone) ou lien « Sélectionner »
-(ordinateur). L'élément est coché dès que l'appui long est reconnu, doigt encore posé ;
-si le doigt se met ensuite à glisser, la sélection est annulée et c'est un glisser-déposer
-(fusion). Une case apparaît devant chaque élément ; toucher un élément le coche ou le
-décoche ; « Tout » / « Aucun » ; ✕ ou le bouton retour du téléphone quittent la sélection.
-« Ranger » ouvre alors une seule fenêtre « Ranger N éléments » : un type et une destination
-pour tous (N cartes seules, une nouvelle liste ou une liste existante). « Supprimer » les
-met tous à la corbeille. Le type est présélectionné si tous les éléments ont le même.
+**Archiver** : glisser la carte vers la gauche (fond « Archiver » révélé) ; notification
+« Archivée » avec « Annuler ».
+
+**Sélection multiple** : appui long sur une carte (doigt ou souris). La carte est cochée dès
+que l'appui long est reconnu, sans attendre de relâcher. Toucher une autre carte la coche ou
+la décoche ; ✕ ou le bouton retour du téléphone quittent la sélection. Barre de sélection :
+« N sélectionnées », « Fusionner » (dès 2 cartes : elles deviennent une liste, dans l'ordre
+affiché, « Annuler » possible) et « Ranger » (une seule fenêtre « Ranger N cartes » : un type et
+une destination pour toutes). Pas de glisser-déposer dans l'Inbox.
 
 ### 3.0 bis Onglets Actions, Habitudes, Projets, Ressources
 
@@ -116,7 +117,7 @@ Archives (« Annuler » possible). Dans les **Archives**, chaque carte propose
 d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
 menu du +). Sur le premier écran, il quitte l'app.
 
-**Glisser-déposer** (Inbox, Actions, Projets, Ressources ; appui long sur téléphone) :
+**Glisser-déposer** (Actions, Projets, Ressources ; appui long sur téléphone) :
 lâcher une carte **au centre** d'une autre les fusionne en une liste (cadre jaune « Fusionner
 en liste », « Annuler » possible) ; lâcher sur un **bord** la déplace avant ou après (pas dans
 l'Inbox, triée par date).
@@ -407,3 +408,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 1 : couleurs, polices (Bricolage Grotesque, Figtree) et icônes (Phosphor) de la charte Ject ; 7 couleurs de cartes. |
 | 19/10/2026 | Refonte, étape 2 : onglets dans une barre en bas ; bande du haut (menu, titre, recherche repliée, bouton « Aires ») ; tiroir (Archives, Corbeille, Aires, Réglages, affichage, synchro) ; le + ouvre directement une carte texte. |
 | 19/10/2026 | Refonte, étape 3 : éditeur (× / « Ajouter » pour une nouvelle carte, ← seule sinon ; barre Liste, Couleur et illustration, Aires, Plus ; export Notion dans Plus) ; cases à cocher de la charte ; 7 pastilles de couleur ; illustrations = aplat + emoji incliné, créables (emoji + couleur), plus d'import d'image (les images déjà importées restent affichées). |
+| 19/10/2026 | Refonte, étape 4 : Inbox avec un seul bouton « Ranger » par carte ; glisser vers la gauche pour archiver ; appui long = sélection seulement (plus de glisser-déposer dans l'Inbox), avec « Fusionner » et « Ranger » ; « Tout ranger » ; « Supprimer » en contour framboise. |

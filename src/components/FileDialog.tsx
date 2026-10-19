@@ -56,7 +56,7 @@ export function FileDialog({ ids, together = false, notes, onClose }: Props) {
 
   const finish = (count: number) => {
     onClose();
-    if (count) toast(`${count} élément${count > 1 ? 's' : ''} rangé${count > 1 ? 's' : ''}`);
+    if (count) toast(`${count} carte${count > 1 ? 's' : ''} rangée${count > 1 ? 's' : ''}`);
   };
 
   const next = (didFile: boolean) => {
@@ -96,19 +96,19 @@ export function FileDialog({ ids, together = false, notes, onClose }: Props) {
   const removeAll = async () => {
     for (const n of group) await trashNote(n.id);
     onClose();
-    toast(`${group.length} élément${group.length > 1 ? 's' : ''} supprimé${group.length > 1 ? 's' : ''}`);
+    toast(`${group.length} carte${group.length > 1 ? 's' : ''} supprimée${group.length > 1 ? 's' : ''}`);
   };
 
   return (
     <Dialog
-      title={together ? `Ranger ${group.length} élément${group.length > 1 ? 's' : ''}` : queue.length > 1 ? `Ranger · ${index + 1} / ${queue.length}` : 'Ranger'}
+      title={together ? `Ranger ${group.length} carte${group.length > 1 ? 's' : ''}` : queue.length > 1 ? `Ranger · ${index + 1} / ${queue.length}` : 'Ranger'}
       onClose={() => finish(filed)}
       className="file-dialog"
       footer={
         <>
           <button
             type="button"
-            className="btn"
+            className="btn danger"
             onClick={() => void (together ? removeAll() : trashNote(item.id).then(() => next(false)))}
           >
             <Icon name="trash" size={18} /> Supprimer

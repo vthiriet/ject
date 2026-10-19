@@ -17,10 +17,6 @@ interface Props {
   reorder?: boolean;
   /** Lâcher au centre d'une autre carte : les deux fusionnent en une liste. */
   onMerge?: (sourceId: string, targetId: string) => void;
-  /** Appui long (téléphone), dès qu'il est reconnu : par exemple pour sélectionner. */
-  onHold?: (id: string) => void;
-  /** Le doigt s'est finalement déplacé : l'appui long devient un glisser. */
-  onHoldCancel?: (id: string) => void;
   render: (note: Note) => ReactNode;
 }
 
@@ -43,14 +39,11 @@ function startPoint(e: Event | null) {
   return null;
 }
 
-const isTouch = (e: Event | null) => !!e && (e.type.startsWith('touch') || ('pointerType' in e && (e as PointerEvent).pointerType === 'touch'));
-
 /** Grille (ou liste) de cartes : déplacer pour réordonner, ou lâcher sur une carte pour fusionner. */
-export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, onHold, onHoldCancel, render }: Props) {
+export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, render }: Props) {
   const [activeId, setActiveId] = useState<string | null>(null);
   // Le doigt (ou la souris) a vraiment bougé depuis le début du glissement.
   const [moved, setMoved] = useState(false);
-  const [held, setHeld] = useState(false);
   const [hint, setHint] = useState<Hint>(null);
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
@@ -67,17 +60,10 @@ export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, onH
     setActiveId(String(e.active.id));
     setMoved(false);
     navigator.vibrate?.(20);
-    // Appui long reconnu : on prévient tout de suite, sans attendre que le doigt se lève.
-    const hold = !!onHold && isTouch(e.activatorEvent);
-    setHeld(hold);
-    if (hold) onHold!(String(e.active.id));
   };
 
   const onDragMove = ({ active, over, activatorEvent, delta }: DragMoveEvent) => {
-    if (!moved && (Math.abs(delta.x) > 10 || Math.abs(delta.y) > 10)) {
-      setMoved(true);
-      if (held) onHoldCancel?.(String(active.id));
-    }
+    if (!moved && (Math.abs(delta.x) > 10 || Math.abs(delta.y) > 10)) setMoved(true);
     if (!over || over.id === active.id) return setHint(null);
     const start = startPoint(activatorEvent);
     const r = over.rect;
@@ -120,7 +106,6 @@ export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, onH
       onDragMove={onDragMove}
       onDragEnd={onDragEnd}
       onDragCancel={() => {
-        if (held && !moved && activeId) onHoldCancel?.(activeId);
         setActiveId(null);
         setHint(null);
       }}
@@ -136,7 +121,7 @@ export function NoteGrid({ notes, layout, sortable, reorder = true, onMerge, onH
         </div>
       </SortableContext>
       <DragOverlay>
-        {active && (moved || !held) ? (
+        {active ? (
           <div className="dragging">
             {render(active)}
             {hint?.mode === 'merge' && <span className="merge-label">Fusionner en liste</span>}

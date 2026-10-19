@@ -206,6 +206,21 @@ export default function App() {
     const before = await mergeNotes(sourceId, targetId);
     if (before) toast('Cartes fusionnées en liste', { label: 'Annuler', run: () => void restoreNotes(before) });
   };
+  // Inbox : fusionne les cartes sélectionnées dans la première (annulable d'un coup).
+  const mergeMany = async ([target, ...sources]: string[]) => {
+    const snapshots: Note[][] = [];
+    for (const source of sources) {
+      const before = await mergeNotes(source, target);
+      if (before) snapshots.push(before);
+    }
+    if (!snapshots.length) return;
+    toast('Cartes fusionnées en liste', {
+      label: 'Annuler',
+      run: () => void (async () => {
+        for (const snap of snapshots.reverse()) await restoreNotes(snap);
+      })(),
+    });
+  };
   const groups = groupsFor(section, visible);
 
   const habits = useMemo(() => notes.filter((n) => categoryOf(n) === 'habit' && !n.inbox && !n.archived && n.trashedAt === null), [notes]);
@@ -354,7 +369,7 @@ export default function App() {
             total={inboxAll.length}
             onOpen={(id) => setEditing({ id, isNew: false })}
             onFile={(ids, together) => setFiling({ ids, together })}
-            onMerge={query ? undefined : (a, b) => void merge(a, b)}
+            onMerge={(ids) => void mergeMany(ids)}
           />
         )}
 
