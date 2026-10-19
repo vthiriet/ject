@@ -5,13 +5,20 @@ import { syncState } from './sync';
 
 declare const __BUILD_TIME__: string;
 
-/** Dernières erreurs rencontrées (affichées dans Paramètres › Diagnostic). */
+/** Dernières erreurs rencontrées (affichées dans Réglages › Diagnostic). */
 const errors: string[] = [];
 
 export function logError(message: string) {
   errors.unshift(`${new Date().toLocaleTimeString('fr-FR')} ${message}`);
   errors.length = Math.min(errors.length, 10);
 }
+
+/** Journal des erreurs, de la plus récente à la plus ancienne. */
+export const errorLog = () => [...errors];
+
+/** Ouvre les Réglages depuis n'importe où (éventuellement sur le Diagnostic). */
+export const openSettings = (section?: 'diagnostic') =>
+  window.dispatchEvent(new CustomEvent('ject:settings', { detail: section }));
 
 /** Échoue si l'opération ne répond pas à temps (base du navigateur bloquée). */
 export function withTimeout<T>(promise: Promise<T>, ms = 4000): Promise<T> {
@@ -31,7 +38,7 @@ export async function runDiagnostics(): Promise<string> {
   add('Service worker', navigator.serviceWorker?.controller ? 'actif' : 'aucun');
   try {
     const all = await withTimeout(db.notes.toArray());
-    add('Notes enregistrées', all.length);
+    add('Cartes enregistrées', all.length);
     add('dont Inbox', all.filter((n) => n.inbox && !n.deleted && n.trashedAt === null).length);
     add('dont supprimées', all.filter((n) => n.deleted).length);
     add('En attente d’envoi', await withTimeout(db.outbox.count()));
@@ -42,10 +49,10 @@ export async function runDiagnostics(): Promise<string> {
   try {
     const note = await withTimeout(createInboxItem('Test diagnostic'));
     const back = await withTimeout(db.notes.get(note.id));
-    add('Essai d’ajout à l’inbox', back?.inbox ? 'OK' : 'ÉCHEC (élément introuvable après ajout)');
+    add('Essai d’ajout à l’Inbox', back?.inbox ? 'OK' : 'ÉCHEC (élément introuvable après ajout)');
     await withTimeout(deleteNoteForever(note.id));
   } catch (e) {
-    add('Essai d’ajout à l’inbox', `ÉCHEC ${describe(e)}`);
+    add('Essai d’ajout à l’Inbox', `ÉCHEC ${describe(e)}`);
   }
   try {
     const session = await withTimeout(getSession());

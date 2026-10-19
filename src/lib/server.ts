@@ -22,4 +22,4 @@ export async function requireUser(request: Request) {
   return data.user;
 }
 
-export const unauthorized = () => json({ error: 'Connecte-toi dans les Paramètres de Ject.' }, 401);
+export const unauthorized = () => json({ error: 'Connecte-toi dans les Réglages de Ject.' }, 401);

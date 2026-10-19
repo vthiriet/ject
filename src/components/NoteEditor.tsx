@@ -250,8 +250,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   const itemBadge = (item: ChecklistItem) =>
     item.status === 'waiting'
-        ? `⏳ En attente${item.waitingFor ? ` · ${item.waitingFor}` : ''}`
-        : item.status === 'someday' && '💤 Un jour';
+        ? `En attente${item.waitingFor ? ` · ${item.waitingFor}` : ''}`
+        : item.status === 'someday' && 'Un jour';
 
   const itemRow = (item: ChecklistItem, done: boolean, drag?: RowDrag) => {
     const badge = !done && hasItemOptions ? itemBadge(item) : '';

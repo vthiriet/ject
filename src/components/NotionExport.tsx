@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState } from 'react';
 import { exportToNotion, searchNotionPages, type NotionPage } from '../lib/api';
 import { db, getMeta, setMeta } from '../lib/db';
+import { openSettings } from '../lib/diagnostics';
 import { markExported } from '../lib/store';
 import { getSession, supabase } from '../lib/supabase';
 import { Dialog } from './Dialog';
@@ -54,9 +55,14 @@ export function NotionExport({ noteId, onClose, onDone }: Props) {
       <Dialog title="Exporter vers Notion" onClose={onClose}>
         <p>
           {supabase
-            ? 'Pour exporter vers Notion, connecte-toi d’abord : menu ☰ › Paramètres › Compte.'
+            ? 'Pour exporter vers Notion, connecte-toi d’abord à ton compte.'
             : 'La connexion n’est pas encore configurée (Supabase). Voir le guide d’installation.'}
         </p>
+        {supabase && (
+          <button type="button" className="btn primary" onClick={() => openSettings()}>
+            Se connecter
+          </button>
+        )}
       </Dialog>
     );
   }
@@ -87,7 +93,7 @@ export function NotionExport({ noteId, onClose, onDone }: Props) {
       await setMeta('notionLastPage', page);
       const mention = { at: Date.now(), pageTitle: page.title, pageUrl: page.url };
       await markExported(note.id, whole ? 'all' : chosen.map((i) => i.id), mention);
-      toast(whole ? `Exportée vers « ${page.title} » et archivée` : `${chosen.length} élément(s) exporté(s) vers « ${page.title} »`);
+      toast(whole ? `Exportée vers « ${page.title} » et archivée` : `${chosen.length} élément${chosen.length > 1 ? 's' : ''} exporté${chosen.length > 1 ? 's' : ''} vers « ${page.title} »`);
       onClose();
       if (whole) onDone();
     } catch (e) {
@@ -114,7 +120,7 @@ export function NotionExport({ noteId, onClose, onDone }: Props) {
       <p className="section-label">Page de destination</p>
       {page ? (
         <button type="button" className="page-choice selected" onClick={() => setPage(null)}>
-          <span>{page.icon ?? '📄'} {page.title}</span>
+          <span>{page.icon ?? <Icon name="notes" size={18} />} {page.title}</span>
           <small>Changer</small>
         </button>
       ) : (
@@ -128,7 +134,7 @@ export function NotionExport({ noteId, onClose, onDone }: Props) {
             {pages?.map((p) => (
               <li key={p.id}>
                 <button type="button" className="page-choice" onClick={() => setPage(p)}>
-                  <span>{p.icon ?? '📄'} {p.title}</span>
+                  <span>{p.icon ?? <Icon name="notes" size={18} />} {p.title}</span>
                 </button>
               </li>
             ))}
@@ -173,7 +179,7 @@ export function NotionExport({ noteId, onClose, onDone }: Props) {
           </p>
         </>
       )}
-      {!isList && <p className="hint">La note sera envoyée, puis archivée dans Ject avec une mention.</p>}
+      {!isList && <p className="hint">La carte sera envoyée, puis archivée dans Ject avec une mention.</p>}
       {error && <p className="error">{error}</p>}
     </Dialog>
   );

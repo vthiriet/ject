@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
-import { runDiagnostics } from '../lib/diagnostics';
+import { errorLog, runDiagnostics } from '../lib/diagnostics';
 import { downloadFile } from '../lib/download';
 import { useSyncStatus, type ThemePref } from '../lib/hooks';
 import { importBackup } from '../lib/store';
@@ -16,17 +16,19 @@ interface Props {
   onClose: () => void;
   theme: ThemePref;
   setTheme: (t: ThemePref) => void;
+  /** Section à montrer en ouvrant (ex. le journal des erreurs). */
+  focus?: 'diagnostic';
 }
 
 const STATUS_TEXT = {
-  local: 'Non connecté : les notes restent sur cet appareil.',
+  local: 'Non connecté : les cartes restent sur cet appareil.',
   syncing: 'Synchronisation en cours…',
   synced: 'À jour sur tous tes appareils.',
   offline: 'Hors ligne : la synchronisation reprendra au retour du réseau.',
-  error: 'Erreur de synchronisation.',
+  error: 'La synchronisation a échoué.',
 };
 
-export function Settings({ onClose, theme, setTheme }: Props) {
+export function Settings({ onClose, theme, setTheme, focus }: Props) {
   const status = useSyncStatus();
   const [email, setEmail] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -34,6 +36,11 @@ export function Settings({ onClose, theme, setTheme }: Props) {
   const [busy, setBusy] = useState(false);
   const [diag, setDiag] = useState('');
   const [diagRunning, setDiagRunning] = useState(false);
+  const errors = errorLog();
+  const diagRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (focus === 'diagnostic') diagRef.current?.scrollIntoView({ block: 'start' });
+  }, [focus]);
   const runDiag = async () => {
     setDiagRunning(true);
     setDiag(await runDiagnostics());
@@ -52,14 +59,14 @@ export function Settings({ onClose, theme, setTheme }: Props) {
       options: { emailRedirectTo: location.origin },
     });
     setBusy(false);
-    if (error) toast(`Erreur : ${error.message}`);
+    if (error) toast('L’envoi du lien n’a pas marché. Vérifie l’adresse et réessaie.');
     else setSent(true);
   };
 
   const logout = async () => {
     await supabase?.auth.signOut();
     setUserEmail(null);
-    toast('Déconnecté. Les notes restent sur cet appareil.');
+    toast('Déconnecté. Les cartes restent sur cet appareil.');
   };
 
   const exportJson = async () => {
@@ -78,22 +85,23 @@ export function Settings({ onClose, theme, setTheme }: Props) {
     const labels: Label[] = await db.labels.filter((l) => !l.deleted).toArray();
     notes.sort((a, b) => Number(a.archived) - Number(b.archived) || b.position - a.position);
     const md = ['# Ject — export', '', ...notes.map((n) => noteToMarkdown(n, labels) + (n.archived ? '\n\n*(archivée)*' : '') + '\n')].join('\n');
-    downloadFile(`ject-notes-${new Date().toISOString().slice(0, 10)}.md`, md, 'text/markdown');
+    downloadFile(`ject-cartes-${new Date().toISOString().slice(0, 10)}.md`, md, 'text/markdown');
   };
 
   const importJson = async (file?: File) => {
     if (!file) return;
     try {
       const data = JSON.parse(await file.text());
+      // La sauvegarde s'ajoute à l'existant, sans confirmation (décision 54).
       const count = await importBackup(data);
-      toast(`${count} note(s) importée(s)`);
+      toast(`${count} carte${count > 1 ? 's' : ''} ajoutée${count > 1 ? 's' : ''}`);
     } catch {
       toast('Fichier de sauvegarde illisible');
     }
   };
 
   return (
-    <Dialog title="Paramètres" onClose={onClose}>
+    <Dialog title="Réglages" onClose={onClose}>
       <section className="settings-section">
         <h3>Apparence</h3>
         <div className="segmented" role="radiogroup" aria-label="Thème">
@@ -117,7 +125,7 @@ export function Settings({ onClose, theme, setTheme }: Props) {
             </div>
           </>
         ) : sent ? (
-          <p>📬 E-mail envoyé à <strong>{email}</strong>. Ouvre-le <strong>sur cet appareil</strong> et touche le lien : tu seras connecté.</p>
+          <p><Icon name="send" size={18} /> E-mail envoyé à <strong>{email}</strong>. Ouvre-le <strong>sur cet appareil</strong> et touche le lien : tu seras connecté.</p>
         ) : (
           <form className="row" onSubmit={(e) => { e.preventDefault(); void sendLink(); }}>
             <input className="text-input" type="email" required value={email} placeholder="ton@email.fr" onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
@@ -137,8 +145,16 @@ export function Settings({ onClose, theme, setTheme }: Props) {
           </label>
         </div>
       </section>
-      <section className="settings-section">
+      <section className="settings-section" ref={diagRef}>
         <h3>Diagnostic</h3>
+        {errors.length > 0 ? (
+          <>
+            <p className="hint">Dernières erreurs :</p>
+            <pre className="diagnostic">{errors.join('\n')}</pre>
+          </>
+        ) : (
+          <p className="hint">Aucune erreur récente.</p>
+        )}
         <p className="hint">En cas de problème : lance le diagnostic, puis fais une capture d’écran ou copie le résultat.</p>
         <div className="row wrap">
           <button type="button" className="btn" disabled={diagRunning} onClick={() => void runDiag()}>

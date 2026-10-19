@@ -67,7 +67,7 @@ Inspiré de GTD (que faire de chaque élément) et de PARA (où il vit), en vers
 
 **Onglets, dans l'ordre :** Inbox · Actions · Habitudes · Projets · Ressources.
 Ils remplacent l'onglet « Listes ». Le menu ☰ garde les Aires, les Archives, la Corbeille
-et les Paramètres.
+et les Réglages.
 
 **Cartes :** dans chaque onglet, une carte est soit un **élément seul** (note texte), soit
 une **liste** (plusieurs éléments à cocher), comme dans Keep. Couleurs, illustrations et
@@ -114,7 +114,7 @@ Archives (« Annuler » possible). Dans les **Archives**, chaque carte propose
 **Désarchiver** et **Supprimer** (corbeille, vidée après 7 jours).
 
 **Bouton « précédent » du téléphone :** il revient à l'onglet affiché avant, et referme
-d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Paramètres, menu ☰,
+d'abord ce qui est ouvert (carte — enregistrée comme avec ←, Ranger, Réglages, menu ☰,
 menu du +). Sur le premier écran, il quitte l'app.
 
 **Glisser-déposer** (Actions, Projets, Ressources ; appui long sur téléphone) :
@@ -388,7 +388,7 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 12/10/2026 | Inbox : le texte saisi est remis en place si l'enregistrement échoue ; les erreurs inattendues s'affichent à l'écran. |
 | 12/10/2026 | Plan de l'organisation Actions / Habitudes / Projets / Ressources avec aires et états (à valider). |
 | 12/10/2026 | Onglets Actions, Habitudes, Projets, Ressources ; types à la saisie ; rangement en 3 temps ; états, régularités et aires. |
-| 12/10/2026 | Paramètres › Diagnostic : version chargée, état de la base locale, essai d'ajout, dernières erreurs. |
+| 12/10/2026 | Réglages › Diagnostic : version chargée, état de la base locale, essai d'ajout, dernières erreurs. |
 | 12/10/2026 | Base du navigateur bloquée : délai maximal de 4 s, message explicatif au démarrage et dans le diagnostic. |
 | 12/10/2026 | Bouton + (Texte / Liste) à la place de la zone de saisie permanente de l'Inbox et des barres « Nouvelle … » des onglets. |
 | 12/10/2026 | Bouton + : Inbox ou un type ; page de création (Unique / Liste, nouvelle / existante, précisions). |
@@ -411,3 +411,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 3 : éditeur (× / « Ajouter » pour une nouvelle carte, ← seule sinon ; barre Liste, Couleur et illustration, Aires, Plus ; export Notion dans Plus) ; cases à cocher de la charte ; 7 pastilles de couleur ; illustrations = aplat + emoji incliné, créables (emoji + couleur), plus d'import d'image (les images déjà importées restent affichées). |
 | 19/10/2026 | Refonte, étape 4 : Inbox avec un seul bouton « Ranger » par carte ; glisser vers la gauche pour archiver ; appui long = sélection seulement (plus de glisser-déposer dans l'Inbox), avec « Fusionner » et « Ranger » ; « Tout ranger » ; « Supprimer » en contour framboise. |
 | 19/10/2026 | Refonte, étape 5 : Habitudes avec rond / étoile corail, bouton « + », une étoile par fois prévue ; « −1 » et éclats d'emoji retirés (corriger via « Annuler » ou « Retirer ») ; icône pause. |
+| 19/10/2026 | Refonte, étape 6 : « Réglages » partout ; erreurs inattendues = message rassurant + « Voir le détail » (journal des erreurs dans Réglages › Diagnostic) ; export Notion sans connexion : bouton « Se connecter » ; restauration d'une sauvegarde sans confirmation (« N cartes ajoutées ») ; textes au lexique « carte », plus d'emoji dans l'interface. |

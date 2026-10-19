@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { db } from '../lib/db';
-import { describe, logError, withTimeout } from '../lib/diagnostics';
+import { describe, logError, openSettings, withTimeout } from '../lib/diagnostics';
 import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { appliesOn, habitConfig, isPaused, progress, scaleOf } from '../lib/habits';
@@ -84,6 +84,7 @@ export default function App() {
   const [drawer, setDrawer] = useState(false);
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
+  const [settingsFocus, setSettingsFocus] = useState<'diagnostic' | undefined>();
   const [filing, setFiling] = useState<{ ids: string[]; together?: boolean } | null>(null);
   const [sheet, setSheet] = useState<string | null>(null);
   const started = useRef(false);
@@ -120,13 +121,20 @@ export default function App() {
     if (started.current) return;
     started.current = true;
     // Toute erreur inattendue s'affiche à l'écran au lieu de passer inaperçue.
+    // Message rassurant ; le détail technique va dans le journal (décision 47).
+    const oops = () => toast('Un souci est survenu, tes cartes sont en sécurité.', { label: 'Voir le détail', run: () => openSettings('diagnostic') });
     window.addEventListener('unhandledrejection', (e) => {
       logError(describe(e.reason));
-      toast(`Erreur : ${describe(e.reason)}`);
+      oops();
     });
     window.addEventListener('error', (e) => {
       logError(e.message);
-      toast(`Erreur : ${e.message}`);
+      oops();
+    });
+    window.addEventListener('ject:settings', (e) => {
+      setEditing(null);
+      setSettingsFocus((e as CustomEvent<'diagnostic' | undefined>).detail);
+      setDialog('settings');
     });
     startAutoSync();
     // Vérifie que la base du navigateur répond ; sinon, explique quoi faire.
@@ -233,11 +241,11 @@ export default function App() {
         note={n}
         labels={labels}
         images={images}
-        onOpen={() => toast('Restaure la note pour la modifier')}
+        onOpen={() => toast('Restaure la carte pour la modifier')}
         actions={
           <>
             <IconButton name="restore" label="Restaurer" onClick={() => void restoreNote(n.id)} />
-            <IconButton name="trash" label="Supprimer définitivement" onClick={() => confirm('Supprimer définitivement cette note ?') && void deleteNoteForever(n.id)} />
+            <IconButton name="trash" label="Supprimer définitivement" onClick={() => confirm('Supprimer définitivement cette carte ?') && void deleteNoteForever(n.id)} />
           </>
         }
       />
@@ -268,7 +276,7 @@ export default function App() {
                 size={22}
                 onClick={() => {
                   void updateNote(n.id, { archived: true, pinned: false });
-                  toast('Archivée ✓', { label: 'Annuler', run: () => void updateNote(n.id, { archived: false, pinned: n.pinned }) });
+                  toast('Archivée', { label: 'Annuler', run: () => void updateNote(n.id, { archived: false, pinned: n.pinned }) });
                 }}
               />
             </>
@@ -376,8 +384,8 @@ export default function App() {
 
         {section === 'trash' && visible.length > 0 && (
           <div className="trash-head">
-            <span>Les notes de la corbeille sont supprimées après 7 jours.</span>
-            <button type="button" className="link-btn" onClick={() => confirm('Vider la corbeille ? Les notes seront supprimées définitivement.') && void emptyTrash()}>
+            <span>Les cartes de la corbeille sont supprimées après 7 jours.</span>
+            <button type="button" className="link-btn" onClick={() => confirm('Vider la corbeille ? Les cartes seront supprimées définitivement.') && void emptyTrash()}>
               Vider la corbeille
             </button>
           </div>
@@ -445,7 +453,7 @@ export default function App() {
       {editing && (
         <NoteEditor key={editing.id} noteId={editing.id} isNew={editing.isNew} initial={editing.initial} labels={labels} images={images} onClose={() => setEditing(null)} />
       )}
-      {dialog === 'settings' && <Settings onClose={() => setDialog(null)} theme={theme} setTheme={setTheme} />}
+      {dialog === 'settings' && <Settings onClose={() => { setDialog(null); setSettingsFocus(undefined); }} theme={theme} setTheme={setTheme} focus={settingsFocus} />}
       {sheet && notes.find((n) => n.id === sheet) && (
         <HabitSheet
           note={notes.find((n) => n.id === sheet)!}
