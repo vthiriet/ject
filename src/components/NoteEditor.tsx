@@ -12,7 +12,7 @@ import type { BackgroundImage, Category, ChecklistItem, Label, Note } from '../l
 import { Banner } from './Background';
 import { BackgroundPicker } from './BackgroundPicker';
 import { HabitConfigForm } from './HabitConfigForm';
-import { Icon, IconButton } from './Icon';
+import { CheckBox, Icon, IconButton } from './Icon';
 import { LabelPicker } from './LabelPicker';
 import { LinkPreviewCard } from './LinkPreview';
 import { NotionExport } from './NotionExport';
@@ -100,7 +100,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
       // Retire les lignes vides des listes.
       const items = draft.items.filter((i) => i.text.trim());
       await updateNote(noteId, { ...draft, items });
-      if (isNew) toast(note.inbox ? 'Ajouté à l’inbox' : 'Ajouté');
+      if (isNew) toast(note.inbox ? 'Ajouté à ton Inbox' : 'Ajouté');
     }
     onClose();
   };
@@ -162,10 +162,14 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   const convert = () => {
     if (draft.type === 'text') {
+      // Les lignes déjà tapées deviennent des éléments ; on continue d'écrire sur la dernière.
       const lines = draft.content.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
-      edit({ type: 'list', items: lines.length ? lines.map((l) => newItem(l)) : [newItem()], content: '' });
+      const items = lines.length ? lines.map((l) => newItem(l)) : [newItem()];
+      edit({ type: 'list', items, content: '' });
+      setFocusId(items[items.length - 1].id);
     } else {
       edit({ type: 'text', content: draft.items.filter((i) => i.text.trim()).map((i) => i.text).join('\n'), items: [] });
+      setFocusId('content');
     }
     setPanel(null);
   };
@@ -180,7 +184,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
       // Un projet terminé qu'on désarchive redevient actif.
       ...(note.archived && note.projectStatus === 'done' ? { projectStatus: 'active' as const } : {}),
     });
-    toast(note.archived ? 'Note désarchivée' : 'Note archivée', {
+    toast(note.archived ? 'Carte désarchivée' : 'Carte archivée', {
       label: 'Annuler',
       run: () => void updateNote(noteId, { archived: note.archived, pinned: note.pinned }),
     });
@@ -189,7 +193,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   const remove = async () => {
     await flush();
     await trashNote(noteId);
-    toast('Note placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(noteId) });
+    toast('Carte placée dans la corbeille', { label: 'Annuler', run: () => void restoreNote(noteId) });
     onClose();
   };
   const copyList = async () => {
@@ -202,15 +206,15 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
   };
   const copy = async () => {
     await navigator.clipboard.writeText(noteToText({ ...note, ...draft }));
-    toast('Note copiée');
+    toast('Carte copiée');
     setPanel(null);
   };
   const share = async () => {
     const text = noteToText({ ...note, ...draft });
-    if (navigator.share) await navigator.share({ title: draft.title || 'Note Ject', text }).catch(() => {});
+    if (navigator.share) await navigator.share({ title: draft.title || 'Carte Ject', text }).catch(() => {});
     else {
       await navigator.clipboard.writeText(text);
-      toast('Partage indisponible ici : note copiée');
+      toast('Partage indisponible ici : carte copiée');
     }
     setPanel(null);
   };
@@ -260,7 +264,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           aria-label={done ? 'Décocher' : 'Cocher'}
           onClick={() => updateItem(item.id, { checked: !item.checked })}
         >
-          <Icon name={done ? 'checked' : 'unchecked'} size={26} />
+          <CheckBox checked={done} />
         </button>
         <div className="item-main">
           <AutoTextarea
@@ -312,14 +316,16 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   return (
     <div className="overlay editor-overlay" onMouseDown={(e) => e.target === e.currentTarget && void close()}>
-      <div className="editor" data-color={note.color} role="dialog" aria-modal="true" aria-label="Note">
+      <div className="editor" data-color={note.color} role="dialog" aria-modal="true" aria-label="Carte">
+        {/* Nouvelle carte : × et « Ajouter » ; carte existante : ← seule, tout est enregistré (décision 44). */}
         <div className="editor-top">
-          <IconButton name="back" label="Fermer" onClick={() => void close()} />
-          <button type="button" className="btn primary editor-ok" onClick={() => void close()}>
-            <Icon name="check" size={18} /> {isNew ? 'Ajouter' : 'OK'}
-          </button>
+          <IconButton name={isNew ? 'close' : 'back'} label="Fermer" onClick={() => void close()} />
           <div className="spacer" />
-          {!note.trashedAt && !inInbox && (
+          {isNew ? (
+            <button type="button" className="btn primary editor-ok" onClick={() => void close()}>
+              Ajouter
+            </button>
+          ) : !note.trashedAt && !inInbox && (
             <>
               <IconButton name="pin" label={note.pinned ? 'Désépingler' : 'Épingler'} active={note.pinned} onClick={() => void updateNote(noteId, { pinned: !note.pinned, archived: false })} />
               <IconButton name={note.archived ? 'unarchive' : 'archive'} label={note.archived ? 'Désarchiver' : 'Archiver'} onClick={() => void archive()} />
@@ -377,7 +383,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
               ref={contentRef}
               className="editor-content"
               value={draft.content}
-              placeholder="Créer une note…"
+              placeholder="Écris ici…"
               onChange={(v) => edit({ content: v })}
             />
           ) : (
@@ -448,11 +454,11 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           <div className="panel menu">
             {!inInbox && <button type="button" onClick={() => { setPanel(null); void flush().then(() => setExporting(true)); }}><Icon name="send" size={20} /> Exporter vers Notion</button>}
             <button type="button" onClick={() => setPanel('move')}><Icon name="file" size={20} /> {inInbox ? 'Ranger dans…' : 'Déplacer vers…'}</button>
-            <button type="button" onClick={convert}><Icon name={draft.type === 'text' ? 'checked' : 'notes'} size={20} /> {draft.type === 'text' ? 'Transformer en liste' : 'Transformer en texte'}</button>
             <button type="button" onClick={() => void copy()}><Icon name="copy" size={20} /> Copier le texte</button>
             <button type="button" onClick={() => void share()}><Icon name="share" size={20} /> Partager</button>
             <button type="button" onClick={() => void duplicate()}><Icon name="add" size={20} /> Créer une copie</button>
-            <button type="button" onClick={() => void remove()}><Icon name="trash" size={20} /> Supprimer</button>
+            <button type="button" className="danger" onClick={() => void remove()}><Icon name="trash" size={20} /> Supprimer</button>
+            {!isNew && <p className="edited">Modifiée le {formatDate(note.updatedAt)}</p>}
           </div>
         )}
 
@@ -464,16 +470,23 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           </div>
         )}
 
+        {/* Barre au-dessus du clavier : les gestes de prise de note (décisions 42, 46). */}
         <div className="editor-bottom">
+          <button
+            type="button"
+            className={`editor-tool ${draft.type === 'list' ? 'on' : ''}`}
+            aria-pressed={draft.type === 'list'}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={convert}
+          >
+            <Icon name="listcheck" size={20} fill={draft.type === 'list'} /> Liste
+          </button>
           <IconButton name="palette" label="Couleur et illustration" active={panel === 'colors'} onClick={() => setPanel(panel === 'colors' ? null : 'colors')} />
           {!inInbox && (
-            <>
-              <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
-              <IconButton name="send" label="Exporter vers Notion" onClick={() => void flush().then(() => setExporting(true))} />
-            </>
+            <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
           )}
-          <span className="edited">Modifiée le {formatDate(note.updatedAt)}</span>
-          <IconButton name="more" label="Plus d'actions" active={panel === 'more'} onClick={() => setPanel(panel === 'more' ? null : 'more')} />
+          <div className="spacer" />
+          <IconButton name="more" label="Plus" active={panel === 'more'} onClick={() => setPanel(panel === 'more' ? null : 'more')} />
         </div>
       </div>
       {exporting && <NotionExport noteId={noteId} onClose={() => setExporting(false)} onDone={onClose} />}

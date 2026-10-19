@@ -454,55 +454,41 @@ a {
   transform: rotate(2deg);
 }
 
-/* ---------- Illustrations de fond ---------- */
+/* ---------- Illustrations de fond (décisions 16, 23) ---------- */
+.note-card,
+.editor-scroll {
+  container-type: inline-size;
+}
 .banner {
   position: relative;
-  height: 96px;
+  height: 88px;
   overflow: hidden;
   background-size: cover;
   background-position: center;
 }
+.banner.illustration {
+  background: var(--note-bg);
+}
 .banner.tall {
-  height: 160px;
-}
-.preset {
-  background: var(--bg-light);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .preset {
-    background: var(--bg-dark);
-  }
-}
-:root[data-theme="dark"] .preset {
-  background: var(--bg-dark);
+  height: 140px;
 }
 .banner-emoji {
   position: absolute;
-  right: 12%;
-  bottom: -8px;
-  font-size: 64px;
+  bottom: -15%;
+  font-family: var(--police-emoji);
+  font-size: clamp(64px, 45cqw, 96px);
   line-height: 1;
-  transform: rotate(-10deg);
 }
-.banner.tall .banner-emoji {
-  font-size: 104px;
-}
-.banner-emoji.small {
-  right: auto;
-  left: 14%;
-  top: 14px;
-  bottom: auto;
-  font-size: var(--t-ecran);
-  opacity: 0.55;
+.banner-emoji.right {
+  right: 6%;
   transform: rotate(12deg);
 }
-.banner-emoji.tiny {
-  right: auto;
-  left: 46%;
-  top: 8px;
-  bottom: auto;
-  font-size: var(--t-carte);
-  opacity: 0.4;
+.banner-emoji.left {
+  left: 6%;
+  transform: rotate(-12deg);
+}
+.banner.tall .banner-emoji {
+  font-size: 96px;
 }
 
 /* ---------- Aperçu de lien ---------- */
@@ -781,64 +767,77 @@ textarea.auto {
   flex-wrap: wrap;
   gap: 8px;
 }
+/* Sélecteur de couleur : 7 pastilles rondes de 44 px sur une ligne (décision 24). */
+.swatches.colors {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 44px));
+  justify-content: space-between;
+  gap: 4px;
+}
 .swatch {
   position: relative;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 2px solid transparent;
+  width: 100%;
+  max-width: 44px;
+  aspect-ratio: 1;
   border-radius: 50%;
   background: var(--note-bg);
-  box-shadow: inset 0 0 0 1px var(--border);
+  box-shadow: inset 0 0 0 1px var(--contour-champ);
+  color: var(--encre);
 }
-.swatch.selected {
-  border-color: var(--focus);
-}
-.swatch-none {
-  position: absolute;
-  width: 70%;
-  height: 2px;
-  background: var(--muted);
-  transform: rotate(-45deg);
+.swatches.mini .swatch {
+  width: 32px;
 }
 .bg-thumb {
   position: relative;
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
-  border: 2px solid transparent;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: var(--r-moyen);
+  background-color: var(--note-bg);
   background-size: cover;
   background-position: center;
-  box-shadow: inset 0 0 0 1px var(--border);
-  font-size: var(--t-ecran);
+  box-shadow: inset 0 0 0 1px var(--contour-champ);
+  color: var(--texte-discret);
 }
 .bg-thumb.selected {
-  border-color: var(--focus);
+  outline: 3px solid var(--encre);
+  outline-offset: 2px;
 }
-.bg-thumb.import {
-  gap: 0;
-  font-size: var(--t-legende);
-  color: var(--muted);
-  border: 1px dashed var(--muted);
-  box-shadow: none;
+.thumb-emoji {
+  font-family: var(--police-emoji);
+  font-size: 34px;
+  transform: rotate(-12deg) translate(6px, 8px);
 }
 .bg-thumb-wrap {
   position: relative;
 }
 .bg-delete {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: -6px;
+  right: -6px;
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--encre);
+  color: var(--panneau);
+}
+.illus-maker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.emoji-input {
+  width: 64px;
+  font-family: var(--police-emoji);
+  font-size: var(--t-section);
+  text-align: center;
 }
 
 /* Libellés */
@@ -1941,10 +1940,9 @@ textarea.auto {
 
 /* Bouton de validation d'une carte ouverte */
 .editor-ok {
-  order: 10;
-  min-height: 38px;
-  margin: 0 6px 0 8px;
-  padding: 0 16px;
+  min-height: 40px;
+  margin: 0 8px;
+  padding: 0 20px;
 }
 
 /* Priorité des actions : flamme grisée, puis jaune (3), orange (2), rouge (1). */
@@ -2236,4 +2234,117 @@ h1, h2, h3,
 .logo-dot {
   display: inline-block;
   color: var(--corail);
+}
+
+/* ---------- Cartes et éditeur (étape 3) ---------- */
+/* Case à cocher : 18 px, zone tactile 32 × 32 (décisions 18, 19, 34). */
+.case {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 2px solid var(--contour-case);
+  border-radius: var(--r-petit);
+  color: var(--sur-corail);
+}
+.case.on {
+  border-color: var(--corail);
+  background: var(--corail);
+}
+.item-row {
+  align-items: center;
+  min-height: 32px;
+  padding: 0 4px 0 8px;
+}
+.item-row .check {
+  width: 32px;
+  height: 32px;
+}
+.item-row textarea {
+  padding: 4px 0 !important;
+  font-size: var(--t-carte);
+}
+.item-row.done textarea {
+  color: var(--texte-discret);
+}
+.drag-handle {
+  height: 32px;
+  color: var(--texte-discret);
+}
+.card-items li {
+  align-items: center;
+  gap: 4px;
+}
+.card-items .check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+.card-pin {
+  color: var(--corail-texte);
+}
+.card-title {
+  font-size: var(--t-carte);
+}
+.card-content,
+.card-items {
+  color: var(--texte);
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--texte-discret);
+  font-size: var(--t-legende);
+}
+.emoji,
+.chip .emoji {
+  font-family: var(--police-emoji);
+}
+.editor-title {
+  color: var(--encre);
+  font-size: var(--t-ecran);
+  font-weight: 600;
+}
+.editor-content {
+  font-size: var(--t-carte);
+}
+.editor-bottom {
+  gap: 4px;
+  padding: 6px 8px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  border-top: 1px solid color-mix(in srgb, var(--encre) 10%, transparent);
+}
+.editor-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--r-moyen);
+  color: var(--texte);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.editor-tool.on {
+  background: var(--corail-doux);
+  color: var(--onglet-actif);
+}
+.panel {
+  background: var(--panneau);
+}
+.panel.menu .danger {
+  color: var(--erreur);
+}
+.panel.menu .edited {
+  margin: 0;
+  padding: 8px 20px;
+  text-align: left;
+}
+/* Avec une illustration, les boutons de côté restent à hauteur du texte, sous le bandeau. */
+.note-card:has(> .banner) .card-side {
+  top: calc(88px + (100% - 88px) / 2);
 }

@@ -1,89 +1,87 @@
-import { useRef, useState } from 'react';
-import { PRESET_BACKGROUNDS } from '../lib/backgrounds';
-import { cardColor, COLOR_IDS, NOTE_COLORS } from '../lib/colors';
-import { resizeImage } from '../lib/images';
-import { addBackgroundImage, deleteBackgroundImage, updateNote } from '../lib/store';
+import { useState } from 'react';
+import { illustrationOf, illustrationValue, PRESET_BACKGROUNDS } from '../lib/backgrounds';
+import { cardColor, COLOR_IDS, NOTE_COLORS, type CardColor } from '../lib/colors';
+import { deleteBackgroundImage, updateNote } from '../lib/store';
 import type { BackgroundImage, Note } from '../lib/types';
 import { Icon } from './Icon';
-import { toast } from './Toast';
 
-/** Choix de la couleur et de l'illustration de fond d'une note. */
+/** Premier emoji (ou caractère) d'un texte saisi. */
+const firstEmoji = (s: string) => {
+  const seg = new Intl.Segmenter('fr', { granularity: 'grapheme' }).segment(s.trim());
+  return [...seg][0]?.segment ?? '';
+};
+
+/**
+ * Couleur et illustration d'une carte (décisions 8, 16, 17, 24) : 7 pastilles rondes, la galerie
+ * d'illustrations, et une illustration à composer soi-même (un emoji + une couleur).
+ */
 export function BackgroundPicker({ note, images }: { note: Note; images: BackgroundImage[] }) {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
-
-  const onFile = async (file?: File) => {
-    if (!file) return;
-    setBusy(true);
-    try {
-      const img = await addBackgroundImage(await resizeImage(file));
-      await updateNote(note.id, { background: `img:${img.id}` });
-    } catch {
-      toast("Impossible de lire cette image");
-    } finally {
-      setBusy(false);
-      if (fileRef.current) fileRef.current.value = '';
-    }
-  };
+  const current = illustrationOf(note.background);
+  const [emoji, setEmoji] = useState('');
+  const [color, setColor] = useState<CardColor>(cardColor(note.color));
+  const custom = firstEmoji(emoji);
+  const ownImages = images.filter((img) => note.background === `img:${img.id}`);
 
   return (
     <div className="panel picker">
       <p className="section-label">Couleur</p>
-      <div className="swatches">
+      <div className="swatches colors" role="radiogroup" aria-label="Couleur de la carte">
         {COLOR_IDS.map((c) => (
           <button
             key={c}
             type="button"
+            role="radio"
+            aria-checked={cardColor(note.color) === c}
             className={`swatch ${cardColor(note.color) === c ? 'selected' : ''}`}
             data-color={c}
             title={NOTE_COLORS[c][0]}
             aria-label={NOTE_COLORS[c][0]}
             onClick={() => void updateNote(note.id, { color: c })}
           >
-            {cardColor(note.color) === c && <Icon name="check" size={18} />}
+            {cardColor(note.color) === c && <Icon name="check" size={20} />}
           </button>
         ))}
       </div>
+
       <p className="section-label">Illustration</p>
       <div className="swatches backgrounds">
         <button
           type="button"
           className={`bg-thumb none ${!note.background ? 'selected' : ''}`}
-          title="Aucune"
           aria-label="Aucune illustration"
+          title="Aucune"
           onClick={() => void updateNote(note.id, { background: null })}
         >
-          <span className="swatch-none" />
+          <Icon name="close" size={20} />
         </button>
         {PRESET_BACKGROUNDS.map((p) => (
           <button
             key={p.id}
             type="button"
-            className={`bg-thumb preset ${note.background === `preset:${p.id}` ? 'selected' : ''}`}
-            style={{ '--bg-light': p.light, '--bg-dark': p.dark } as React.CSSProperties}
+            className={`bg-thumb ${note.background === `preset:${p.id}` ? 'selected' : ''}`}
+            data-color={p.color}
             title={p.name}
             aria-label={p.name}
             onClick={() => void updateNote(note.id, { background: `preset:${p.id}` })}
           >
-            {p.emoji}
+            <span className="thumb-emoji">{p.emoji}</span>
           </button>
         ))}
-        {images.map((img) => (
+        {current && note.background?.startsWith('ill:') && (
+          <button type="button" className="bg-thumb selected" data-color={current.color} aria-label="Mon illustration">
+            <span className="thumb-emoji">{current.emoji}</span>
+          </button>
+        )}
+        {ownImages.map((img) => (
           <span key={img.id} className="bg-thumb-wrap">
-            <button
-              type="button"
-              className={`bg-thumb ${note.background === `img:${img.id}` ? 'selected' : ''}`}
-              style={{ backgroundImage: `url(${img.dataUrl})` }}
-              aria-label="Mon image"
-              onClick={() => void updateNote(note.id, { background: `img:${img.id}` })}
-            />
+            <span className="bg-thumb selected" style={{ backgroundImage: `url(${img.dataUrl})` }} aria-label="Image importée" />
             <button
               type="button"
               className="bg-delete"
-              aria-label="Retirer cette image de ma galerie"
-              title="Retirer de ma galerie"
+              aria-label="Retirer cette image"
+              title="Retirer cette image"
               onClick={() => {
-                if (confirm('Retirer cette image de ta galerie ? Les notes qui l’utilisent perdront leur illustration.')) {
+                if (confirm('Retirer cette image ? Les cartes qui l’utilisent perdront leur illustration.')) {
                   void deleteBackgroundImage(img.id);
                 }
               }}
@@ -92,11 +90,45 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
             </button>
           </span>
         ))}
-        <button type="button" className="bg-thumb import" onClick={() => fileRef.current?.click()} disabled={busy} title="Importer une image">
-          <Icon name={busy ? 'sync' : 'upload'} size={20} />
-          <span>Importer</span>
+      </div>
+
+      <p className="section-label">Créer une illustration</p>
+      <div className="illus-maker">
+        <input
+          className="text-input emoji-input"
+          value={emoji}
+          placeholder="🙂"
+          aria-label="Emoji de l’illustration"
+          onChange={(e) => setEmoji(e.target.value)}
+        />
+        <div className="swatches mini" role="radiogroup" aria-label="Couleur de l’illustration">
+          {COLOR_IDS.map((c) => (
+            <button
+              key={c}
+              type="button"
+              role="radio"
+              aria-checked={color === c}
+              aria-label={NOTE_COLORS[c][0]}
+              title={NOTE_COLORS[c][0]}
+              className={`swatch ${color === c ? 'selected' : ''}`}
+              data-color={c}
+              onClick={() => setColor(c)}
+            >
+              {color === c && <Icon name="check" size={16} />}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="btn primary"
+          disabled={!custom}
+          onClick={() => {
+            void updateNote(note.id, { background: illustrationValue({ emoji: custom, color }) });
+            setEmoji('');
+          }}
+        >
+          Utiliser
         </button>
-        <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => void onFile(e.target.files?.[0])} />
       </div>
     </div>
   );

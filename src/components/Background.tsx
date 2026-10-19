@@ -1,21 +1,22 @@
-import { findPreset } from '../lib/backgrounds';
+import { illustrationOf } from '../lib/backgrounds';
 import type { BackgroundImage } from '../lib/types';
 
-/** Bandeau d'illustration en haut d'une note (galerie intégrée ou image importée). */
+/** Emoji penché vers la droite ou la gauche, toujours du même côté pour un même emoji. */
+const sideOf = (emoji: string) => ([...emoji].reduce((a, c) => a + (c.codePointAt(0) ?? 0), 0) % 2 ? 'right' : 'left');
+
+/** Bandeau d'illustration en haut d'une carte : aplat de couleur + grand emoji incliné (décision 16). */
 export function Banner({ value, images, tall }: { value: string | null; images: BackgroundImage[]; tall?: boolean }) {
   if (!value) return null;
   const cls = `banner ${tall ? 'tall' : ''}`;
-  if (value.startsWith('preset:')) {
-    const p = findPreset(value.slice(7));
-    if (!p) return null;
+  const ill = illustrationOf(value);
+  if (ill) {
     return (
-      <div className={`${cls} preset`} style={{ '--bg-light': p.light, '--bg-dark': p.dark } as React.CSSProperties}>
-        <span className="banner-emoji" aria-hidden="true">{p.emoji}</span>
-        <span className="banner-emoji small" aria-hidden="true">{p.emoji}</span>
-        <span className="banner-emoji tiny" aria-hidden="true">{p.emoji}</span>
+      <div className={`${cls} illustration`} data-color={ill.color}>
+        <span className={`banner-emoji ${sideOf(ill.emoji)}`} aria-hidden="true">{ill.emoji}</span>
       </div>
     );
   }
+  // Images importées avant la charte : toujours affichées.
   const img = images.find((i) => `img:${i.id}` === value);
   if (!img?.dataUrl) return null;
   return <div className={cls} style={{ backgroundImage: `url(${img.dataUrl})` }} />;

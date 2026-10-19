@@ -1,7 +1,7 @@
 import {
   ArchiveIcon, ArrowCounterClockwiseIcon, ArrowLeftIcon, ArrowsClockwiseIcon, BookmarkSimpleIcon, BoxArrowUpIcon, CardsIcon, CaretDownIcon, CaretRightIcon,
   CheckIcon, CheckCircleIcon, CheckSquareIcon, CloudIcon, CopyIcon, DotsSixVerticalIcon, DotsThreeVerticalIcon, DownloadSimpleIcon, FlagIcon, FlameIcon,
-  FolderSimpleIcon, FunnelSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
+  FolderSimpleIcon, FunnelSimpleIcon, GearSixIcon, HourglassIcon, ImageIcon, ListChecksIcon, ListIcon, MagnifyingGlassIcon, MoonIcon, PaletteIcon, PaperPlaneTiltIcon, PencilSimpleIcon, PlusIcon,
   PushPinIcon, RowsIcon, ShareNetworkIcon, SignOutIcon, SquareIcon, SquaresFourIcon, StarIcon, TagIcon, TrashIcon, TrayArrowDownIcon, UploadSimpleIcon, XIcon,
   type Icon as PhosphorIcon,
 } from '@phosphor-icons/react';
@@ -13,6 +13,7 @@ const ICONS = {
   close: XIcon,
   grid: SquaresFourIcon,
   list: RowsIcon,
+  listcheck: ListChecksIcon,
   pin: PushPinIcon,
   archive: ArchiveIcon,
   unarchive: BoxArrowUpIcon,
@@ -71,5 +72,14 @@ export function IconButton({
     <button type="button" className={`icon-btn ${active ? 'active' : ''} ${className}`} title={label} aria-label={label} onClick={onClick}>
       <Icon name={name} size={size} fill={active} />
     </button>
+  );
+}
+
+/** Case à cocher de la charte (décisions 18, 19, 34) : 18 px, corail + coche foncée quand cochée. */
+export function CheckBox({ checked }: { checked: boolean }) {
+  return (
+    <span className={`case ${checked ? 'on' : ''}`} aria-hidden="true">
+      {checked && <CheckIcon size={12} weight="bold" />}
+    </span>
   );
 }

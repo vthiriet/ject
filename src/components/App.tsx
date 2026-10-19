@@ -142,7 +142,7 @@ export default function App() {
       // Partage Android : le contenu arrive dans l'inbox.
       const [title, text, url] = shared;
       const content = [title, text, url && !text.includes(url) ? url : ''].filter(Boolean).join('\n');
-      void createInboxItem(content).then(() => toast('Ajouté à ton inbox'));
+      void createInboxItem(content).then(() => toast('Ajouté à ton Inbox'));
     } else if (tab && CATEGORIES.some((c) => c.id === tab)) {
       setSection(tab as Category);
     } else if (params.get('new') === 'inbox') {
