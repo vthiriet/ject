@@ -59,3 +59,6 @@ select cron.schedule(
   );
   $$
 );
+
+-- 4. Fait prendre en compte les nouvelles tables tout de suite.
+notify pgrst, 'reload schema';
