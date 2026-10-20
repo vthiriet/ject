@@ -81,7 +81,7 @@ de filtrer par aire dans chaque onglet.
 
 | Type | Exemples | Information propre |
 |---|---|---|
-| Action | « Prendre RDV dentiste » ; liste « Courses » | **Priorité** (flamme) : aucune / 3 jaune / 2 orange / 1 rouge |
+| Action | « Prendre RDV dentiste » ; liste « Courses » | **Prioritaire** (flamme) ou non |
 | Habitude | « Courir » ; liste « Routine du matin » | **Rythme**, objectif, à éviter, moment (voir 3.0 ter) |
 | Projet | liste « Voyage Japon » (ses étapes) | Aucune (pas de statut) |
 | Ressource | « Film : Dune 2 » ; liste « Films à voir » | Aucune |
@@ -125,10 +125,12 @@ l'Inbox, triée par date).
 **Éléments d'une liste** : dans une carte liste ouverte, la poignée ⋮⋮ à gauche de chaque
 élément non coché permet de le glisser plus haut ou plus bas.
 
-**Priorité des actions** : flamme à côté de la poubelle ; chaque appui : grise → jaune (3) →
-orange (2) → rouge (1, priorité maximale) → grise. Le chiffre (1, 2 ou 3) s'affiche sur la
-flamme. Les actions sont triées tout en haut : rouge, orange, jaune, puis grises (dans
-« Épinglées » comme dans le reste).
+**Priorité des actions** (un seul niveau, depuis le 20/10/2026) : dans une action ouverte, la
+flamme en haut à droite (à la place de l'épingle) la rend **« Prioritaire »** ; un second appui
+retire la priorité ; message avec « Annuler ». Sur la liste, pas de bouton : une petite flamme
+corail devant le texte des actions prioritaires, rassemblées dans la section « Prioritaires »
+en haut, puis « Autres ». La carte change de section à la fermeture, jamais sous le doigt.
+Les anciennes priorités 1 et 2 sont devenues « Prioritaire », la 3 une action normale.
 
 **Saisie** : pas de champ titre pour un texte (sauf s'il en avait déjà un) ; bouton
 **« Ajouter »** (nouvelle carte) ou **« OK »** en haut à droite pour valider, avec le message
@@ -420,3 +422,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 7 : animations (rebond, ressort, compteur, point du logo), fondus si moins d'animations ; logo et icône de l'application en vectoriel. |
 | 20/10/2026 | Mémoire du navigateur bloquée : rechargement automatique une fois, puis message qui reste affiché avec « Réessayer » ; « Chargement… » au lieu d'un écran vide. Habitudes : ordre stable (cocher ne déplace plus la carte), trié par moment (matin, journée, soir) ; à la création, le nom d'abord, puis les réglages. |
 | 20/10/2026 | Habitudes : corriger n'importe quel jour passé dans la fiche (« − » / « + »), liste de tous les jours cochés avec « Retirer une fois ». |
+| 20/10/2026 | Actions : priorité ramenée à un seul niveau « Prioritaire » (flamme dans la carte ouverte, à la place de l'épingle) ; section « Prioritaires » ; plus de flamme grise sur chaque carte ; coche « Archiver » de 44 px ; anciennes priorités 1 et 2 → Prioritaire, 3 → normale. |

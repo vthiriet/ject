@@ -331,7 +331,21 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
             </button>
           ) : !note.trashedAt && !inInbox && (
             <>
-              <IconButton name="pin" label={note.pinned ? 'Désépingler' : 'Épingler'} active={note.pinned} onClick={() => void updateNote(noteId, { pinned: !note.pinned, archived: false })} />
+              {category === 'action' ? (
+                // Actions : un seul niveau de priorité, porté par l'épingle (pas de bouton sur la carte).
+                <IconButton
+                  name="flame"
+                  label={note.pinned ? 'Retirer la priorité' : 'Prioritaire'}
+                  active={note.pinned}
+                  onClick={() => {
+                    const was = note.pinned;
+                    void updateNote(noteId, { pinned: !was, archived: false });
+                    toast(was ? 'Priorité retirée' : 'Prioritaire', { label: 'Annuler', run: () => void updateNote(noteId, { pinned: was }) });
+                  }}
+                />
+              ) : (
+                <IconButton name="pin" label={note.pinned ? 'Désépingler' : 'Épingler'} active={note.pinned} onClick={() => void updateNote(noteId, { pinned: !note.pinned, archived: false })} />
+              )}
               <IconButton name={note.archived ? 'unarchive' : 'archive'} label={note.archived ? 'Désarchiver' : 'Archiver'} onClick={() => void archive()} />
             </>
           )}

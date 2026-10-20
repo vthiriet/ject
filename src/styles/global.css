@@ -1906,28 +1906,6 @@ textarea.auto {
   display: flex;
   align-items: center;
 }
-.note-card.has-side:has(.priority-btn) .card-body {
-  padding-right: 62px;
-}
-.priority-btn {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 40px;
-  border-radius: var(--r-moyen);
-  color: var(--muted);
-  opacity: 0.45;
-}
-.priority-btn:hover {
-  background: var(--hover);
-}
-.priority-btn.p3 { color: #f9ab00; opacity: 1; }
-.priority-btn.p2 { color: #f57c00; opacity: 1; }
-.priority-btn.p1 { color: #d93025; opacity: 1; }
-.card-side .icon-btn {
-  width: 30px;
-}
 
 /* Glisser-déposer : fusion (centre) ou placement (bord) */
 .drag-item {
@@ -1970,28 +1948,6 @@ textarea.auto {
 
 .inbox .note-grid.list {
   gap: 0;
-}
-
-/* Chiffre de priorité sur la flamme */
-.prio-num {
-  position: absolute;
-  right: 1px;
-  bottom: 5px;
-  min-width: 14px;
-  height: 14px;
-  padding: 0 2px;
-  border-radius: 7px;
-  background: currentColor;
-  font-size: var(--t-legende);
-  font-weight: 700;
-  line-height: 14px;
-  text-align: center;
-}
-.prio-num {
-  color: inherit;
-}
-.priority-btn .prio-num {
-  -webkit-text-fill-color: #fff;
 }
 
 /* Deux boutons à droite d'une carte (Archives : désarchiver + supprimer) */
@@ -2535,4 +2491,23 @@ h1, h2, h3,
 .logged-day {
   min-height: 40px;
   text-align: left;
+}
+
+/* ---------- Actions : un seul niveau « Prioritaire » (audit designer, 20/10/2026) ---------- */
+.icon-btn.active {
+  color: var(--corail-texte);
+}
+.prio-flag {
+  display: inline-flex;
+  margin-right: 4px;
+  color: var(--corail-texte);
+  vertical-align: -2px;
+}
+/* Un seul bouton (Archiver) : zone tactile de 44 px. */
+.note-card.has-side:has(.card-side > :only-child) .card-body {
+  padding-right: 48px;
+}
+.card-side > .icon-btn:only-child {
+  width: 44px;
+  height: 44px;
 }

@@ -5,7 +5,7 @@ import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { appliesOn, habitConfig, isPaused, progress, scaleOf } from '../lib/habits';
 import { useBackgrounds, useDbReady, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
-import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
+import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, migratePriorities, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
@@ -28,22 +28,15 @@ const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id ==
 
 type Group = { label: string; notes: Note[]; progress?: { done: number; total: number } };
 
-/** Regroupe les cartes d'un onglet en sections (épinglées, puis par état). */
+/** Regroupe les cartes d'un onglet en sections : épinglées (« Prioritaires » dans Actions), puis les autres. */
 function groupsFor(section: Section, notes: Note[]): Group[] {
   if (!isCategory(section)) return [{ label: '', notes }];
   if (section === 'habit') return habitGroups(notes);
   const pinned = notes.filter((n) => n.pinned);
   const rest = notes.filter((n) => !n.pinned);
   const groups: Group[] = [];
-  // Actions : rouge (1), orange (2), jaune (3), puis sans flamme ; à priorité égale, l'ordre choisi.
-  const byPriority = (list: Note[]) =>
-    section === 'action' ? [...list].sort((a, b) => (a.priority ?? 4) - (b.priority ?? 4)) : list;
-  if (pinned.length) groups.push({ label: 'Épinglées', notes: byPriority(pinned) });
-  if (section === 'action') {
-    groups.push({ label: pinned.length ? 'Autres' : '', notes: byPriority(rest) });
-  } else {
-    groups.push({ label: pinned.length ? 'Autres' : '', notes: rest });
-  }
+  if (pinned.length) groups.push({ label: section === 'action' ? 'Prioritaires' : 'Épinglées', notes: pinned });
+  groups.push({ label: pinned.length ? 'Autres' : '', notes: rest });
   return groups.filter((g) => g.notes.length);
 }
 
@@ -162,6 +155,7 @@ export default function App() {
         }
       });
     void purgeOldTrash();
+    void migratePriorities();
     const params = new URLSearchParams(location.search);
     const shared = ['share_title', 'share_text', 'share_url'].map((k) => params.get(k)?.trim() ?? '');
     const tab = params.get('tab');
@@ -276,29 +270,15 @@ export default function App() {
         onOpen={() => setEditing({ id: n.id, isNew: false })}
         sideAction={
           isCategory(section) ? (
-            <>
-              {section === 'action' && (
-                <button
-                  type="button"
-                  className={`priority-btn p${n.priority ?? 0}`}
-                  aria-label={n.priority ? `Priorité ${n.priority}` : 'Ajouter une priorité'}
-                  title={n.priority ? `Priorité ${n.priority}` : 'Priorité'}
-                  onClick={() => void updateNote(n.id, { priority: n.priority === 3 ? 2 : n.priority === 2 ? 1 : n.priority === 1 ? undefined : 3 })}
-                >
-                  <Icon name="flame" size={20} fill={!!n.priority} />
-                  {n.priority && <span className="prio-num">{n.priority}</span>}
-                </button>
-              )}
-              <IconButton
-                name="check"
-                label="Archiver"
-                size={22}
-                onClick={() => {
-                  void updateNote(n.id, { archived: true, pinned: false });
-                  toast('Archivée', { label: 'Annuler', run: () => void updateNote(n.id, { archived: false, pinned: n.pinned }) });
-                }}
-              />
-            </>
+            <IconButton
+              name="check"
+              label="Archiver"
+              size={22}
+              onClick={() => {
+                void updateNote(n.id, { archived: true, pinned: false });
+                toast('Archivée', { label: 'Annuler', run: () => void updateNote(n.id, { archived: false, pinned: n.pinned }) });
+              }}
+            />
           ) : section === 'archive' ? (
             // Dans les Archives : remettre en place, ou supprimer (corbeille, 7 jours).
             <>

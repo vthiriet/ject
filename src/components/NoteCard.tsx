@@ -30,6 +30,9 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
   const empty = !note.title.trim() && !note.content.trim() && open.length === 0 && checkedCount === 0;
 
   const category = categoryOf(note);
+  // Actions : l'épingle s'appelle « Prioritaire » et se signale par une flamme devant le texte.
+  const urgent = category === 'action' && note.pinned && !note.inbox;
+  const flag = urgent ? <span className="prio-flag" title="Prioritaire" aria-label="Prioritaire"><Icon name="flame" size={16} fill /></span> : null;
   // Pastille de régularité (habitudes) ; plus d'états pour les actions et projets.
   const meta = category === 'habit' ? rhythmLabel(habitConfig(note)) : '';
 
@@ -45,12 +48,13 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onOpen()}
     >
       <Banner value={note.background} images={images} />
-      {note.pinned && <span className="card-pin" title="Épinglée"><Icon name="pin" size={18} fill /></span>}
+      {note.pinned && !urgent && <span className="card-pin" title="Épinglée"><Icon name="pin" size={18} fill /></span>}
       <div className="card-body">
-        {note.title.trim() && <h3 className="card-title">{note.title}</h3>}
+        {note.title.trim() && <h3 className="card-title">{flag}{note.title}</h3>}
         {note.type === 'text' && note.content.trim() && (
-          <p className="card-content"><LinkedText text={note.content} /></p>
+          <p className="card-content">{!note.title.trim() && flag}<LinkedText text={note.content} /></p>
         )}
+        {note.type === 'list' && !note.title.trim() && flag}
         {note.type === 'list' && open.length > 0 && (
           <ul className="card-items">
             {open.slice(0, MAX_ITEMS).map((i) => (

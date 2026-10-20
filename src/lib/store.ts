@@ -81,6 +81,17 @@ export async function emptyTrash() {
   for (const n of trashed) await deleteNoteForever(n.id);
 }
 
+/**
+ * Anciennes priorités des actions (1, 2, 3) : 1 et 2 deviennent « Prioritaire » (épinglée),
+ * 3 redevient une action normale. Sans effet une fois faite (le champ est vidé).
+ */
+export async function migratePriorities() {
+  const old = await db.notes.filter((n) => n.priority !== undefined && !n.deleted).toArray();
+  for (const n of old) {
+    await save('note', { ...n, pinned: n.pinned || (!n.archived && n.priority !== 3), priority: undefined });
+  }
+}
+
 export async function purgeOldTrash() {
   const limit = Date.now() - TRASH_DAYS * 24 * 3600 * 1000;
   const old = await db.notes.filter((n) => !n.deleted && n.trashedAt !== null && n.trashedAt < limit).toArray();

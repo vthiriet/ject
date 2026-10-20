@@ -75,7 +75,7 @@ export interface Note {
   /** Carte « action » seule. */
   status?: ActionStatus;
   waitingFor?: string;
-  /** Action : priorité 1 (rouge, la plus haute), 2 (orange), 3 (jaune). */
+  /** Ancienne priorité des actions (1 à 3), convertie en « Prioritaire » (épinglée) au démarrage. */
   priority?: 1 | 2 | 3;
   /** Carte « projet ». */
   projectStatus?: ProjectStatus;
