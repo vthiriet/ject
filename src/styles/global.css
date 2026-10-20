@@ -2499,3 +2499,13 @@ h1, h2, h3,
     transition-duration: 150ms !important;
   }
 }
+.db-stuck {
+  max-width: 420px;
+  margin: 0 auto;
+  color: var(--texte);
+  text-align: left;
+}
+.editor-content.short {
+  min-height: 0;
+  margin-bottom: 12px;
+}

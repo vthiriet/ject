@@ -378,16 +378,13 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
           </div>
           )}
-          {!inInbox && category === 'habit' && (
-            <HabitConfigForm value={habitConfig(note)} onChange={(c) => void updateNote(noteId, { habit: c, frequency: undefined })} />
-          )}
 
           {draft.type === 'text' ? (
             <AutoTextarea
               ref={contentRef}
-              className="editor-content"
+              className={`editor-content ${!inInbox && category === 'habit' ? 'short' : ''}`}
               value={draft.content}
-              placeholder="Écris ici…"
+              placeholder={!inInbox && category === 'habit' ? 'Nom de l’habitude (ex. Marcher)' : 'Écris ici…'}
               onChange={(v) => edit({ content: v })}
             />
           ) : (
@@ -427,6 +424,11 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
                 <Icon name="copy" size={18} /> Copier la liste
               </button>
             </div>
+          )}
+
+          {/* Habitude : on la nomme d'abord, puis on règle son rythme. */}
+          {!inInbox && category === 'habit' && (
+            <HabitConfigForm value={habitConfig(note)} onChange={(c) => void updateNote(noteId, { habit: c, frequency: undefined })} />
           )}
 
           {links.length > 0 && (

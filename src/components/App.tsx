@@ -4,7 +4,7 @@ import { describe, logError, openSettings, withTimeout } from '../lib/diagnostic
 import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { appliesOn, habitConfig, isPaused, progress, scaleOf } from '../lib/habits';
-import { useBackgrounds, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
+import { useBackgrounds, useDbReady, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
 import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
@@ -48,13 +48,19 @@ function groupsFor(section: Section, notes: Note[]): Group[] {
 }
 
 /**
- * Habitudes : par rythme, celles déjà tenues en bas, avec une barre de progression par
- * section ; puis « pas aujourd'hui » et « en pause ».
+ * Habitudes : par rythme, dans un ordre stable (cocher ne déplace pas la carte), avec une
+ * barre de progression par section ; puis « pas aujourd'hui » et « en pause ».
  */
 function habitGroups(notes: Note[]): Group[] {
   const today = new Date();
   const tally = (list: Note[]) => ({ done: list.filter((n) => progress(n, today).done).length, total: list.length });
-  const doneLast = (list: Note[]) => [...list.filter((n) => !progress(n, today).done), ...list.filter((n) => progress(n, today).done)];
+  // Matin, journée, soir, puis sans moment ; à moment égal, l'ordre habituel des cartes.
+  const MOMENTS = ['morning', 'day', 'evening'];
+  const rank = (n: Note) => {
+    const m = habitConfig(n).moment;
+    return m ? MOMENTS.indexOf(m) : MOMENTS.length;
+  };
+  const byMoment = (list: readonly Note[]) => [...list].sort((a, b) => rank(a) - rank(b));
   const active = notes.filter((n) => !isPaused(n, today));
   const of = (scale: string) => active.filter((n) => scaleOf(habitConfig(n)) === scale);
   const daily = of('day');
@@ -64,7 +70,7 @@ function habitGroups(notes: Note[]): Group[] {
       ['Cette semaine', of('week')],
       ['Ce mois-ci', of('month')],
       ['Cette année', of('year')],
-    ] as const).map(([label, list]) => ({ label, notes: doneLast(list), progress: tally(list) })),
+    ] as const).map(([label, list]) => ({ label, notes: byMoment(list), progress: tally(list) })),
     { label: "Pas aujourd'hui", notes: daily.filter((n) => !appliesOn(habitConfig(n), today)) },
     { label: 'En pause', notes: notes.filter((n) => isPaused(n, today)) },
   ].filter((g) => g.notes.length);
@@ -72,6 +78,9 @@ function habitGroups(notes: Note[]): Group[] {
 
 export default function App() {
   const notes = useNotes();
+  const dbReady = useDbReady();
+  // Base du navigateur qui ne répond pas, même après un rechargement automatique.
+  const [dbStuck, setDbStuck] = useState(false);
   const labels = useLabels();
   const images = useBackgrounds();
   const status = useSyncStatus();
@@ -137,11 +146,21 @@ export default function App() {
       setDialog('settings');
     });
     startAutoSync();
-    // Vérifie que la base du navigateur répond ; sinon, explique quoi faire.
-    withTimeout(db.notes.count()).catch((e) => {
-      logError(`Base locale : ${describe(e)}`);
-      toast('La mémoire du navigateur est bloquée : ferme complètement le navigateur (Forcer l’arrêt), puis rouvre Ject.');
-    });
+    // Vérifie que la base du navigateur répond. Sinon, on recharge une fois automatiquement
+    // (souvent suffisant sur Chrome Android), puis on explique quoi faire.
+    const RELOADED = 'ject-db-reload';
+    withTimeout(db.notes.count(), 8000)
+      .then(() => sessionStorage.removeItem(RELOADED))
+      .catch((e) => {
+        logError(`Base locale : ${describe(e)}`);
+        if (!sessionStorage.getItem(RELOADED)) {
+          sessionStorage.setItem(RELOADED, '1');
+          location.reload();
+        } else {
+          sessionStorage.removeItem(RELOADED);
+          setDbStuck(true);
+        }
+      });
     void purgeOldTrash();
     const params = new URLSearchParams(location.search);
     const shared = ['share_title', 'share_text', 'share_url'].map((k) => params.get(k)?.trim() ?? '');
@@ -371,66 +390,82 @@ export default function App() {
       )}
 
       <main className={`content ${isTab ? 'with-tabs' : ''}`}>
-        {section === 'inbox' && (
-          <InboxView
-            items={inboxItems}
-            total={inboxAll.length}
-            onOpen={(id) => setEditing({ id, isNew: false })}
-            onFile={(ids, together) => setFiling({ ids, together })}
-            onMerge={(ids) => void mergeMany(ids)}
-          />
-        )}
-
-
-        {section === 'trash' && visible.length > 0 && (
-          <div className="trash-head">
-            <span>Les cartes de la corbeille sont supprimées après 7 jours.</span>
-            <button type="button" className="link-btn" onClick={() => confirm('Vider la corbeille ? Les cartes seront supprimées définitivement.') && void emptyTrash()}>
-              Vider la corbeille
-            </button>
-          </div>
-        )}
-
-        {section === 'habit' && !query && <HabitSummary habits={habits} />}
-
-        {groups.map((g) => (
-          <section key={g.label || 'all'}>
-            {g.label && !g.progress && <p className="section-label grid-label">{g.label}</p>}
-            {g.progress && (
-              <div className="section-progress">
-                <p className="section-label grid-label">
-                  {g.label}
-                  {/* Le compteur grossit un instant quand il change (décision 15). */}
-                  <span key={g.progress.done} className="bump">{g.progress.done} / {g.progress.total}</span>
-                </p>
-                <div className="habit-bar" aria-label={`${g.progress.done} sur ${g.progress.total} tenues`}>
-                  <span style={{ width: `${Math.round((g.progress.done / g.progress.total) * 100)}%` }} />
-                </div>
-              </div>
-            )}
-            <NoteGrid
-              notes={g.notes}
-              layout={section === 'habit' ? 'list' : layout}
-              sortable={sortable && section !== 'habit'}
-              onMerge={isCategory(section) && section !== 'habit' ? (a, b) => void merge(a, b) : undefined}
-              render={card}
-            />
-          </section>
-        ))}
-
-        {section !== 'inbox' && visible.length === 0 && (
+        {!dbReady ? (
           <div className="empty">
-            <Icon name={section === 'archive' ? 'archive' : section === 'trash' ? 'trash' : query ? 'search' : categoryMeta(section).icon} size={96} />
-            <p>
-              {query ? 'Aucun résultat'
-                : section === 'archive' ? 'Les cartes archivées et les projets terminés s’affichent ici'
-                : section === 'trash' ? 'La corbeille est vide'
-                : section === 'action' ? 'Tes actions à faire s’affichent ici'
-                : section === 'habit' ? 'Tes habitudes et leur régularité s’affichent ici'
-                : section === 'project' ? 'Tes projets s’affichent ici'
-                : 'Tes ressources (recos, idées, infos à garder) s’affichent ici'}
-            </p>
+            {dbStuck ? (
+              <div className="db-stuck">
+                <p><strong>La mémoire du navigateur ne répond pas.</strong> Tes cartes sont en sécurité (sur ton compte si tu es connecté).</p>
+                <p>Ferme complètement le navigateur (Paramètres du téléphone › Applications › Chrome › Forcer l’arrêt), ferme les autres onglets Ject, puis rouvre Ject.</p>
+                <button type="button" className="btn primary" onClick={() => location.reload()}>Réessayer</button>
+              </div>
+            ) : (
+              <p>Chargement…</p>
+            )}
           </div>
+        ) : (
+          <>
+          {section === 'inbox' && (
+            <InboxView
+              items={inboxItems}
+              total={inboxAll.length}
+              onOpen={(id) => setEditing({ id, isNew: false })}
+              onFile={(ids, together) => setFiling({ ids, together })}
+              onMerge={(ids) => void mergeMany(ids)}
+            />
+          )}
+
+
+          {section === 'trash' && visible.length > 0 && (
+            <div className="trash-head">
+              <span>Les cartes de la corbeille sont supprimées après 7 jours.</span>
+              <button type="button" className="link-btn" onClick={() => confirm('Vider la corbeille ? Les cartes seront supprimées définitivement.') && void emptyTrash()}>
+                Vider la corbeille
+              </button>
+            </div>
+          )}
+
+          {section === 'habit' && !query && <HabitSummary habits={habits} />}
+
+          {groups.map((g) => (
+            <section key={g.label || 'all'}>
+              {g.label && !g.progress && <p className="section-label grid-label">{g.label}</p>}
+              {g.progress && (
+                <div className="section-progress">
+                  <p className="section-label grid-label">
+                    {g.label}
+                    {/* Le compteur grossit un instant quand il change (décision 15). */}
+                    <span key={g.progress.done} className="bump">{g.progress.done} / {g.progress.total}</span>
+                  </p>
+                  <div className="habit-bar" aria-label={`${g.progress.done} sur ${g.progress.total} tenues`}>
+                    <span style={{ width: `${Math.round((g.progress.done / g.progress.total) * 100)}%` }} />
+                  </div>
+                </div>
+              )}
+              <NoteGrid
+                notes={g.notes}
+                layout={section === 'habit' ? 'list' : layout}
+                sortable={sortable && section !== 'habit'}
+                onMerge={isCategory(section) && section !== 'habit' ? (a, b) => void merge(a, b) : undefined}
+                render={card}
+              />
+            </section>
+          ))}
+
+          {section !== 'inbox' && visible.length === 0 && (
+            <div className="empty">
+              <Icon name={section === 'archive' ? 'archive' : section === 'trash' ? 'trash' : query ? 'search' : categoryMeta(section).icon} size={96} />
+              <p>
+                {query ? 'Aucun résultat'
+                  : section === 'archive' ? 'Les cartes archivées et les projets terminés s’affichent ici'
+                  : section === 'trash' ? 'La corbeille est vide'
+                  : section === 'action' ? 'Tes actions à faire s’affichent ici'
+                  : section === 'habit' ? 'Tes habitudes et leur régularité s’affichent ici'
+                  : section === 'project' ? 'Tes projets s’affichent ici'
+                  : 'Tes ressources (recos, idées, infos à garder) s’affichent ici'}
+              </p>
+            </div>
+          )}
+          </>
         )}
       </main>
 

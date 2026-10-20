@@ -10,6 +10,11 @@ export function useNotes(): Note[] {
   return useLiveQuery(() => db.notes.filter((n) => !n.deleted).toArray(), [], EMPTY);
 }
 
+/** La base locale a-t-elle répondu au moins une fois ? (sinon : chargement, pas « vide »). */
+export function useDbReady(): boolean {
+  return useLiveQuery(() => db.notes.count().then(() => true), [], false);
+}
+
 export function useLabels(): Label[] {
   const labels = useLiveQuery(() => db.labels.filter((l) => !l.deleted).toArray(), [], EMPTY);
   return [...labels].sort((a, b) => a.name.localeCompare(b.name, 'fr'));
