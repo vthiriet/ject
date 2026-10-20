@@ -87,6 +87,12 @@ export function HabitConfigForm({ value, onChange }: { value: HabitConfig; onCha
         <input type="checkbox" checked={!!value.avoid} onChange={(e) => set({ avoid: e.target.checked || undefined })} />
         À éviter (cocher = période tenue)
       </label>
+      {value.rhythm !== 'daily' && value.rhythm !== 'days' && (
+        <label className="switch-row">
+          <input type="checkbox" checked={value.notify !== false} onChange={(e) => set({ notify: e.target.checked ? undefined : false })} />
+          Rappels par notification
+        </label>
+      )}
       {value.rhythm === 'daily' && (
         <label className="switch-row">
           <input type="checkbox" checked={!!value.noWeekend} onChange={(e) => set({ noWeekend: e.target.checked || undefined })} />

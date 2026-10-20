@@ -24,6 +24,8 @@ export interface HabitConfig {
   moment?: 'morning' | 'day' | 'evening';
   /** Quotidienne : pas le samedi ni le dimanche. */
   noWeekend?: boolean;
+  /** Rappels par notification (semaine, mois, année) ; activés sauf si false. */
+  notify?: boolean;
 }
 
 export type NoteColor =

@@ -192,6 +192,22 @@ l'inbox » et « Actions ».
 pause sont ignorées), historique en barres, **corriger un jour** (n'importe quel jour passé, même ancien : « − » / « + » pour retirer ou ajouter une ou plusieurs fois), liste de tous les jours cochés (« Retirer une fois », avec « Annuler » ; 7 derniers jours, puis « Voir les autres »), **pause** jusqu'à
 une date / « Reprendre », « Modifier », « Supprimer ».
 
+**Rappels par notification** (habitudes de la semaine, du mois, de l'année ; pas les
+quotidiennes) :
+- date fixée (« chaque mois, le N ») : un rappel ce jour-là ; sinon début, milieu et veille de
+  la fin de la période (semaine : lundi, jeudi, samedi ; mois : le 1er, le 15, l'avant-dernier
+  jour ; année : 1er janvier, 1er juillet, 1er décembre) ;
+- heure selon le moment : matin 9 h, journée 12 h, soir 18 h, sinon 9 h ;
+- rien si l'habitude est déjà tenue sur la période, en pause ou archivée ; « à éviter » :
+  seulement en fin de période (« As-tu tenu … ? ») ;
+- une notification par heure : le détail pour une habitude (avec bouton « +1 », compté sans
+  ouvrir Ject), un résumé « N habitudes à faire » pour plusieurs ;
+- interrupteur « Rappels par notification » dans les réglages de chaque habitude ; activation,
+  arrêt et essai dans Réglages › Rappels des habitudes ;
+- technique : abonnement Web Push enregistré dans Supabase (`ject_push`), envoi par
+  `/api/notify` appelé toutes les heures par une tâche Supabase (pg_cron), sans doublon
+  (`ject_push_sent`). Installation : docs/INSTALLATION.md, étape 7.
+
 **Pause générale** (vacances, maladie) : depuis l'en-tête, met toutes les habitudes en pause
 jusqu'à une date ; les jours de pause ne comptent pas.
 
@@ -427,3 +443,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 20/10/2026 | Habitudes : corriger n'importe quel jour passé dans la fiche (« − » / « + »), liste de tous les jours cochés avec « Retirer une fois ». |
 | 20/10/2026 | Actions : priorité ramenée à un seul niveau « Prioritaire » (flamme dans la carte ouverte, à la place de l'épingle) ; section « Prioritaires » ; plus de flamme grise sur chaque carte ; coche « Archiver » de 44 px ; anciennes priorités 1 et 2 → Prioritaire, 3 → normale. |
 | 20/10/2026 | Actions : glisser une action vers la gauche = Prioritaire (au doigt) ; flamme au survol à la souris ; astuce affichée une fois. |
+| 20/10/2026 | Rappels des habitudes par notification (début, milieu, veille de la fin, ou jour fixé ; 9 h / 12 h / 18 h ; pas si déjà tenue ; bouton « +1 »). |

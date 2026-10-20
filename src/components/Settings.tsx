@@ -3,6 +3,7 @@ import { db } from '../lib/db';
 import { errorLog, runDiagnostics } from '../lib/diagnostics';
 import { downloadFile } from '../lib/download';
 import { useSyncStatus, type ThemePref } from '../lib/hooks';
+import { currentSubscription, disableReminders, enableReminders, pushSupported, sendTest } from '../lib/push';
 import { importBackup } from '../lib/store';
 import { supabase } from '../lib/supabase';
 import { syncNow, syncState } from '../lib/sync';
@@ -36,6 +37,28 @@ export function Settings({ onClose, theme, setTheme, focus }: Props) {
   const [busy, setBusy] = useState(false);
   const [diag, setDiag] = useState('');
   const [diagRunning, setDiagRunning] = useState(false);
+  // Rappels des habitudes sur cet appareil : null = vérification en cours.
+  const [reminders, setReminders] = useState<boolean | null>(null);
+  const [remindBusy, setRemindBusy] = useState(false);
+  useEffect(() => {
+    void currentSubscription().then((s) => setReminders(!!s));
+  }, []);
+  const toggleReminders = async () => {
+    setRemindBusy(true);
+    if (reminders) {
+      await disableReminders();
+      setReminders(false);
+      toast('Rappels coupés sur cet appareil');
+    } else {
+      const err = await enableReminders();
+      if (err) toast(err);
+      else {
+        setReminders(true);
+        toast('Rappels activés sur cet appareil');
+      }
+    }
+    setRemindBusy(false);
+  };
   const errors = errorLog();
   const diagRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -131,6 +154,28 @@ export function Settings({ onClose, theme, setTheme, focus }: Props) {
             <input className="text-input" type="email" required value={email} placeholder="ton@email.fr" onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
             <button type="submit" className="btn primary" disabled={busy}>Recevoir le lien</button>
           </form>
+        )}
+      </section>
+
+      <section className="settings-section">
+        <h3>Rappels des habitudes</h3>
+        <p className="hint">
+          Pour les habitudes de la semaine, du mois et de l’année : au début, au milieu et la veille de la fin de la
+          période (ou le jour choisi), à 9 h, 12 h ou 18 h selon le moment. Rien si l’habitude est déjà tenue ou en pause.
+        </p>
+        {!pushSupported() ? (
+          <p className="hint">Ce navigateur ne permet pas les notifications. Installe Ject comme une application.</p>
+        ) : (
+          <div className="row wrap">
+            <button type="button" className={`btn ${reminders ? '' : 'primary'}`} disabled={remindBusy || reminders === null} onClick={() => void toggleReminders()}>
+              <Icon name={reminders ? 'close' : 'repeat'} size={18} /> {reminders ? 'Couper les rappels' : 'Activer les rappels'}
+            </button>
+            {reminders && (
+              <button type="button" className="btn" disabled={remindBusy} onClick={() => void sendTest().then((err) => toast(err ?? 'Notification d’essai envoyée'))}>
+                <Icon name="send" size={18} /> Envoyer un essai
+              </button>
+            )}
+          </div>
         )}
       </section>
 

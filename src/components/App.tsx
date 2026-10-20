@@ -71,7 +71,14 @@ function habitGroups(notes: Note[]): Group[] {
 }
 
 export default function App() {
-  const notes = useNotes();
+  // Relecture de la base quand le service worker y a écrit (« +1 » depuis une notification).
+  const [rev, setRev] = useState(0);
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => e.data === 'ject:refresh' && setRev((r) => r + 1);
+    navigator.serviceWorker?.addEventListener('message', onMessage);
+    return () => navigator.serviceWorker?.removeEventListener('message', onMessage);
+  }, []);
+  const notes = useNotes(rev);
   const dbReady = useDbReady();
   // Base du navigateur qui ne répond pas, même après un rechargement automatique.
   const [dbStuck, setDbStuck] = useState(false);

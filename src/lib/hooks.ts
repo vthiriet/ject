@@ -6,8 +6,9 @@ import type { BackgroundImage, Label, Note } from './types';
 
 const EMPTY: never[] = [];
 
-export function useNotes(): Note[] {
-  return useLiveQuery(() => db.notes.filter((n) => !n.deleted).toArray(), [], EMPTY);
+/** `rev` : à changer pour forcer une relecture (ex. +1 compté depuis une notification). */
+export function useNotes(rev = 0): Note[] {
+  return useLiveQuery(() => db.notes.filter((n) => !n.deleted).toArray(), [rev], EMPTY);
 }
 
 /** La base locale a-t-elle répondu au moins une fois ? (sinon : chargement, pas « vide »). */

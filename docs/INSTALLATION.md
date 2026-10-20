@@ -188,6 +188,32 @@ Ensuite :
 
 ---
 
+## Étape 7 : Rappels des habitudes (notifications)
+
+Les rappels partent d'un serveur, même quand Ject est fermé. Il faut trois secrets et
+une tâche automatique dans Supabase. Les valeurs de `VAPID_PRIVATE_KEY` et `CRON_SECRET`
+sont fournies à part (ne jamais les mettre dans le dépôt GitHub).
+
+1. **Clé de service Supabase** : Supabase › Project Settings › API (ou « API Keys ») ›
+   copier la clé **service_role** (secrète).
+2. **Vercel** › le projet `ject` › Settings › Environment Variables › ajouter, pour
+   **Production** et **Preview** :
+   - `SUPABASE_SERVICE_ROLE_KEY` = la clé de l'étape 1 ;
+   - `VAPID_PRIVATE_KEY` = la clé privée fournie ;
+   - `CRON_SECRET` = le secret fourni.
+3. **Republier** la version de test pour qu'elle lise ces variables (GitHub › Actions ›
+   « Publication Vercel » › Run workflow sur `preview`, ou attendre le prochain envoi).
+4. **Supabase** › SQL Editor › New query : coller le contenu de `supabase/notifications.sql`
+   en remplaçant `COLLE_ICI_LE_SECRET` par la valeur de `CRON_SECRET`, puis « Run ».
+   Cela crée les tables des appareils abonnés et une tâche qui appelle `/api/notify`
+   toutes les heures (à la 7e minute).
+5. Dans Ject (sur le téléphone, application installée et compte connecté) : Réglages ›
+   Rappels des habitudes › **Activer les rappels**, accepter les notifications, puis
+   **Envoyer un essai**.
+
+Après la mise en production, remplacer dans la tâche Supabase l'adresse de la version de
+test par celle de production (relancer le script avec la nouvelle adresse).
+
 ## Travailler en local (facultatif)
 
 1. Copie `.env.example` en `.env` et remplis les mêmes valeurs qu'à l'étape 3.
