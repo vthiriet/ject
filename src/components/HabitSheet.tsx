@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  addDays, currentPause, encouragement, habitConfig, history, iso, MOMENT_LABEL, parse, periodRange,
+  addDays, currentPause, encouragement, habitConfig, history, iso, MOMENT_LABEL, parse,
   progress, rhythmLabel, successRate,
 } from '../lib/habits';
 import { logHabit, pauseHabits, resumeHabit, updateNote } from '../lib/store';
@@ -29,15 +29,18 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
   const rate = successRate(note, today);
   const hist = history(note, p.scale === 'day' ? 14 : p.scale === 'week' ? 8 : p.scale === 'year' ? 4 : 6, today);
   const max = Math.max(1, ...hist.map((h) => Math.max(h.count, h.goal)));
-  const [from] = periodRange(p.scale, today);
-  const [catchUp, setCatchUp] = useState(iso(addDays(today, -1)) >= iso(from) ? iso(addDays(today, -1)) : todayIso);
+  // Jour à corriger : n'importe quel jour passé (oubli ou erreur, même longtemps après).
+  const [day, setDay] = useState(todayIso);
+  const [showAll, setShowAll] = useState(false);
   const [pauseUntil, setPauseUntil] = useState(iso(addDays(today, 7)));
   const pause = currentPause(note, today);
 
-  // Jours cochés dans la période en cours (pour corriger un oubli ou une erreur).
+  // Tous les jours cochés, du plus récent au plus ancien.
   const logged = Object.entries(note.habitLog ?? {})
-    .filter(([d]) => d >= iso(from) && d <= todayIso)
+    .filter(([d]) => d <= todayIso)
     .sort(([a], [b]) => (a < b ? 1 : -1));
+  const shown = showAll ? logged : logged.slice(0, 7);
+  const dayCount = note.habitLog?.[day] ?? 0;
 
   const remove = () => {
     void updateNote(note.id, { archived: true, pinned: false });
@@ -80,30 +83,51 @@ export function HabitSheet({ note, onClose, onEdit }: Props) {
         ))}
       </div>
 
-      <p className="section-label">Rattraper un oubli</p>
-      <div className="row">
+      <p className="section-label">Corriger un jour</p>
+      <div className="row day-fix">
         <input
           className="text-input"
           type="date"
-          value={catchUp}
-          min={iso(from)}
+          value={day}
           max={todayIso}
-          onChange={(e) => setCatchUp(e.target.value)}
-          aria-label="Jour"
+          onChange={(e) => e.target.value && setDay(e.target.value)}
+          aria-label="Jour à corriger"
         />
-        <button type="button" className="btn" onClick={() => catchUp && void logHabit(note.id, catchUp, 1).then(() => toast(`Ajouté pour le ${formatDate(parse(catchUp).getTime())}`))}>
-          <Icon name="add" size={18} /> Fait ce jour-là
-        </button>
+        <div className="stepper" role="group" aria-label={`Fois faites le ${formatDate(parse(day).getTime())}`}>
+          <button type="button" className="btn" aria-label="Retirer une fois" disabled={!dayCount} onClick={() => void logHabit(note.id, day, -1)}>−</button>
+          <span aria-live="polite">{dayCount} fois</span>
+          <button type="button" className="btn" aria-label="Ajouter une fois" onClick={() => void logHabit(note.id, day, 1)}>+</button>
+        </div>
       </div>
+
       {logged.length > 0 && (
-        <ul className="logged-days">
-          {logged.map(([d, n]) => (
-            <li key={d}>
-              <span>{formatDate(parse(d).getTime())}{n > 1 ? ` · ${n} fois` : ''}</span>
-              <button type="button" className="link-btn" onClick={() => void logHabit(note.id, d, -1)}>Retirer</button>
-            </li>
-          ))}
-        </ul>
+        <>
+          <p className="section-label">Jours cochés</p>
+          <ul className="logged-days">
+            {shown.map(([d, n]) => (
+              <li key={d}>
+                <button type="button" className="logged-day" onClick={() => setDay(d)}>
+                  {formatDate(parse(d).getTime())}{n > 1 ? ` · ${n} fois` : ''}
+                </button>
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => {
+                    void logHabit(note.id, d, -1);
+                    toast(`Une fois retirée le ${formatDate(parse(d).getTime())}`, { label: 'Annuler', run: () => void logHabit(note.id, d, 1) });
+                  }}
+                >
+                  Retirer une fois
+                </button>
+              </li>
+            ))}
+          </ul>
+          {logged.length > shown.length && (
+            <button type="button" className="link-btn" onClick={() => setShowAll(true)}>
+              Voir les {logged.length - shown.length} autres jours
+            </button>
+          )}
+        </>
       )}
 
       <p className="section-label">Pause (vacances, maladie)</p>

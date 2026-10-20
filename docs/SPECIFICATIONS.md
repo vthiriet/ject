@@ -184,8 +184,7 @@ l'inbox » et « Actions ».
 
 **Fiche détaillée** (toucher une habitude) : avancement, % de réussite (4 dernières semaines,
 3 derniers mois ou 3 dernières années ; la période en cours ne compte que si elle est réussie ; les périodes en
-pause sont ignorées), historique en barres, **rattrapage** d'un oubli (choisir
-un jour de la période en cours), liste des jours cochés (avec « Retirer »), **pause** jusqu'à
+pause sont ignorées), historique en barres, **corriger un jour** (n'importe quel jour passé, même ancien : « − » / « + » pour retirer ou ajouter une ou plusieurs fois), liste de tous les jours cochés (« Retirer une fois », avec « Annuler » ; 7 derniers jours, puis « Voir les autres »), **pause** jusqu'à
 une date / « Reprendre », « Modifier », « Supprimer ».
 
 **Pause générale** (vacances, maladie) : depuis l'en-tête, met toutes les habitudes en pause
@@ -420,3 +419,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 19/10/2026 | Refonte, étape 6 : « Réglages » partout ; erreurs inattendues = message rassurant + « Voir le détail » (journal des erreurs dans Réglages › Diagnostic) ; export Notion sans connexion : bouton « Se connecter » ; restauration d'une sauvegarde sans confirmation (« N cartes ajoutées ») ; textes au lexique « carte », plus d'emoji dans l'interface. |
 | 19/10/2026 | Refonte, étape 7 : animations (rebond, ressort, compteur, point du logo), fondus si moins d'animations ; logo et icône de l'application en vectoriel. |
 | 20/10/2026 | Mémoire du navigateur bloquée : rechargement automatique une fois, puis message qui reste affiché avec « Réessayer » ; « Chargement… » au lieu d'un écran vide. Habitudes : ordre stable (cocher ne déplace plus la carte), trié par moment (matin, journée, soir) ; à la création, le nom d'abord, puis les réglages. |
+| 20/10/2026 | Habitudes : corriger n'importe quel jour passé dans la fiche (« − » / « + »), liste de tous les jours cochés avec « Retirer une fois ». |
