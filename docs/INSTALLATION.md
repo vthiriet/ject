@@ -201,8 +201,10 @@ sont fournies à part (ne jamais les mettre dans le dépôt GitHub).
    - `SUPABASE_SERVICE_ROLE_KEY` = la clé de l'étape 1 ;
    - `VAPID_PRIVATE_KEY` = la clé privée fournie ;
    - `CRON_SECRET` = le secret fourni.
-3. **Republier** la version de test pour qu'elle lise ces variables (GitHub › Actions ›
-   « Publication Vercel » › Run workflow sur `preview`, ou attendre le prochain envoi).
+3. **Republier** la version de test pour qu'elle lise ces variables : un nouvel envoi sur
+   `preview` suffit (Claude s'en charge). Le bouton « Run workflow » de GitHub n'apparaît que
+   lorsque la publication existe aussi sur `main`, c'est-à-dire après la première mise en
+   production.
 4. **Supabase** › SQL Editor › New query : coller le contenu de `supabase/notifications.sql`
    en remplaçant `COLLE_ICI_LE_SECRET` par la valeur de `CRON_SECRET`, puis « Run ».
    Cela crée les tables des appareils abonnés et une tâche qui appelle `/api/notify`
