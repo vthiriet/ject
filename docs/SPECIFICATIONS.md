@@ -127,7 +127,10 @@ l'Inbox, triée par date).
 
 **Priorité des actions** (un seul niveau, depuis le 20/10/2026) : dans une action ouverte, la
 flamme en haut à droite (à la place de l'épingle) la rend **« Prioritaire »** ; un second appui
-retire la priorité ; message avec « Annuler ». Sur la liste, pas de bouton : une petite flamme
+retire la priorité ; message avec « Annuler ». **Depuis la liste** : au doigt, glisser une action
+**vers la gauche** la rend prioritaire (ou retire la priorité) ; à la souris, une flamme
+apparaît au survol de la carte. Astuce affichée une seule fois en haut d'Actions (au toucher).
+Attention : dans l'Inbox, le même geste archive. Sur la liste, pas de bouton visible : une petite flamme
 corail devant le texte des actions prioritaires, rassemblées dans la section « Prioritaires »
 en haut, puis « Autres ». La carte change de section à la fermeture, jamais sous le doigt.
 Les anciennes priorités 1 et 2 sont devenues « Prioritaire », la 3 une action normale.
@@ -423,3 +426,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 20/10/2026 | Mémoire du navigateur bloquée : rechargement automatique une fois, puis message qui reste affiché avec « Réessayer » ; « Chargement… » au lieu d'un écran vide. Habitudes : ordre stable (cocher ne déplace plus la carte), trié par moment (matin, journée, soir) ; à la création, le nom d'abord, puis les réglages. |
 | 20/10/2026 | Habitudes : corriger n'importe quel jour passé dans la fiche (« − » / « + »), liste de tous les jours cochés avec « Retirer une fois ». |
 | 20/10/2026 | Actions : priorité ramenée à un seul niveau « Prioritaire » (flamme dans la carte ouverte, à la place de l'épingle) ; section « Prioritaires » ; plus de flamme grise sur chaque carte ; coche « Archiver » de 44 px ; anciennes priorités 1 et 2 → Prioritaire, 3 → normale. |
+| 20/10/2026 | Actions : glisser une action vers la gauche = Prioritaire (au doigt) ; flamme au survol à la souris ; astuce affichée une fois. |

@@ -2511,3 +2511,70 @@ h1, h2, h3,
   width: 44px;
   height: 44px;
 }
+
+/* ---------- Actions : glisser vers la gauche = Prioritaire ---------- */
+.swipe {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-grand);
+  touch-action: pan-y;
+}
+.swipe-reveal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-right: 16px;
+  background: var(--corail-doux);
+  color: var(--onglet-actif);
+  font-size: var(--t-legende);
+  font-weight: 700;
+}
+.swipe:not(.swiping) > .swipe-reveal {
+  visibility: hidden;
+}
+.swipe-body {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+/* À la souris : la flamme apparaît au survol de la carte (rien sur téléphone). */
+.card-actions:has(.prio-hover) {
+  position: absolute;
+  top: 50%;
+  right: 46px;
+  transform: translateY(-50%);
+  display: none;
+  padding: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .note-card:hover .card-actions:has(.prio-hover),
+  .card-actions:has(.prio-hover:focus-visible) {
+    display: block;
+  }
+}
+.prio-hover {
+  width: 36px;
+  height: 36px;
+  background: var(--note-bg);
+}
+.tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 640px;
+  margin: 8px auto 4px;
+  padding: 4px 4px 4px 12px;
+  border-radius: var(--r-moyen);
+  background: var(--corail-doux);
+  color: var(--onglet-actif);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.tip span {
+  flex: 1;
+}
+.tip .icon-btn {
+  color: inherit;
+}

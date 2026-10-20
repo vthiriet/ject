@@ -22,6 +22,7 @@ import { NoteCard } from './NoteCard';
 import { NoteEditor } from './NoteEditor';
 import { NoteGrid } from './NoteGrid';
 import { Settings } from './Settings';
+import { Swipeable } from './Swipeable';
 import { toast, Toaster } from './Toast';
 
 const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id === s);
@@ -87,6 +88,10 @@ export default function App() {
   const [editing, setEditing] = useState<{ id: string; isNew: boolean; initial?: Note } | null>(null);
   const [dialog, setDialog] = useState<null | 'settings' | 'labels'>(null);
   const [settingsFocus, setSettingsFocus] = useState<'diagnostic' | undefined>();
+  // Astuce « glisse vers la gauche », montrée une seule fois (au toucher seulement).
+  const [tipSeen, setTipSeen] = useLocalPref<'0' | '1'>('ject-tip-prio', '0');
+  const dismissTip = () => tipSeen === '0' && setTipSeen('1');
+  const touchDevice = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
   const [filing, setFiling] = useState<{ ids: string[]; together?: boolean } | null>(null);
   const [sheet, setSheet] = useState<string | null>(null);
   const started = useRef(false);
@@ -246,7 +251,26 @@ export default function App() {
 
   const habits = useMemo(() => notes.filter((n) => categoryOf(n) === 'habit' && !n.inbox && !n.archived && n.trashedAt === null), [notes]);
 
+  // Actions : un seul niveau de priorité, porté par l'épingle ; annulable.
+  const togglePriority = (n: Note) => {
+    const was = n.pinned;
+    void updateNote(n.id, { pinned: !was });
+    toast(was ? 'Priorité retirée' : 'Prioritaire', { label: 'Annuler', run: () => void updateNote(n.id, { pinned: was }) });
+    dismissTip();
+  };
+
   const card = (n: Note) =>
+    section === 'action' ? (
+      // Glisser vers la gauche au doigt : prioritaire ; à la souris, flamme au survol.
+      <Swipeable
+        reveal={<><Icon name="flame" size={20} fill={!n.pinned} /> {n.pinned ? 'Retirer la priorité' : 'Prioritaire'}</>}
+        onSwipe={() => togglePriority(n)}
+      >
+        {categoryCard(n)}
+      </Swipeable>
+    ) : categoryCard(n);
+
+  const categoryCard = (n: Note) =>
     section === 'habit' ? (
       <HabitCard note={n} onOpen={() => setSheet(n.id)} />
     ) : section === 'trash' ? (
@@ -268,6 +292,17 @@ export default function App() {
         labels={labels}
         images={images}
         onOpen={() => setEditing({ id: n.id, isNew: false })}
+        actions={
+          section === 'action' ? (
+            <IconButton
+              name="flame"
+              label={n.pinned ? 'Retirer la priorité' : 'Prioritaire'}
+              active={n.pinned}
+              className="prio-hover"
+              onClick={() => togglePriority(n)}
+            />
+          ) : undefined
+        }
         sideAction={
           isCategory(section) ? (
             <IconButton
@@ -405,6 +440,13 @@ export default function App() {
           )}
 
           {section === 'habit' && !query && <HabitSummary habits={habits} />}
+            {section === 'action' && touchDevice && tipSeen === '0' && visible.length > 0 && (
+              <div className="tip">
+                <Icon name="flame" size={18} />
+                <span>Astuce : glisse une action vers la gauche pour la rendre prioritaire.</span>
+                <IconButton name="close" label="Fermer l’astuce" size={18} onClick={dismissTip} />
+              </div>
+            )}
 
           {groups.map((g) => (
             <section key={g.label || 'all'}>
