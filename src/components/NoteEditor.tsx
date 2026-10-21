@@ -5,7 +5,7 @@ import { markAdded } from '../lib/fresh';
 import { habitConfig } from '../lib/habits';
 import { useBackClose } from '../lib/history';
 import {
-  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, trashNote, updateNote,
+  deleteNoteForever, duplicateNote, isEmptyNote, newItem, restoreNote, toggleItem, trashNote, updateNote,
 } from '../lib/store';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { extractLinks, formatDate, noteToText } from '../lib/text';
@@ -265,7 +265,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           type="button"
           className="check"
           aria-label={done ? 'Décocher' : 'Cocher'}
-          onClick={() => updateItem(item.id, { checked: !item.checked })}
+          onClick={() => setItems(toggleItem(draft.items, item.id))}
         >
           <CheckBox checked={done} />
         </button>

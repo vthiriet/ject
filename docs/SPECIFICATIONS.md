@@ -445,3 +445,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 20/10/2026 | Actions : glisser une action vers la gauche = Prioritaire (au doigt) ; flamme au survol à la souris ; astuce affichée une fois. |
 | 20/10/2026 | Rappels des habitudes par notification (début, milieu, veille de la fin, ou jour fixé ; 9 h / 12 h / 18 h ; pas si déjà tenue ; bouton « +1 »). |
 | 21/10/2026 | Les « aires » s'appellent désormais « catégories » ; éléments cochés toujours visibles (barrés) dans les listes, sur la carte et dans la carte ouverte. |
+| 21/10/2026 | Un élément coché passe en tête des éléments cochés (décoché : retour à la fin des éléments à faire) ; sélecteur de tous les emoji avec recherche en français pour créer une illustration. |

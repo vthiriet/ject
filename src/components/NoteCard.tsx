@@ -1,7 +1,7 @@
 import { categoryOf } from '../lib/gtd';
 import { habitConfig, rhythmLabel } from '../lib/habits';
 import { isFresh } from '../lib/fresh';
-import { updateNote } from '../lib/store';
+import { toggleItem, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
 import { Banner } from './Background';
@@ -40,8 +40,7 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
   // Pastille de régularité (habitudes) ; plus d'états pour les actions et projets.
   const meta = category === 'habit' ? rhythmLabel(habitConfig(note)) : '';
 
-  const toggle = (id: string) =>
-    updateNote(note.id, { items: note.items.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i)) });
+  const toggle = (id: string) => updateNote(note.id, { items: toggleItem(note.items, id) });
 
   return (
     <article

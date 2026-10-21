@@ -25,6 +25,21 @@ async function save<T extends { id: string; updatedAt: number }>(kind: Kind, rec
 
 // ---------- Notes ----------
 
+/**
+ * Coche ou décoche un élément de liste. Coché, il passe en tête des éléments cochés (plus facile
+ * à retrouver et à décocher) ; décoché, il revient à la fin des éléments à faire.
+ */
+export function toggleItem(items: ChecklistItem[], id: string): ChecklistItem[] {
+  const item = items.find((i) => i.id === id);
+  if (!item) return items;
+  const moved = { ...item, checked: !item.checked };
+  const rest = items.filter((i) => i.id !== id);
+  const firstChecked = rest.findIndex((i) => i.checked || i.exported);
+  const at = firstChecked === -1 ? rest.length : firstChecked;
+  rest.splice(at, 0, moved);
+  return rest;
+}
+
 export function newItem(text = '', checked = false): ChecklistItem {
   return { id: uid(), text, checked };
 }

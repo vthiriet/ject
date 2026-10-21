@@ -833,12 +833,6 @@ textarea.auto {
   align-items: center;
   gap: 8px;
 }
-.emoji-input {
-  width: 64px;
-  font-family: var(--police-emoji);
-  font-size: var(--t-section);
-  text-align: center;
-}
 
 /* Libellés */
 .label-options {
@@ -2587,4 +2581,40 @@ h1, h2, h3,
 p.checked-toggle {
   margin: 6px 0 0;
   font-size: var(--t-legende);
+}
+
+/* Sélecteur d'emoji (emoji-picker-element), aux couleurs de la charte. */
+.emoji-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--contour-champ);
+  border-radius: var(--r-moyen);
+  background: var(--surface);
+  color: var(--texte);
+  font-size: var(--t-legende);
+  font-weight: 600;
+}
+.emoji-choice .emoji {
+  font-size: var(--t-ecran);
+  line-height: 1;
+}
+.emoji-picker-host emoji-picker {
+  width: 100%;
+  height: min(60vh, 460px);
+  --background: var(--surface);
+  --border-color: var(--contour-champ);
+  --border-radius: var(--r-moyen);
+  --indicator-color: var(--corail);
+  --input-border-color: var(--contour-champ);
+  --input-font-color: var(--texte);
+  --input-placeholder-color: var(--texte-discret);
+  --outline-color: var(--focus);
+  --category-font-color: var(--texte-secondaire);
+  --button-active-background: var(--corail-doux);
+  --button-hover-background: var(--hover);
+  --emoji-size: 1.6rem;
+  --num-columns: 8;
 }

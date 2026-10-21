@@ -3,6 +3,8 @@ import { illustrationOf, illustrationValue, PRESET_BACKGROUNDS } from '../lib/ba
 import { cardColor, COLOR_IDS, NOTE_COLORS, type CardColor } from '../lib/colors';
 import { deleteBackgroundImage, updateNote } from '../lib/store';
 import type { BackgroundImage, Note } from '../lib/types';
+import { Dialog } from './Dialog';
+import { EmojiPicker } from './EmojiPicker';
 import { Icon } from './Icon';
 
 /** Premier emoji (ou caractère) d'un texte saisi. */
@@ -18,6 +20,8 @@ const firstEmoji = (s: string) => {
 export function BackgroundPicker({ note, images }: { note: Note; images: BackgroundImage[] }) {
   const current = illustrationOf(note.background);
   const [emoji, setEmoji] = useState('');
+  // Sélecteur de tous les emoji (recherche en français), ouvert à la demande.
+  const [choosing, setChoosing] = useState(false);
   const [color, setColor] = useState<CardColor>(cardColor(note.color));
   const custom = firstEmoji(emoji);
   const ownImages = images.filter((img) => note.background === `img:${img.id}`);
@@ -94,13 +98,16 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
 
       <p className="section-label">Créer une illustration</p>
       <div className="illus-maker">
-        <input
-          className="text-input emoji-input"
-          value={emoji}
-          placeholder="🙂"
-          aria-label="Emoji de l’illustration"
-          onChange={(e) => setEmoji(e.target.value)}
-        />
+        <button
+          type="button"
+          className="emoji-choice"
+          aria-expanded={choosing}
+          aria-label={custom ? `Emoji choisi : ${custom}. Changer` : 'Choisir un emoji'}
+          onClick={() => setChoosing(!choosing)}
+        >
+          {custom ? <span className="emoji">{custom}</span> : <Icon name="add" size={20} />}
+          <span>{custom ? 'Changer' : 'Choisir un emoji'}</span>
+        </button>
         <div className="swatches mini" role="radiogroup" aria-label="Couleur de l’illustration">
           {COLOR_IDS.map((c) => (
             <button
@@ -130,6 +137,16 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
           Utiliser
         </button>
       </div>
+      {choosing && (
+        <Dialog title="Choisir un emoji" onClose={() => setChoosing(false)} className="emoji-dialog">
+          <EmojiPicker
+            onPick={(e) => {
+              setEmoji(e);
+              setChoosing(false);
+            }}
+          />
+        </Dialog>
+      )}
     </div>
   );
 }

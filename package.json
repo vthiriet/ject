@@ -22,6 +22,8 @@
     "astro": "^7.3.8",
     "dexie": "^4.4.6",
     "dexie-react-hooks": "^4.4.0",
+    "emoji-picker-element": "^1.29.1",
+    "emoji-picker-element-data": "^1.8.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "web-push": "^3.6.7"
