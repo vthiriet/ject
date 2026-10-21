@@ -131,7 +131,7 @@ retire la priorité ; message avec « Annuler ». **Depuis la liste** : au doigt
 **vers la gauche** la rend prioritaire (ou retire la priorité) ; à la souris, une flamme
 apparaît au survol de la carte. Astuce affichée une seule fois en haut d'Actions (au toucher).
 Attention : dans l'Inbox, le même geste archive. Sur la liste, pas de bouton visible : une petite flamme
-corail devant le texte des actions prioritcatégories, rassemblées dans la section « Prioritcatégories »
+corail devant le texte des actions prioritaires, rassemblées dans la section « Prioritaires »
 en haut, puis « Autres ». La carte change de section à la fermeture, jamais sous le doigt.
 Les anciennes priorités 1 et 2 sont devenues « Prioritaire », la 3 une action normale.
 
@@ -185,7 +185,20 @@ l'inbox » et « Actions ».
 - Chaque section (Aujourd'hui, Cette semaine, Ce mois-ci, Cette année) a sa barre de
   progression « X / Y » : habitudes tenues sur habitudes de la section.
 - Pas de points ni de niveaux (retirés le 19/10/2026).
-- Pas de série 🔥, de calendrier en pastilles ni de records (choix explicite).
+- Pas de série 🔥 ni de records (choix explicite).
+
+**Bilans** (toucher l'en-tête d'une section, signalé par ›) :
+- Aujourd'hui → bilan des quotidiennes : **Semaine** (grille de pastilles par habitude et par
+  jour), **Mois** (calendrier, plus la case est corail plus les habitudes du jour sont tenues),
+  **Année** (12 barres, une par mois).
+- Cette semaine → bilan des hebdomadaires : **Mois** (une étoile par semaine, « 2/3 ») et
+  **Année** (12 barres : part des semaines tenues).
+- Ce mois-ci → bilan des mensuelles : **Année** (une ligne d'étoiles par habitude, « 8 / 10 »).
+- En tête, un seul chiffre (taux ou « tenues / comptées »), sans comparaison en points avec la
+  période précédente ; en dessous, « Par habitude ». Flèches ‹ › pour remonter dans le temps
+  (pas au-delà de la période en cours).
+- Ne comptent pas : les pauses, les jours non concernés, l'avant-création et l'avenir ; la
+  période en cours ne compte que si elle est déjà tenue.
 
 **Fiche détaillée** (toucher une habitude) : avancement, % de réussite (4 dernières semaines,
 3 derniers mois ou 3 dernières années ; la période en cours ne compte que si elle est réussie ; les périodes en
@@ -210,11 +223,6 @@ quotidiennes) :
 
 **Pause générale** (vacances, maladie) : depuis l'en-tête, met toutes les habitudes en pause
 jusqu'à une date ; les jours de pause ne comptent pas.
-
-**Prochaine étape : notifications** (nécessite un serveur d'envoi et 2 clés à créer) : un
-rappel en **début** de période (lundi, 1er du mois) et à la **mi-période** (mi-semaine,
-mi-mois) pour les habitudes hebdomadcatégories et mensuelles non encore tenues. Horcatégories à
-confirmer (proposition : 9 h en début de période, 18 h à la mi-période).
 
 ### 3.1 V1 : prototype complet
 
@@ -446,3 +454,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 20/10/2026 | Rappels des habitudes par notification (début, milieu, veille de la fin, ou jour fixé ; 9 h / 12 h / 18 h ; pas si déjà tenue ; bouton « +1 »). |
 | 21/10/2026 | Les « aires » s'appellent désormais « catégories » ; éléments cochés toujours visibles (barrés) dans les listes, sur la carte et dans la carte ouverte. |
 | 21/10/2026 | Un élément coché passe en tête des éléments cochés (décoché : retour à la fin des éléments à faire) ; sélecteur de tous les emoji avec recherche en français pour créer une illustration. |
+| 21/10/2026 | Bilans des habitudes : toucher l'en-tête d'une section (›) ouvre son bilan (quotidiennes : semaine, mois, année ; hebdomadaires : mois, année ; mensuelles : année). |

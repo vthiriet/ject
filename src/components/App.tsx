@@ -13,6 +13,7 @@ import { Drawer, type Section } from './Drawer';
 import { Fab } from './Fab';
 import { HabitCard } from './HabitCard';
 import { HabitSheet } from './HabitSheet';
+import { HabitReview } from './HabitReview';
 import { HabitSummary } from './HabitSummary';
 import { FileDialog } from './FileDialog';
 import { Icon, IconButton } from './Icon';
@@ -27,7 +28,8 @@ import { toast, Toaster } from './Toast';
 
 const isCategory = (s: Section): s is Category => CATEGORIES.some((c) => c.id === s);
 
-type Group = { label: string; notes: Note[]; progress?: { done: number; total: number } };
+type ReviewScale = 'day' | 'week' | 'month';
+type Group = { label: string; notes: Note[]; progress?: { done: number; total: number }; review?: ReviewScale };
 
 /** Regroupe les cartes d'un onglet en sections : épinglées (« Prioritaires » dans Actions), puis les autres. */
 function groupsFor(section: Section, notes: Note[]): Group[] {
@@ -60,11 +62,11 @@ function habitGroups(notes: Note[]): Group[] {
   const daily = of('day');
   return [
     ...([
-      ["Aujourd'hui", daily.filter((n) => appliesOn(habitConfig(n), today))],
-      ['Cette semaine', of('week')],
-      ['Ce mois-ci', of('month')],
-      ['Cette année', of('year')],
-    ] as const).map(([label, list]) => ({ label, notes: byMoment(list), progress: tally(list) })),
+      ["Aujourd'hui", daily.filter((n) => appliesOn(habitConfig(n), today)), 'day'],
+      ['Cette semaine', of('week'), 'week'],
+      ['Ce mois-ci', of('month'), 'month'],
+      ['Cette année', of('year'), undefined],
+    ] as const).map(([label, list, review]) => ({ label, notes: byMoment(list), progress: tally(list), review })),
     { label: "Pas aujourd'hui", notes: daily.filter((n) => !appliesOn(habitConfig(n), today)) },
     { label: 'En pause', notes: notes.filter((n) => isPaused(n, today)) },
   ].filter((g) => g.notes.length);
@@ -101,6 +103,8 @@ export default function App() {
   const touchDevice = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
   const [filing, setFiling] = useState<{ ids: string[]; together?: boolean } | null>(null);
   const [sheet, setSheet] = useState<string | null>(null);
+  // Bilan d'une section des Habitudes.
+  const [review, setReview] = useState<ReviewScale | null>(null);
   const started = useRef(false);
   useBackClose(drawer, () => setDrawer(false));
   // Recherche repliée en icône, filtre des aires replié derrière le bouton « Aires ».
@@ -459,16 +463,24 @@ export default function App() {
             <section key={g.label || 'all'}>
               {g.label && !g.progress && <p className="section-label grid-label">{g.label}</p>}
               {g.progress && (
-                <div className="section-progress">
-                  <p className="section-label grid-label">
+                // En-tête : le toucher ouvre le bilan de la section (quotidiennes, hebdomadaires, mensuelles).
+                <button
+                  type="button"
+                  className="section-progress"
+                  disabled={!g.review}
+                  aria-label={`${g.label} : ${g.progress.done} sur ${g.progress.total} tenues${g.review ? '. Voir le bilan' : ''}`}
+                  onClick={() => g.review && setReview(g.review)}
+                >
+                  <span className="section-label grid-label">
                     {g.label}
                     {/* Le compteur grossit un instant quand il change (décision 15). */}
                     <span key={g.progress.done} className="bump">{g.progress.done} / {g.progress.total}</span>
-                  </p>
-                  <div className="habit-bar" aria-label={`${g.progress.done} sur ${g.progress.total} tenues`}>
+                    {g.review && <Icon name="next" size={16} />}
+                  </span>
+                  <span className="habit-bar">
                     <span style={{ width: `${Math.round((g.progress.done / g.progress.total) * 100)}%` }} />
-                  </div>
-                </div>
+                  </span>
+                </button>
               )}
               <NoteGrid
                 notes={g.notes}
@@ -527,6 +539,13 @@ export default function App() {
             setSheet(null);
             setEditing({ id: sheet, isNew: false });
           }}
+        />
+      )}
+      {review && (
+        <HabitReview
+          scale={review}
+          habits={habits.filter((h) => scaleOf(habitConfig(h)) === review)}
+          onClose={() => setReview(null)}
         />
       )}
       {filing && <FileDialog ids={filing.ids} together={filing.together} notes={notes} onClose={() => setFiling(null)} />}
