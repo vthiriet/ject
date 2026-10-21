@@ -2578,3 +2578,13 @@ h1, h2, h3,
 .tip .icon-btn {
   color: inherit;
 }
+
+/* Éléments cochés : restent visibles, barrés, après ceux à faire. */
+.card-items li.done span {
+  color: var(--texte-discret);
+  text-decoration: line-through;
+}
+p.checked-toggle {
+  margin: 6px 0 0;
+  font-size: var(--t-legende);
+}

@@ -44,7 +44,6 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
     initial && isNew ? (initial.type === 'list' ? initial.items[0]?.id ?? null : 'content') : null,
   );
   const [panel, setPanel] = useState<Panel>(null);
-  const [showChecked, setShowChecked] = useState(false);
   const [exporting, setExporting] = useState(false);
   /** Élément de liste dont on règle l'état ou la régularité. */
   const [itemOptions, setItemOptions] = useState<string | null>(null);
@@ -411,11 +410,10 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
               </button>
               {checked.length > 0 && (
                 <>
-                  <button type="button" className="checked-toggle" onClick={() => setShowChecked(!showChecked)} aria-expanded={showChecked}>
-                    <span className={`chevron ${showChecked ? 'open' : ''}`}><Icon name="expand" size={24} /></span>
+                  <p className="checked-toggle">
                     {checked.length} élément{checked.length > 1 ? 's' : ''} coché{checked.length > 1 ? 's' : ''}
-                  </button>
-                  {showChecked && <ul>{checked.map((i) => itemRow(i, true))}</ul>}
+                  </p>
+                  <ul>{checked.map((i) => itemRow(i, true))}</ul>
                 </>
               )}
               {exported.length > 0 && (
@@ -503,7 +501,7 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
           </button>
           <IconButton name="palette" label="Couleur et illustration" active={panel === 'colors'} onClick={() => setPanel(panel === 'colors' ? null : 'colors')} />
           {!inInbox && (
-            <IconButton name="label" label="Aires" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
+            <IconButton name="label" label="Catégories" active={panel === 'labels'} onClick={() => setPanel(panel === 'labels' ? null : 'labels')} />
           )}
           <div className="spacer" />
           <IconButton name="more" label="Plus" active={panel === 'more'} onClick={() => setPanel(panel === 'more' ? null : 'more')} />

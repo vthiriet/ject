@@ -28,7 +28,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** Tiroir : Archives, Corbeille, Aires, Réglages, affichage et état de la synchro (les onglets sont en bas). */
+/** Tiroir : Archives, Corbeille, Catégories, Réglages, affichage et état de la synchro (les onglets sont en bas). */
 export function Drawer(props: Props) {
   const { open, section, labelId, labels, counts, layout, onToggleLayout, syncStatus, onNavigate, onEditLabels, onSettings, onClose } = props;
   const item = (active: boolean, icon: React.ReactNode, text: string, onClick: () => void, count?: number, key?: string) => (
@@ -48,9 +48,9 @@ export function Drawer(props: Props) {
         <div className="drawer-brand"><Logo /></div>
         {item(section === 'archive', <Icon name="archive" fill={section === 'archive'} />, 'Archives', () => onNavigate('archive', null))}
         {item(section === 'trash', <Icon name="trash" fill={section === 'trash'} />, 'Corbeille', () => onNavigate('trash', null))}
-        <p className="drawer-heading">Aires</p>
+        <p className="drawer-heading">Catégories</p>
         {labels.map((l) => item(labelId === l.id, <span className="drawer-emoji">{l.emoji}</span>, l.name, () => onNavigate(aireTarget, l.id), counts[l.id], l.id))}
-        {item(false, <Icon name="edit" />, 'Modifier les aires', onEditLabels)}
+        {item(false, <Icon name="edit" />, 'Modifier les catégories', onEditLabels)}
         <hr />
         {item(false, <Icon name="settings" />, 'Réglages', onSettings)}
         {item(false, <Icon name={layout === 'grid' ? 'list' : 'grid'} />, layout === 'grid' ? 'Afficher en liste' : 'Afficher en grille', onToggleLayout)}

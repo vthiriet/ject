@@ -375,7 +375,7 @@ export default function App() {
             onClick={() => setAiresOpen(!airesOpen)}
           >
             <Icon name="funnel" size={20} fill={!!labelId} />
-            <span>{currentLabel ? currentLabel.name : 'Aires'}</span>
+            <span>{currentLabel ? currentLabel.name : 'Catégories'}</span>
           </button>
         )}
       </header>
@@ -401,8 +401,8 @@ export default function App() {
       )}
 
       {airesOpen && section !== 'inbox' && section !== 'trash' && (
-        <div className="label-bar" role="toolbar" aria-label="Filtrer par aire">
-          <button type="button" className={`chip ${!labelId ? 'on' : ''}`} onClick={() => { setLabelId(null); setAiresOpen(false); }}>Toutes les aires</button>
+        <div className="label-bar" role="toolbar" aria-label="Filtrer par catégorie">
+          <button type="button" className={`chip ${!labelId ? 'on' : ''}`} onClick={() => { setLabelId(null); setAiresOpen(false); }}>Toutes les catégories</button>
           {labels.map((l) => (
             <button key={l.id} type="button" className={`chip ${labelId === l.id ? 'on' : ''}`} onClick={() => { setLabelId(labelId === l.id ? null : l.id); setAiresOpen(false); }}>
               {l.emoji} {l.name}

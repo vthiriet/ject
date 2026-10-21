@@ -39,7 +39,7 @@ Ject reprend d'abord les bases de Google Keep, puis corrige trois manques :
 attente d'être rangés.
 - Bouton rond **+** en bas à droite (sur tous les onglets), comme Google Keep : on choisit
   **Texte** ou **Liste**, et la carte s'ouvre prête à écrire. Dans l'Inbox, c'est un
-  élément à trier ; dans un autre onglet, la carte prend le type de l'onglet (et l'aire
+  élément à trier ; dans un autre onglet, la carte prend le type de l'onglet (et la catégorie
   filtrée). Une carte laissée vide est supprimée à la fermeture.
 - Un élément = un texte ou une liste (liens cliquables avec aperçu).
 - Toucher un élément l'ouvre pour le modifier (sans épingle ni archivage) ; corbeille
@@ -66,16 +66,16 @@ une destination pour toutes). Pas de glisser-déposer dans l'Inbox.
 Inspiré de GTD (que faire de chaque élément) et de PARA (où il vit), en version simplifiée.
 
 **Onglets, dans l'ordre :** Inbox · Actions · Habitudes · Projets · Ressources.
-Ils remplacent l'onglet « Listes ». Le menu ☰ garde les Aires, les Archives, la Corbeille
+Ils remplacent l'onglet « Listes ». Le menu ☰ garde les Catégories, les Archives, la Corbeille
 et les Réglages.
 
 **Cartes :** dans chaque onglet, une carte est soit un **élément seul** (note texte), soit
 une **liste** (plusieurs éléments à cocher), comme dans Keep. Couleurs, illustrations et
 export Notion restent disponibles partout. L'onglet où se trouve la carte donne son type.
 
-**Aires** (Santé, Maison, Finances…) : ce sont les libellés actuels, renommés. Une carte de
-n'importe quel type peut appartenir à une ou plusieurs aires. Une rangée de pastilles permet
-de filtrer par aire dans chaque onglet.
+**Catégories** (Santé, Maison, Finances…) : ce sont les libellés actuels, renommés. Une carte de
+n'importe quel type peut appartenir à une ou plusieurs catégories. Une rangée de pastilles permet
+de filtrer par catégorie dans chaque onglet.
 
 **Par type :**
 
@@ -101,7 +101,7 @@ Menu ⋮ › « Ranger dans… » range directement la carte telle quelle dans u
 
 Destinations proposées, dans l'ordre : « Carte seule dans … », puis la barre de recherche
 (qui propose « Nouvelle liste « nom » ») et les listes existantes de ce type (les plus récentes d'abord, avec recherche). Pas de réglage
-d'état, de régularité ni d'aire au rangement : ils se règlent ensuite dans la carte.
+d'état, de régularité ni de catégorie au rangement : ils se règlent ensuite dans la carte.
 
 **Affichage par onglet :** Actions est découpé en sections À faire (listes et actions
 seules) / En attente / Un jour / Faites ; Projets en Actifs / Un jour ; un projet
@@ -131,13 +131,13 @@ retire la priorité ; message avec « Annuler ». **Depuis la liste** : au doigt
 **vers la gauche** la rend prioritaire (ou retire la priorité) ; à la souris, une flamme
 apparaît au survol de la carte. Astuce affichée une seule fois en haut d'Actions (au toucher).
 Attention : dans l'Inbox, le même geste archive. Sur la liste, pas de bouton visible : une petite flamme
-corail devant le texte des actions prioritaires, rassemblées dans la section « Prioritaires »
+corail devant le texte des actions prioritcatégories, rassemblées dans la section « Prioritcatégories »
 en haut, puis « Autres ». La carte change de section à la fermeture, jamais sous le doigt.
 Les anciennes priorités 1 et 2 sont devenues « Prioritaire », la 3 une action normale.
 
 **Saisie** : pas de champ titre pour un texte (sauf s'il en avait déjà un) ; bouton
 **« Ajouter »** (nouvelle carte) ou **« OK »** en haut à droite pour valider, avec le message
-« Ajouté à l'inbox » / « Ajouté ». Dans l'Inbox, pas d'aires ni d'export Notion. Le zoom de
+« Ajouté à l'inbox » / « Ajouté ». Dans l'Inbox, pas de catégories ni d'export Notion. Le zoom de
 l'app est désactivé.
 
 **Éditeur :** sous le titre, le type de la carte et son réglage (état, régularité).
@@ -146,7 +146,7 @@ une liste, chaque élément a un bouton ⏳ (ou 🔁 pour une habitude) pour ré
 ou sa régularité. Menu ⋮ › « Déplacer vers… » pour changer de type.
 
 **Données existantes :** les notes et listes créées avant cette version sont classées dans
-**Ressources**. Les libellés deviennent les **aires**. Le réglage « À l'ouverture de Ject »
+**Ressources**. Les libellés deviennent les **catégories**. Le réglage « À l'ouverture de Ject »
 est retiré : Ject s'ouvre toujours sur l'Inbox. Raccourcis Android : « Ajouter à
 l'inbox » et « Actions ».
 
@@ -213,7 +213,7 @@ jusqu'à une date ; les jours de pause ne comptent pas.
 
 **Prochaine étape : notifications** (nécessite un serveur d'envoi et 2 clés à créer) : un
 rappel en **début** de période (lundi, 1er du mois) et à la **mi-période** (mi-semaine,
-mi-mois) pour les habitudes hebdomadaires et mensuelles non encore tenues. Horaires à
+mi-mois) pour les habitudes hebdomadcatégories et mensuelles non encore tenues. Horcatégories à
 confirmer (proposition : 9 h en début de période, 18 h à la mi-période).
 
 ### 3.1 V1 : prototype complet
@@ -444,3 +444,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 20/10/2026 | Actions : priorité ramenée à un seul niveau « Prioritaire » (flamme dans la carte ouverte, à la place de l'épingle) ; section « Prioritaires » ; plus de flamme grise sur chaque carte ; coche « Archiver » de 44 px ; anciennes priorités 1 et 2 → Prioritaire, 3 → normale. |
 | 20/10/2026 | Actions : glisser une action vers la gauche = Prioritaire (au doigt) ; flamme au survol à la souris ; astuce affichée une fois. |
 | 20/10/2026 | Rappels des habitudes par notification (début, milieu, veille de la fin, ou jour fixé ; 9 h / 12 h / 18 h ; pas si déjà tenue ; bouton « +1 »). |
+| 21/10/2026 | Les « aires » s'appellent désormais « catégories » ; éléments cochés toujours visibles (barrés) dans les listes, sur la carte et dans la carte ouverte. |

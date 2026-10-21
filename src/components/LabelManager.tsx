@@ -18,9 +18,9 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
   };
 
   return (
-    <Dialog title="Modifier les aires" onClose={onClose}>
+    <Dialog title="Modifier les catégories" onClose={onClose}>
       <form className="row" onSubmit={(e) => { e.preventDefault(); void add(); }}>
-        <input className="text-input" value={name} placeholder="Nouvelle aire (ex. Santé, Maison)" onChange={(e) => setName(e.target.value)} />
+        <input className="text-input" value={name} placeholder="Nouvelle catégorie (ex. Santé, Maison)" onChange={(e) => setName(e.target.value)} />
         <button type="submit" className="btn primary">Créer</button>
       </form>
       <ul className="label-manage">
@@ -30,13 +30,13 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
             <input
               className="text-input flat"
               defaultValue={l.name}
-              aria-label="Nom de l'aire"
+              aria-label="Nom de la catégorie"
               onBlur={(e) => e.target.value.trim() && e.target.value !== l.name && void updateLabel(l.id, { name: e.target.value.trim() })}
             />
             <IconButton
               name="trash"
-              label="Supprimer l'aire"
-              onClick={() => confirm(`Supprimer l’aire « ${l.name} » ? Les cartes ne seront pas supprimées.`) && void deleteLabel(l.id)}
+              label="Supprimer la catégorie"
+              onClick={() => confirm(`Supprimer la catégorie « ${l.name} » ? Les cartes ne seront pas supprimées.`) && void deleteLabel(l.id)}
             />
             {emojiFor === l.id && (
               <div className="emoji-grid">
@@ -47,7 +47,7 @@ export function LabelManager({ labels, onClose }: { labels: Label[]; onClose: ()
             )}
           </li>
         ))}
-        {!labels.length && <li className="hint">Aucune aire pour l’instant : Santé, Maison, Finances, Travail…</li>}
+        {!labels.length && <li className="hint">Aucune catégorie pour l’instant : Santé, Maison, Finances, Travail…</li>}
       </ul>
     </Dialog>
   );

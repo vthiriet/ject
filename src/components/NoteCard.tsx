@@ -23,7 +23,11 @@ const MAX_ITEMS = 8;
 
 export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: Props) {
   const open = note.items.filter((i) => !i.checked && !i.exported && i.text.trim());
-  const checkedCount = note.items.filter((i) => i.checked && !i.exported && i.text.trim()).length;
+  const done = note.items.filter((i) => i.checked && !i.exported && i.text.trim());
+  const checkedCount = done.length;
+  // Les éléments cochés restent visibles, barrés, après ceux à faire.
+  const shown = [...open, ...done].slice(0, MAX_ITEMS);
+  const hidden = open.length + done.length - shown.length;
   const exportedCount = note.items.filter((i) => i.exported).length;
   const noteLabels = note.labelIds.map((id) => labels.find((l) => l.id === id)).filter(Boolean) as Label[];
   const link = extractLinks(note)[0];
@@ -55,25 +59,24 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
           <p className="card-content">{!note.title.trim() && flag}<LinkedText text={note.content} /></p>
         )}
         {note.type === 'list' && !note.title.trim() && flag}
-        {note.type === 'list' && open.length > 0 && (
+        {note.type === 'list' && shown.length > 0 && (
           <ul className="card-items">
-            {open.slice(0, MAX_ITEMS).map((i) => (
-              <li key={i.id}>
+            {shown.map((i) => (
+              <li key={i.id} className={i.checked ? 'done' : ''}>
                 <button
                   type="button"
                   className="check"
-                  aria-label={`Cocher « ${i.text} »`}
+                  aria-label={`${i.checked ? 'Décocher' : 'Cocher'} « ${i.text} »`}
                   onClick={(e) => { e.stopPropagation(); void toggle(i.id); }}
                 >
-                  <CheckBox checked={false} />
+                  <CheckBox checked={i.checked} />
                 </button>
                 <span><LinkedText text={i.text} /></span>
               </li>
             ))}
           </ul>
         )}
-        {note.type === 'list' && open.length > MAX_ITEMS && <p className="card-more">… et {open.length - MAX_ITEMS} autres</p>}
-        {checkedCount > 0 && <p className="card-more">+ {checkedCount} élément{checkedCount > 1 ? 's' : ''} coché{checkedCount > 1 ? 's' : ''}</p>}
+        {note.type === 'list' && hidden > 0 && <p className="card-more">… et {hidden} autre{hidden > 1 ? 's' : ''}</p>}
         {empty && !note.background && <p className="card-empty">Carte vide</p>}
         {link && <LinkPreviewCard url={link} compact />}
         {note.exported ? (
