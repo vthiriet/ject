@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { db } from '../lib/db';
-import { errorLog, runDiagnostics } from '../lib/diagnostics';
+import { errorLog, logError, runDiagnostics } from '../lib/diagnostics';
 import { downloadFile } from '../lib/download';
 import { useSyncStatus, type ThemePref } from '../lib/hooks';
 import { currentSubscription, disableReminders, enableReminders, pushSupported, sendTest } from '../lib/push';
@@ -82,7 +82,15 @@ export function Settings({ onClose, theme, setTheme, focus }: Props) {
       options: { emailRedirectTo: location.origin },
     });
     setBusy(false);
-    if (error) toast('L’envoi du lien n’a pas marché. Vérifie l’adresse et réessaie.');
+    if (error) {
+      // Le détail (code et message de Supabase) va dans Diagnostic pour comprendre le blocage.
+      logError(`Lien de connexion : ${error.status ?? ''} ${error.message}`);
+      toast(
+        error.status === 429
+          ? 'Trop de liens demandés : attends un peu (jusqu’à une heure) avant de réessayer.'
+          : 'L’envoi du lien n’a pas marché. Le détail est dans Diagnostic, en bas des Réglages.',
+      );
+    }
     else setSent(true);
   };
 

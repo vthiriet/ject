@@ -457,3 +457,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 21/10/2026 | Bilans des habitudes : toucher l'en-tête d'une section (›) ouvre son bilan (quotidiennes : semaine, mois, année ; hebdomadaires : mois, année ; mensuelles : année). |
 | 29/10/2026 | Illustration en filigrane : l'emoji passe en fond de la carte (coin bas droit, pâle) au lieu d'un bandeau au-dessus ; la carte ne grandit plus. Titre des cartes : coupure avec trait d'union au lieu d'une coupure au milieu d'un mot. |
 | 29/10/2026 | Illustration = un emoji seul, sans couleur propre : la couleur est celle de la carte. « Autre emoji » applique l'emoji choisi directement ; vignettes de la galerie sur la couleur de la carte. Les cartes « Papier » existantes prennent une fois la couleur de leur ancienne illustration. |
+| 29/10/2026 | Connexion : si l'envoi du lien échoue, la raison est notée dans Diagnostic ; message dédié quand trop de liens ont été demandés. |
