@@ -1,23 +1,31 @@
 import { illustrationOf } from '../lib/backgrounds';
-import type { BackgroundImage } from '../lib/types';
+import { cardColor } from '../lib/colors';
+import type { BackgroundImage, Note, NoteColor } from '../lib/types';
 
-/** Emoji penché vers la droite ou la gauche, toujours du même côté pour un même emoji. */
-const sideOf = (emoji: string) => ([...emoji].reduce((a, c) => a + (c.codePointAt(0) ?? 0), 0) % 2 ? 'right' : 'left');
+/**
+ * Couleur de fond d'une carte : sa couleur, ou celle de son illustration si la carte est
+ * restée « Papier » (l'aplat de couleur de l'ancien bandeau n'est pas perdu).
+ */
+export function tintOf(note: Pick<Note, 'color' | 'background'>): NoteColor {
+  const ill = illustrationOf(note.background);
+  return ill && cardColor(note.color) === 'default' ? ill.color : note.color;
+}
 
-/** Bandeau d'illustration en haut d'une carte : aplat de couleur + grand emoji incliné (décision 16). */
-export function Banner({ value, images, tall }: { value: string | null; images: BackgroundImage[]; tall?: boolean }) {
-  if (!value) return null;
-  const cls = `banner ${tall ? 'tall' : ''}`;
+/** Illustration en filigrane : grand emoji pâle, incliné, coupé par le coin bas droit (décision 56). */
+export function Watermark({ value }: { value: string | null }) {
   const ill = illustrationOf(value);
-  if (ill) {
-    return (
-      <div className={`${cls} illustration`} data-color={ill.color}>
-        <span className={`banner-emoji ${sideOf(ill.emoji)}`} aria-hidden="true">{ill.emoji}</span>
-      </div>
-    );
-  }
-  // Images importées avant la charte : toujours affichées.
+  if (!ill) return null;
+  return (
+    <span className="watermark" aria-hidden="true">
+      <span className="watermark-emoji">{ill.emoji}</span>
+    </span>
+  );
+}
+
+/** Bandeau en haut d'une carte, pour les images importées avant la charte (toujours affichées). */
+export function Banner({ value, images, tall }: { value: string | null; images: BackgroundImage[]; tall?: boolean }) {
+  if (!value?.startsWith('img:')) return null;
   const img = images.find((i) => `img:${i.id}` === value);
   if (!img?.dataUrl) return null;
-  return <div className={cls} style={{ backgroundImage: `url(${img.dataUrl})` }} />;
+  return <div className={`banner ${tall ? 'tall' : ''}`} style={{ backgroundImage: `url(${img.dataUrl})` }} />;
 }

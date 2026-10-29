@@ -4,7 +4,7 @@ import { isFresh } from '../lib/fresh';
 import { toggleItem, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
-import { Banner } from './Background';
+import { Banner, tintOf, Watermark } from './Background';
 import { CheckBox, Icon } from './Icon';
 import { LinkedText } from './LinkedText';
 import { LinkPreviewCard } from './LinkPreview';
@@ -45,11 +45,12 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
   return (
     <article
       className={`note-card ${sideAction ? 'has-side' : ''} ${isFresh(note.id) ? 'new-card' : ''}`}
-      data-color={note.color}
+      data-color={tintOf(note)}
       tabIndex={0}
       onClick={onOpen}
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onOpen()}
     >
+      <Watermark value={note.background} />
       <Banner value={note.background} images={images} />
       {note.pinned && !urgent && <span className="card-pin" title="Épinglée"><Icon name="pin" size={18} fill /></span>}
       <div className="card-body">

@@ -231,7 +231,7 @@ jusqu'à une date ; les jours de pause ne comptent pas.
 - Listes à cocher : les éléments cochés descendent en bas, dans une zone repliable.
 - Liens cliquables avec aperçu (titre, image et site de la page liée).
 - Couleurs de fond des notes (palette inspirée de Keep, 11 couleurs).
-- **Illustration de fond** (bandeau en haut de la note) : une galerie intégrée de
+- **Illustration de fond** (en filigrane, dans le coin bas droit de la carte, sous le texte ; décision 56) : une galerie intégrée de
   10 illustrations (courses, recettes, idées, projets, musique, films, lecture,
   voyage, fête, nature), plus **ses propres images importées**. Les images importées
   sont réduites automatiquement et rangées dans « ma galerie » pour être réutilisées.
@@ -455,3 +455,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 21/10/2026 | Les « aires » s'appellent désormais « catégories » ; éléments cochés toujours visibles (barrés) dans les listes, sur la carte et dans la carte ouverte. |
 | 21/10/2026 | Un élément coché passe en tête des éléments cochés (décoché : retour à la fin des éléments à faire) ; sélecteur de tous les emoji avec recherche en français pour créer une illustration. |
 | 21/10/2026 | Bilans des habitudes : toucher l'en-tête d'une section (›) ouvre son bilan (quotidiennes : semaine, mois, année ; hebdomadaires : mois, année ; mensuelles : année). |
+| 29/10/2026 | Illustration en filigrane : l'emoji passe en fond de la carte (coin bas droit, pâle) au lieu d'un bandeau au-dessus ; la carte ne grandit plus. Titre des cartes : coupure avec trait d'union au lieu d'une coupure au milieu d'un mot. |

@@ -386,6 +386,7 @@ a {
   font-size: var(--t-texte);
   font-weight: 500;
   padding-right: 18px;
+  hyphens: auto;
 }
 .card-content {
   margin: 0;
@@ -466,29 +467,51 @@ a {
   background-size: cover;
   background-position: center;
 }
-.banner.illustration {
-  background: var(--note-bg);
-}
 .banner.tall {
   height: 140px;
 }
-.banner-emoji {
-  position: absolute;
-  bottom: -15%;
-  font-family: var(--police-emoji);
-  font-size: clamp(64px, 45cqw, 96px);
-  line-height: 1;
+
+/* Filigrane (décision 56) : sous le texte, au-dessus du fond de la carte. */
+.note-card,
+.editor {
+  isolation: isolate;
 }
-.banner-emoji.right {
-  right: 6%;
+.editor {
+  position: relative;
+}
+.watermark {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.watermark-emoji {
+  position: absolute;
+  right: -0.2em;
+  bottom: -0.17em;
+  font-family: var(--police-emoji);
+  font-size: clamp(96px, 80cqw, 128px);
+  line-height: 1;
+  opacity: 0.3;
   transform: rotate(12deg);
 }
-.banner-emoji.left {
-  left: 6%;
-  transform: rotate(-12deg);
+.editor .watermark {
+  bottom: 64px;
 }
-.banner.tall .banner-emoji {
-  font-size: 96px;
+/* En sombre, un peu plus discret pour garder le texte clair bien lisible. */
+:root[data-theme="dark"] .watermark-emoji {
+  opacity: 0.22;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .watermark-emoji {
+    opacity: 0.22;
+  }
+}
+.editor .watermark-emoji {
+  right: -0.25em;
+  bottom: -0.1em;
+  font-size: min(300px, 75vw);
 }
 
 /* ---------- Aperçu de lien ---------- */
@@ -1663,6 +1686,10 @@ textarea.auto {
 /* Poubelle à droite de la carte, centrée verticalement (sans ligne en plus). */
 .note-card.has-side .card-body {
   padding-right: 32px;
+}
+/* La coche de côté laisse déjà la place de l'épingle : le titre peut aller jusqu'au bord. */
+.note-card.has-side .card-title {
+  padding-right: 0;
 }
 .card-side {
   position: absolute;

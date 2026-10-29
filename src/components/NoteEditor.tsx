@@ -10,7 +10,7 @@ import {
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { extractLinks, formatDate, noteToText } from '../lib/text';
 import type { BackgroundImage, Category, ChecklistItem, Label, Note } from '../lib/types';
-import { Banner } from './Background';
+import { Banner, tintOf, Watermark } from './Background';
 import { BackgroundPicker } from './BackgroundPicker';
 import { HabitConfigForm } from './HabitConfigForm';
 import { CheckBox, Icon, IconButton } from './Icon';
@@ -319,7 +319,8 @@ export function NoteEditor({ noteId, isNew, initial, labels, images, onClose }: 
 
   return (
     <div className="overlay editor-overlay" onMouseDown={(e) => e.target === e.currentTarget && void close()}>
-      <div className="editor" data-color={note.color} role="dialog" aria-modal="true" aria-label="Carte">
+      <div className="editor" data-color={tintOf(note)} role="dialog" aria-modal="true" aria-label="Carte">
+        <Watermark value={note.background} />
         {/* Nouvelle carte : × et « Ajouter » ; carte existante : ← seule, tout est enregistré (décision 44). */}
         <div className="editor-top">
           <IconButton name={isNew ? 'close' : 'back'} label="Fermer" onClick={() => void close()} />
