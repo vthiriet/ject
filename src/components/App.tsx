@@ -5,7 +5,7 @@ import { initHistory, pushView, useBackClose } from '../lib/history';
 import { CATEGORIES, categoryMeta, categoryOf } from '../lib/gtd';
 import { appliesOn, habitConfig, isPaused, progress, scaleOf } from '../lib/habits';
 import { useBackgrounds, useDbReady, useLabels, useLocalPref, useNotes, useSyncStatus, useTheme } from '../lib/hooks';
-import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, migratePriorities, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
+import { buildNote, createInboxItem, deleteNoteForever, emptyTrash, migrateIllustrations, migratePriorities, purgeOldTrash, mergeNotes, restoreNote, restoreNotes, saveNote, trashNote, updateNote } from '../lib/store';
 import { startAutoSync } from '../lib/sync';
 import { matchesQuery } from '../lib/text';
 import type { Category, Note } from '../lib/types';
@@ -172,6 +172,7 @@ export default function App() {
       });
     void purgeOldTrash();
     void migratePriorities();
+    void migrateIllustrations();
     const params = new URLSearchParams(location.search);
     const shared = ['share_title', 'share_text', 'share_url'].map((k) => params.get(k)?.trim() ?? '');
     const tab = params.get('tab');

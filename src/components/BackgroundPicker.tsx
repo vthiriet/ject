@@ -1,29 +1,23 @@
 import { useState } from 'react';
 import { illustrationOf, illustrationValue, PRESET_BACKGROUNDS } from '../lib/backgrounds';
-import { cardColor, COLOR_IDS, NOTE_COLORS, type CardColor } from '../lib/colors';
+import { cardColor, COLOR_IDS, NOTE_COLORS } from '../lib/colors';
 import { deleteBackgroundImage, updateNote } from '../lib/store';
 import type { BackgroundImage, Note } from '../lib/types';
 import { Dialog } from './Dialog';
 import { EmojiPicker } from './EmojiPicker';
 import { Icon } from './Icon';
 
-/** Premier emoji (ou caractère) d'un texte saisi. */
-const firstEmoji = (s: string) => {
-  const seg = new Intl.Segmenter('fr', { granularity: 'grapheme' }).segment(s.trim());
-  return [...seg][0]?.segment ?? '';
-};
-
 /**
- * Couleur et illustration d'une carte (décisions 8, 16, 17, 24) : 7 pastilles rondes, la galerie
- * d'illustrations, et une illustration à composer soi-même (un emoji + une couleur).
+ * Couleur et illustration d'une carte (décisions 8, 24, 57) : 7 pastilles rondes, la galerie
+ * d'illustrations et n'importe quel emoji. L'illustration n'a pas de couleur propre : les
+ * vignettes s'affichent sur la couleur de la carte.
  */
 export function BackgroundPicker({ note, images }: { note: Note; images: BackgroundImage[] }) {
-  const current = illustrationOf(note.background);
-  const [emoji, setEmoji] = useState('');
+  const current = illustrationOf(note.background)?.emoji;
+  const tint = cardColor(note.color);
   // Sélecteur de tous les emoji (recherche en français), ouvert à la demande.
   const [choosing, setChoosing] = useState(false);
-  const [color, setColor] = useState<CardColor>(cardColor(note.color));
-  const custom = firstEmoji(emoji);
+  const isPreset = PRESET_BACKGROUNDS.some((p) => p.emoji === current);
   const ownImages = images.filter((img) => note.background === `img:${img.id}`);
 
   return (
@@ -62,18 +56,18 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
           <button
             key={p.id}
             type="button"
-            className={`bg-thumb ${note.background === `preset:${p.id}` ? 'selected' : ''}`}
-            data-color={p.color}
+            className={`bg-thumb ${current === p.emoji ? 'selected' : ''}`}
+            data-color={tint}
             title={p.name}
             aria-label={p.name}
-            onClick={() => void updateNote(note.id, { background: `preset:${p.id}` })}
+            onClick={() => void updateNote(note.id, { background: illustrationValue(p.emoji) })}
           >
             <span className="thumb-emoji">{p.emoji}</span>
           </button>
         ))}
-        {current && note.background?.startsWith('ill:') && (
-          <button type="button" className="bg-thumb selected" data-color={current.color} aria-label="Mon illustration">
-            <span className="thumb-emoji">{current.emoji}</span>
+        {current && !isPreset && (
+          <button type="button" className="bg-thumb selected" data-color={tint} aria-label={`Mon illustration : ${current}`}>
+            <span className="thumb-emoji">{current}</span>
           </button>
         )}
         {ownImages.map((img) => (
@@ -96,52 +90,15 @@ export function BackgroundPicker({ note, images }: { note: Note; images: Backgro
         ))}
       </div>
 
-      <p className="section-label">Créer une illustration</p>
-      <div className="illus-maker">
-        <button
-          type="button"
-          className="emoji-choice"
-          aria-expanded={choosing}
-          aria-label={custom ? `Emoji choisi : ${custom}. Changer` : 'Choisir un emoji'}
-          onClick={() => setChoosing(!choosing)}
-        >
-          {custom ? <span className="emoji">{custom}</span> : <Icon name="add" size={20} />}
-          <span>{custom ? 'Changer' : 'Choisir un emoji'}</span>
-        </button>
-        <div className="swatches mini" role="radiogroup" aria-label="Couleur de l’illustration">
-          {COLOR_IDS.map((c) => (
-            <button
-              key={c}
-              type="button"
-              role="radio"
-              aria-checked={color === c}
-              aria-label={NOTE_COLORS[c][0]}
-              title={NOTE_COLORS[c][0]}
-              className={`swatch ${color === c ? 'selected' : ''}`}
-              data-color={c}
-              onClick={() => setColor(c)}
-            >
-              {color === c && <Icon name="check" size={16} />}
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          className="btn primary"
-          disabled={!custom}
-          onClick={() => {
-            void updateNote(note.id, { background: illustrationValue({ emoji: custom, color }) });
-            setEmoji('');
-          }}
-        >
-          Utiliser
-        </button>
-      </div>
+      <button type="button" className="emoji-choice" aria-expanded={choosing} onClick={() => setChoosing(true)}>
+        <Icon name="add" size={20} />
+        <span>Autre emoji</span>
+      </button>
       {choosing && (
         <Dialog title="Choisir un emoji" onClose={() => setChoosing(false)} className="emoji-dialog">
           <EmojiPicker
             onPick={(e) => {
-              setEmoji(e);
+              void updateNote(note.id, { background: illustrationValue(e) });
               setChoosing(false);
             }}
           />

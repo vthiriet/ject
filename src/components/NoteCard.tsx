@@ -4,7 +4,7 @@ import { isFresh } from '../lib/fresh';
 import { toggleItem, updateNote } from '../lib/store';
 import { extractLinks, formatDate } from '../lib/text';
 import type { BackgroundImage, Label, Note } from '../lib/types';
-import { Banner, tintOf, Watermark } from './Background';
+import { Banner, Watermark } from './Background';
 import { CheckBox, Icon } from './Icon';
 import { LinkedText } from './LinkedText';
 import { LinkPreviewCard } from './LinkPreview';
@@ -45,7 +45,7 @@ export function NoteCard({ note, labels, images, onOpen, actions, sideAction }: 
   return (
     <article
       className={`note-card ${sideAction ? 'has-side' : ''} ${isFresh(note.id) ? 'new-card' : ''}`}
-      data-color={tintOf(note)}
+      data-color={note.color}
       tabIndex={0}
       onClick={onOpen}
       onKeyDown={(e) => e.key === 'Enter' && e.target === e.currentTarget && onOpen()}

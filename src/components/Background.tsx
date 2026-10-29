@@ -1,15 +1,5 @@
 import { illustrationOf } from '../lib/backgrounds';
-import { cardColor } from '../lib/colors';
-import type { BackgroundImage, Note, NoteColor } from '../lib/types';
-
-/**
- * Couleur de fond d'une carte : sa couleur, ou celle de son illustration si la carte est
- * restée « Papier » (l'aplat de couleur de l'ancien bandeau n'est pas perdu).
- */
-export function tintOf(note: Pick<Note, 'color' | 'background'>): NoteColor {
-  const ill = illustrationOf(note.background);
-  return ill && cardColor(note.color) === 'default' ? ill.color : note.color;
-}
+import type { BackgroundImage } from '../lib/types';
 
 /** Illustration en filigrane : grand emoji pâle, incliné, coupé par le coin bas droit (décision 56). */
 export function Watermark({ value }: { value: string | null }) {

@@ -809,9 +809,6 @@ textarea.auto {
   box-shadow: inset 0 0 0 1px var(--contour-champ);
   color: var(--encre);
 }
-.swatches.mini .swatch {
-  width: 32px;
-}
 .bg-thumb {
   position: relative;
   display: grid;
@@ -849,12 +846,6 @@ textarea.auto {
   border-radius: 50%;
   background: var(--encre);
   color: var(--panneau);
-}
-.illus-maker {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
 }
 
 /* Libellés */
@@ -2612,6 +2603,7 @@ p.checked-toggle {
 
 /* Sélecteur d'emoji (emoji-picker-element), aux couleurs de la charte. */
 .emoji-choice {
+  margin-top: 12px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2623,10 +2615,6 @@ p.checked-toggle {
   color: var(--texte);
   font-size: var(--t-legende);
   font-weight: 600;
-}
-.emoji-choice .emoji {
-  font-size: var(--t-ecran);
-  line-height: 1;
 }
 .emoji-picker-host emoji-picker {
   width: 100%;

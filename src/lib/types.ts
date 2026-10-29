@@ -60,7 +60,7 @@ export interface Note {
   content: string;
   items: ChecklistItem[];
   color: NoteColor;
-  /** `preset:<id>` (galerie intégrée), `img:<id>` (image importée) ou null. */
+  /** `emoji:<emoji>` (illustration), `img:<id>` (image importée) ou null. */
   background: string | null;
   pinned: boolean;
   archived: boolean;

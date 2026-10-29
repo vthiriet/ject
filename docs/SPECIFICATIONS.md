@@ -386,7 +386,7 @@ sur l'app, toutes les 30 secondes, et peu après chaque modification.
 
 **Sur l'appareil (IndexedDB)** :
 - **notes** : id, type (`text` ou `list`), titre, contenu, éléments de liste
-  (id, texte, coché, mention d'export), couleur, illustration (`preset:<id>` ou
+  (id, texte, coché, mention d'export), couleur, illustration (`emoji:<emoji>` ou
   `img:<id>`), épinglée, archivée, mise à la corbeille le, position, libellés,
   mention d'export Notion, type (`category`), état, réglages d'habitude (`habit`), journal
   des fois faites par jour (`habitLog`), pauses (`habitPauses`), étapes cochées
@@ -456,3 +456,4 @@ En cas de conflit, la modification la plus récente l'emporte.
 | 21/10/2026 | Un élément coché passe en tête des éléments cochés (décoché : retour à la fin des éléments à faire) ; sélecteur de tous les emoji avec recherche en français pour créer une illustration. |
 | 21/10/2026 | Bilans des habitudes : toucher l'en-tête d'une section (›) ouvre son bilan (quotidiennes : semaine, mois, année ; hebdomadaires : mois, année ; mensuelles : année). |
 | 29/10/2026 | Illustration en filigrane : l'emoji passe en fond de la carte (coin bas droit, pâle) au lieu d'un bandeau au-dessus ; la carte ne grandit plus. Titre des cartes : coupure avec trait d'union au lieu d'une coupure au milieu d'un mot. |
+| 29/10/2026 | Illustration = un emoji seul, sans couleur propre : la couleur est celle de la carte. « Autre emoji » applique l'emoji choisi directement ; vignettes de la galerie sur la couleur de la carte. Les cartes « Papier » existantes prennent une fois la couleur de leur ancienne illustration. |

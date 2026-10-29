@@ -1,3 +1,5 @@
+import { illustrationOf, illustrationValue } from './backgrounds';
+import { cardColor } from './colors';
 import { db, tableFor } from './db';
 import { scheduleSync } from './sync';
 import type { BackgroundImage, Category, ChecklistItem, Kind, Label, Note, NotionMention } from './types';
@@ -104,6 +106,19 @@ export async function migratePriorities() {
   const old = await db.notes.filter((n) => n.priority !== undefined && !n.deleted).toArray();
   for (const n of old) {
     await save('note', { ...n, pinned: n.pinned || (!n.archived && n.priority !== 3), priority: undefined });
+  }
+}
+
+/**
+ * Illustrations sans couleur propre (décision 57) : `preset:` et `ill:` deviennent `emoji:` ;
+ * une carte restée « Papier » prend la couleur de son ancienne illustration.
+ */
+export async function migrateIllustrations() {
+  const old = await db.notes.filter((n) => !n.deleted && /^(preset|ill):/.test(n.background ?? '')).toArray();
+  for (const n of old) {
+    const ill = illustrationOf(n.background);
+    const color = ill?.color && cardColor(n.color) === 'default' ? ill.color : n.color;
+    await save('note', { ...n, background: ill ? illustrationValue(ill.emoji) : null, color });
   }
 }
 

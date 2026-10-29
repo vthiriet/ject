@@ -1,18 +1,21 @@
 import type { CardColor } from './colors';
 
 /**
- * Illustrations de fond (décisions 16, 17, 23) : un aplat d'une des 7 couleurs de cartes et
- * un grand emoji incliné qui déborde du bord. Pas d'image importée.
- * Valeurs enregistrées : `preset:<id>` (galerie) ou `ill:<couleur>:<emoji>` (créée par l'utilisateur).
+ * Illustrations de fond (décisions 56, 57) : un emoji en filigrane, sur la couleur de la carte.
+ * Valeur enregistrée : `emoji:<emoji>`. Anciennes valeurs, migrées au démarrage :
+ * `preset:<id>` (galerie) et `ill:<couleur>:<emoji>` (créée par l'utilisateur).
  */
 export interface Illustration {
   emoji: string;
-  color: CardColor;
+  /** Couleur des anciennes valeurs (`preset:`, `ill:`), reportée une fois sur la carte (décision 57). */
+  color?: CardColor;
 }
 
-export interface PresetBackground extends Illustration {
+export interface PresetBackground {
   id: string;
   name: string;
+  emoji: string;
+  color: CardColor;
 }
 
 export const PRESET_BACKGROUNDS: PresetBackground[] = [
@@ -32,11 +35,14 @@ export function findPreset(id: string) {
   return PRESET_BACKGROUNDS.find((p) => p.id === id);
 }
 
-export const illustrationValue = (i: Illustration) => `ill:${i.color}:${i.emoji}`;
+/** Une illustration n'est plus qu'un emoji : la couleur est celle de la carte (décision 57). */
+export const illustrationValue = (emoji: string) => `emoji:${emoji}`;
 
 /** Illustration d'une valeur enregistrée (galerie ou création), ou null pour une image importée. */
 export function illustrationOf(value: string | null): Illustration | null {
   if (!value) return null;
+  if (value.startsWith('emoji:')) return value.length > 6 ? { emoji: value.slice(6) } : null;
+  // Anciennes valeurs, converties au démarrage par migrateIllustrations().
   if (value.startsWith('preset:')) return findPreset(value.slice(7)) ?? null;
   if (value.startsWith('ill:')) {
     const [, color, ...rest] = value.split(':');
