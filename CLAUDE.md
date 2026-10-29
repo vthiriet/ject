@@ -88,6 +88,7 @@ GitHub est la seule référence : chaque ordinateur a sa propre copie locale.
   production sur Vercel), `preview` = version de test.
 - **Publication** : la liaison Git de Vercel est en panne pour ce projet. C'est
   GitHub Actions (`.github/workflows/vercel.yml`) qui publie à chaque envoi sur
-  `preview` ou `main`. Adresse fixe de la version de test :
+  `preview` ou `main`. Adresse de production : https://ject-delta.vercel.app ;
+  adresse fixe de la version de test :
   https://ject-preview-vthiriets-projects.vercel.app — vérifier le résultat dans
   l'onglet Actions du dépôt GitHub.

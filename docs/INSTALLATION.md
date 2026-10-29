@@ -103,6 +103,7 @@ Astuce : si tu connectes une page **parente**, toutes ses sous-pages sont access
    sur la ligne de la branche concernée, clique sur **••• › Redeploy**.
 
 > **Adresses** :
+> - la production a une adresse fixe : `https://ject-delta.vercel.app` ;
 > - la version de test a une adresse fixe : `https://ject-preview-vthiriets-projects.vercel.app` ;
 > - les adresses avec des lettres au hasard (`ject-bzy1x0why-…`) correspondent à une seule
 >   publication et ne bougent plus ;
@@ -150,8 +151,9 @@ La connexion se fait par un **lien magique reçu par e-mail**. Supabase doit sav
 vers quelles adresses ce lien a le droit de te renvoyer.
 
 1. Dans Supabase : **Authentication › URL Configuration**.
-2. **Site URL** : l'adresse de production Vercel, par exemple `https://ject-xxxx.vercel.app`.
+2. **Site URL** : l'adresse de production Vercel, `https://ject-delta.vercel.app`.
 3. **Redirect URLs** : clique sur **Add URL** et ajoute :
+   - `https://ject-delta.vercel.app/**` (production) ;
    - `https://ject-*-vthiriets-projects.vercel.app/**` (toutes les adresses Vercel de
      test : l'étoile veut dire « n'importe quel texte ici ») ;
    - `http://localhost:4321/**` (travail en local).

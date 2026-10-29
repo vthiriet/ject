@@ -1,6 +1,6 @@
 # Publication sur Vercel depuis GitHub (contourne la liaison Git de Vercel, en panne).
 # - envoi sur `preview` -> version de test : https://ject-preview-vthiriets-projects.vercel.app
-# - envoi sur `main`    -> production
+# - envoi sur `main`    -> production : https://ject-delta.vercel.app
 # Secrets requis (GitHub > Settings > Secrets and variables > Actions) :
 #   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID  (voir docs/INSTALLATION.md)
 name: Publication Vercel

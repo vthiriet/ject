@@ -53,7 +53,7 @@ select cron.schedule(
   '7 * * * *',
   $$
   select net.http_post(
-    url := 'https://ject-preview-vthiriets-projects.vercel.app/api/notify',
+    url := 'https://ject-delta.vercel.app/api/notify',
     headers := '{"Content-Type": "application/json", "Authorization": "Bearer COLLE_ICI_LE_SECRET"}'::jsonb,
     body := '{}'::jsonb
   );
